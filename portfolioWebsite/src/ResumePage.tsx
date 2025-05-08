@@ -1,21 +1,21 @@
 import './main.css'
 import './Header.css'
 
-export default function Header() {
+export default function ResumePage() {
     const goToHome = () => {
         window.location.href = '/'
     }
     const goToProjects = () => {
-        window.location.href = '/'
+        window.location.href = '/Projects'
     }
     const goToBlog = () => {
-        window.location.href = '/'
+        window.location.href = '/Blog'
     }
     const goToAbout = () => {
-        window.location.href = '/'
+        window.location.href = '/About'
     }
     const goToResume = () => {
-        window.location.href = '/'
+        window.location.href = '/Resume'
     }
 
     return (

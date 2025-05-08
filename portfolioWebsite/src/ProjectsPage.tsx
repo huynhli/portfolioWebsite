@@ -1,7 +1,7 @@
 import './main.css'
 import './Header.css'
 
-export default function Header() {
+export default function ProjectsPage() {
     const goToHome = () => {
         window.location.href = '/'
     }

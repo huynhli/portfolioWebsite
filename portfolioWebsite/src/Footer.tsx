@@ -1,18 +1,21 @@
+import './main.css'
+import './Footer.css'
 
 export default function Footer() {
+    const goToHome = () => {
+        window.location.href = '/'
+    }
+
     return (
-        <div className='flex justify-center items-center bg-blue-800 h-20 
-        border-b border-blue-900'>
-            <div className="flex space-x-8 py-4">
-                <button className="text-lg px-6 py-3 text-white 
-                transition-all duration-300 hover:text-2xl hover:bg-blue-700 
-                rounded-lg hover:cursor-pointer">
-                    Home
+        <div className='flex justify-between h-20 '>
+            <div className='self-center px-8'>
+                <button className="aboveline-hover px-2 py-1 duration-400 rounded-b-lg hover:bg-purple-400 hover:cursor-pointer" onClick={goToHome}>
+                    Liam Huynh
                 </button>
-                <button className="text-lg px-6 py-3 text-white 
-                transition-all duration-300 hover:text-2xl hover:bg-blue-700 
-                rounded-lg hover:cursor-pointer">
-                    Docs
+            </div>
+            <div className=' flex justify-evenly self-center px-8'>
+                <button className="aboveline-hover bg-purple-400 px-2 py-1 duration-400 rounded-b-lg hover:bg-white">
+                Thanks for stopping by!
                 </button>
             </div>
         </div>
