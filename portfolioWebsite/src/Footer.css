@@ -1,17 +1,16 @@
 .aboveline-hover {
     position: relative;
     display: inline-block;
-    cursor: pointer;
 }
 
 .aboveline-hover::after {
     content: '';
     position: absolute;
     left: 0;
-    bottom: 0;
+    bottom: 100%;
     height: 0.2em;
     width: 100%;
-    background: currentColor;
+    background: black;
     border-radius: 1em;
     transform: scaleX(0);
     transform-origin: center;
