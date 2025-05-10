@@ -1,53 +1,59 @@
 import './main.css'
 import './Header.css'
+import { useState, useEffect } from 'react'
 
 export default function ProjectsPage() {
-    const goToHome = () => {
-        window.location.href = '/'
-    }
-    const goToProjects = () => {
-        window.location.href = '/Projects'
-    }
-    const goToBlog = () => {
-        window.location.href = '/Blog'
-    }
-    const goToAbout = () => {
-        window.location.href = '/About'
-    }
-    const goToResume = () => {
-        window.location.href = '/Resume'
+    const [allArticles, setAllArticles] = useState<string[]>([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [error, setError] = useState<string | null>(null)
+    
+    const getArticles = async () => {
+        try {
+            setIsLoading(true)
+            const response = await fetch('backendlinkhere')
+            const allArticlesData = await response.json()
+            setAllArticles(allArticlesData)
+        } catch(error) {    
+            console.error('Error fetching: ', error)
+            setError('Failed to load articles')
+            setAllArticles(["Article 1", "Article 2", "Article 3", "Article 4", "Article 5", "Article 6"])
+        } finally {
+            setIsLoading(false)
+        }
     }
 
+    useEffect(() => {
+        getArticles()
+    }, [])
+
     return (
-        <div className='flex justify-between h-20 '>
-            <div className='self-center px-8'>
-                <button className="underline-hover px-2 py-1 duration-400 rounded-t-lg hover:bg-purple-400 hover:cursor-pointer" onClick={goToHome}>
-                    Liam Huynh
-                </button>
+        <>
+            {/* description section */}
+            <div className="flex justify-center">
+                    <h2 className="flex items-center justify-center my-30 text-3xl h-50 w-200 mx-5 bg-green-400">
+                        Projects
+                    </h2>
             </div>
-            <div className=' flex justify-evenly self-center px-8'>
-                <div className='px-2'>
-                <button className="underline-hover px-2 py-1 duration-400 rounded-t-lg hover:bg-purple-400 hover:cursor-pointer" onClick={goToProjects}>
-                Projects
-                </button>
-                </div>
-                <div className='px-2'>
-                <button className="underline-hover px-2 py-1 duration-400 rounded-t-lg hover:bg-purple-400 hover:cursor-pointer" onClick={goToBlog}>
-                Blog
-                </button>
-                </div>
-                <div className='px-2'>
-                <button className="underline-hover px-2 py-1 duration-400 rounded-t-lg hover:bg-purple-400 hover:cursor-pointer" onClick={goToAbout}>
-                About
-                </button>
-                </div>
-                <div className='px-2'>
-                <button className="underline-hover px-2 py-1 duration-400 rounded-t-lg hover:bg-purple-400 hover:cursor-pointer" onClick={goToResume}>
-                Resume
-                </button>
+
+            {/* article section */}
+            <div className="flex justify-center p-4">
+                {/* responsive grid container */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
+                    {isLoading ? ( 
+                        <div className="col-span-full text-center py-8 mb-5">Loading articles...</div>
+                        ) : allArticles.length > 0 ? (
+                            // Map through all articles
+                            allArticles.map((article, i) => (
+                                <button key={i} onClick={goToArticle} className="bg-blue-400 p-4 h-20 mb-30 flex items-center justify-center text-white font-bold rounded-md shadow-md hover:bg-blue-500 transition-colors cursor-pointer">
+                                    {article}
+                                </button>
+                            ))
+                        ) : (
+                        <div className="col-span-full text-center py-8 mb-5">No articles found</div>
+                    )}
                 </div>
             </div>
-        </div>
+        </>
 
     )
 }
