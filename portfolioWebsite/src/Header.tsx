@@ -15,7 +15,7 @@ export default function Header() {
         window.location.href = '/About'
     }
     const goToResume = () => {
-        window.open('/ResumeFeb2025.pdf', '_blank') // TODO open resume.pdf
+        window.open('/ResumeFeb2025.pdf', '_blank')
     }
 
     return (

@@ -19,7 +19,7 @@ export default function Footer() {
             {/* Arrow button */}
             <div className="self-center">
                 <button onClick={scrollToTop} className="cursor-pointer">
-                    <img src="/images/up-arrow.png" title="Up arrow icon" alt="Arrow pointing up" className="w-10 h-10 object-contain transition-transform duration-300 hover:scale-125"/>
+                    <img src="/images/up-arrow.png" title="Up arrow icon" alt="Arrow pointing up" className="invert w-10 h-10 object-contain transition-transform duration-300 hover:scale-125"/>
                 </button>
             </div>
 
