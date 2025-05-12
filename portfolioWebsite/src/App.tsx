@@ -5,7 +5,6 @@ import HomePage from './HomePage.tsx'
 import ProjectsPage from './ProjectsPage.tsx'
 import BlogPage from './BlogPage.tsx';
 import AboutPage from './AboutPage.tsx';
-import ResumePage from './ResumePage.tsx';
 
 export default function App() {
   // defining default layout
@@ -27,8 +26,6 @@ export default function App() {
             <Route path="/Projects" element={<ProjectsPage />} />
             <Route path="/Blog" element={<BlogPage />} />
             <Route path="/About" element={<AboutPage />} />
-            <Route path="/Resume" element={<ResumePage />} />
-
         </Route>
       </Routes>
     </div>

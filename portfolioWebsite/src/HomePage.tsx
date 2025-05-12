@@ -13,7 +13,7 @@ export default function HomePage() {
         } catch(error) {    
             console.error('Error fetching: ', error)
             setError('Failed to load articles')
-            setAllArticles(["Article 1", "Article 2", "Article 3"])
+            setAllArticles(["Article 1", "Article 2", "Article 3", "Article 4", "Article 5", "Article 6"])
         } finally {
             setIsLoading(false)
         }
@@ -24,10 +24,10 @@ export default function HomePage() {
     }, [])
 
     return (
-        <>
+        <div className='min-h-screen'>
             {/* description section */}
             <div className="flex justify-center">
-                    <h2 className="self-center my-30 text-3xl h-50 w-200 mx-5 bg-green-400">
+                    <h2 className="self-center my-30 text-3xl w-170 mx-5 bg-green-400">
                         Hi, I'm Liam - a game developer and designer passionate about creating engaging experiences and bringing ideas to life.
                     </h2>
             </div>
@@ -50,6 +50,6 @@ export default function HomePage() {
                     )}
                 </div>
             </div>
-        </>
+        </div>
     )
 }

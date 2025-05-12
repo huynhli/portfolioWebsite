@@ -3,6 +3,13 @@ import './Header.css'
 import { useState, useEffect } from 'react'
 
 export default function ProjectsPage() {
+    // const goToArticle = (pageNum) => {
+    const goToArticle = () => {
+        // string windowToGoTo = backendcall(pagenum)
+        const windowToGoTo = '/'
+        window.location.href = windowToGoTo
+    }
+
     const [allArticles, setAllArticles] = useState<string[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
@@ -27,7 +34,7 @@ export default function ProjectsPage() {
     }, [])
 
     return (
-        <>
+        <div className='min-h-screen'>
             {/* description section */}
             <div className="flex justify-center">
                     <h2 className="flex items-center justify-center my-30 text-3xl h-50 w-200 mx-5 bg-green-400">
@@ -53,7 +60,7 @@ export default function ProjectsPage() {
                     )}
                 </div>
             </div>
-        </>
+        </div>
 
     )
 }
