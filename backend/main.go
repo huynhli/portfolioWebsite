@@ -1,62 +1,51 @@
 package main
 
 import (
-	"context"
-	"encoding/json"
-	"log"
-	"net/http"
-
+	"fmt"
+	"os"
+	"portfolioWebsite/backend/config"
 	"portfolioWebsite/backend/database"
-	"portfolioWebsite/backend/models"
+	"portfolioWebsite/backend/routes"
 
-	"go.mongodb.org/mongo-driver/bson"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
+func init() {
+	config.LoadConfig()
+}
+
 func main() {
+
+	//Set port from env var
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" // Default to 8080 if PORT is not set
+	}
+
 	database.ConnectMongoDB()
 	defer database.DisconnectMongoDB()
 
-	// Define the route for fetching articles
-	http.HandleFunc("/api/articles", func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == "GET" {
-			collection := database.Database.Collection("articles") // "articles" is the collection name
+	//create new Fiber app
+	app := fiber.New()
 
-			// Fetch all articles from the MongoDB collection
-			cursor, err := collection.Find(context.TODO(), bson.D{})
-			if err != nil {
-				http.Error(w, "DB error", http.StatusInternalServerError)
-				return
-			}
-			defer cursor.Close(context.TODO())
+	//enable CORS to allow requests to backend
+	SetupCors(app)
 
-			var results []models.Article
-			if err = cursor.All(context.TODO(), &results); err != nil {
-				http.Error(w, "Cursor decode error", http.StatusInternalServerError)
-				return
-			}
+	//routing
+	routes.SetupRoutes(app)
 
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(results)
-		} else if r.Method == "POST" {
-			var article models.Article
-			err := json.NewDecoder(r.Body).Decode(&article)
-			if err != nil {
-				http.Error(w, "Invalid request body", http.StatusBadRequest)
-				return
-			}
-			result, err := database.AddArticle(article)
-			if err != nil {
-				http.Error(w, "Failed to insert article", http.StatusInternalServerError)
-				return
-			}
-			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(result)
-		} else {
-			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		}
-	})
+	//port listen and serve
+	err := app.Listen(":" + port)
+	if err != nil {
+		fmt.Println("Error starting server: ", err)
+	}
+}
 
-	// Start the server
-	log.Println("Server running at http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+func SetupCors(app *fiber.App) {
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "*",                            // TODO change after frontend hosted
+		AllowMethods: "GET,POST,PUT,DELETE",          // Allowed methods
+		AllowHeaders: "Origin, Content-Type, Accept", // Allowed headers
+	}))
 }

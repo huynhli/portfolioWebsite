@@ -2,11 +2,14 @@ module portfolioWebsite
 
 go 1.23.6
 
-require go.mongodb.org/mongo-driver v1.17.3
+require (
+	github.com/gofiber/fiber/v2 v2.52.6
+	github.com/joho/godotenv v1.5.1
+	go.mongodb.org/mongo-driver v1.17.3
+)
 
 require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
-	github.com/gofiber/fiber/v2 v2.52.6 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect
