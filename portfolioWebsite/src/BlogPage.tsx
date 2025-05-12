@@ -12,7 +12,7 @@ export default function ProjectsPage() {
 
     const [allArticles, setAllArticles] = useState<string[]>([])
     const [isLoading, setIsLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
+    // const [error, setError] = useState<string | null>(null)
     
     const getArticles = async () => {
         try {
@@ -22,7 +22,7 @@ export default function ProjectsPage() {
             setAllArticles(allArticlesData)
         } catch(error) {    
             console.error('Error fetching: ', error)
-            setError('Failed to load articles')
+            // setError('Failed to load articles')
             setAllArticles(["Article 1", "Article 2", "Article 3", "Article 4", "Article 5", "Article 6"])
         } finally {
             setIsLoading(false)
