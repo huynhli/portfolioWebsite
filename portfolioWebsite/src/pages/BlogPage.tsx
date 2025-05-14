@@ -1,5 +1,4 @@
-import './main.css'
-import './Header.css'
+import '../main.css'
 import { useState, useEffect } from 'react'
 
 export default function ProjectsPage() {

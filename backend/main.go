@@ -13,18 +13,18 @@ import (
 
 func init() {
 	config.LoadConfig()
+	config.InitCloudinary()
 }
 
 func main() {
+	database.ConnectMongoDB()
+	defer database.DisconnectMongoDB()
 
 	//Set port from env var
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080" // Default to 8080 if PORT is not set
 	}
-
-	database.ConnectMongoDB()
-	defer database.DisconnectMongoDB()
 
 	//create new Fiber app
 	app := fiber.New()

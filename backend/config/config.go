@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/joho/godotenv"
 )
 
@@ -12,6 +13,8 @@ var (
 	DB_PASSWORD string
 )
 
+var Cloudinary *cloudinary.Cloudinary
+
 func LoadConfig() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file")
@@ -19,4 +22,19 @@ func LoadConfig() {
 
 	DB_USERNAME = os.Getenv("DB_USERNAME")
 	DB_PASSWORD = os.Getenv("DB_PASSWORD")
+}
+
+func InitCloudinary() {
+	cloud, err := cloudinary.NewFromParams(
+		os.Getenv("CLOUD_NAME"),
+		os.Getenv("API_KEY"),
+		os.Getenv("API_SECRET"),
+	)
+
+	if err != nil {
+		log.Fatalf("Cloudinary init failed %f, ", err)
+	}
+
+	Cloudinary = cloud
+	log.Println("Cloudinary initialized.")
 }

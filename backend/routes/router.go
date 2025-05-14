@@ -8,7 +8,10 @@ import (
 
 func SetupRoutes(app *fiber.App) {
 	app.Get("/", homePage)
-	app.Get("/api/articles", handlers.GetAllArticles)
+	app.Get("/api/articleBanners", handlers.GetAllArticleBanners)
+	app.Get("/api/article", handlers.GetArticleWithTitle)
+	app.Post("/api/addArticle", handlers.AddArticle)
+	app.Post("/api/deleteArticle", handlers.DeleteArticleById)
 }
 
 func homePage(c *fiber.Ctx) error {

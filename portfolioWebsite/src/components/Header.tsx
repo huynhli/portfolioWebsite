@@ -1,4 +1,4 @@
-import './main.css'
+import '../main.css'
 import './Header.css'
 
 export default function Header() {

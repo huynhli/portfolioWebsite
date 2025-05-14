@@ -1,10 +1,12 @@
-import { Routes, Route, Outlet } from 'react-router-dom';
-import Header from './Header.tsx'
-import Footer from './Footer.tsx'
-import HomePage from './HomePage.tsx'
-import ProjectsPage from './ProjectsPage.tsx'
-import BlogPage from './BlogPage.tsx';
-import AboutPage from './AboutPage.tsx';
+import { Routes, Route, Outlet } from 'react-router-dom'
+import Header from './components/Header.tsx'
+import Footer from './components/Footer.tsx'
+import HomePage from './pages/HomePage.tsx'
+import ProjectsPage from './pages/ProjectsPage.tsx'
+import BlogPage from './pages/BlogPage.tsx'
+import AboutPage from './pages/AboutPage.tsx'
+import ArticleUpload from './pages/ArticleUpload.tsx'
+import ImageUpload from './pages/ImageUpload.tsx'
 
 export default function App() {
   // defining default layout
@@ -14,7 +16,7 @@ export default function App() {
         <Header/>
         <Outlet/>
         <Footer/>
-      </div>
+      </div>  
     )
   }
 
@@ -26,6 +28,8 @@ export default function App() {
             <Route path="/Projects" element={<ProjectsPage />} />
             <Route path="/Blog" element={<BlogPage />} />
             <Route path="/About" element={<AboutPage />} />
+            <Route path="/ArticleUpload" element={<ArticleUpload />} />
+            <Route path="/ImageUpload" element={<ImageUpload />} />
         </Route>
       </Routes>
     </div>

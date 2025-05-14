@@ -1,6 +1,4 @@
-import './main.css'
-import './Header.css'
-
+import '../main.css'
 export default function AboutPage() {
 
     return (
@@ -13,7 +11,7 @@ export default function AboutPage() {
             </div>
 
             {/* Description section */}
-            <div className="flex justify-center">
+            <div className="flex justify-center"> 
                 <div className='flex flex-col justify-left text-3xl w-200 mx-5 bg-green-400'>
                     <p className='my-5 mx-5'>Hi, I'm Liam.</p>
                     <p className='my-5 mx-5'>I'm an aspiring game designer and developer with a growing passion for creating interactive web and mobile experiences.</p>

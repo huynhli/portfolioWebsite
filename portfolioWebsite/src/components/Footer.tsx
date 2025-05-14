@@ -1,10 +1,11 @@
-import './main.css'
+import '../main.css'
 import './Footer.css'
 
 export default function Footer() {
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
+
 
     return (
         <div className='flex justify-between h-20 bg-purple-400'>
