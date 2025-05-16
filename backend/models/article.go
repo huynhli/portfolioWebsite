@@ -16,6 +16,14 @@ type Article struct {
 }
 
 type ContentBlock struct {
-	Type string `json:"type" bson:"type"`
+	Type string `json:"type" bson:"type"` // "Text", "Heading", "Image", "Subheading"
 	Data string `json:"data" bson:"data"`
+}
+
+type Image struct {
+	PublicID string `bson:"public_id" json:"public_id"`
+	URL      string `bson:"url" json:"url"`
+	Format   string `bson:"format" json:"format"`
+	Width    int    `bson:"width" json:"width"`
+	Height   int    `bson:"height" json:"height"`
 }

@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -27,8 +28,8 @@ func LoadConfig() {
 func InitCloudinary() {
 	cloud, err := cloudinary.NewFromParams(
 		os.Getenv("CLOUD_NAME"),
-		os.Getenv("API_KEY"),
-		os.Getenv("API_SECRET"),
+		os.Getenv("CLOUD_API_KEY"),
+		os.Getenv("CLOUD_API_SECRET"),
 	)
 
 	if err != nil {
@@ -36,5 +37,5 @@ func InitCloudinary() {
 	}
 
 	Cloudinary = cloud
-	log.Println("Cloudinary initialized.")
+	fmt.Println("Cloudinary initialized.")
 }

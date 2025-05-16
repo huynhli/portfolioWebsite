@@ -11,12 +11,10 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
-func init() {
+func main() {
+	fmt.Println("running main")
 	config.LoadConfig()
 	config.InitCloudinary()
-}
-
-func main() {
 	database.ConnectMongoDB()
 	defer database.DisconnectMongoDB()
 
