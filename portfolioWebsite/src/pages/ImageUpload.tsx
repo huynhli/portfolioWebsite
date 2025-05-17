@@ -1,17 +1,18 @@
 import '../main.css'
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 
 export default function ImageUpload() {
     const [imgData, setImgData] = useState<File | null>(null)
     const [publicIdToDelete, setPublicIdToDelete] = useState<string>("")
     const [uploadResult, setUploadResult] = useState<{
-    url?: string
-    public_id?: string
-    format?: string
-    width?: number
-    height?: number
-    error?: string
-} | null>(null)
+        url?: string
+        public_id?: string
+        format?: string
+        width?: number
+        height?: number
+        error?: string
+    } | null>(null)
+    
 
     const uploadFileButtonClick = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
@@ -77,13 +78,17 @@ export default function ImageUpload() {
         }
     }
 
+    useEffect(() => {
+
+    }, [])
+
 
     return (
-        <div className=''>
+        <div className='min-h-screen'>
             <div className='flex flex-col bg-green-400'>
-                <h2 className='flex justify-center bg-purple-400'>Upload an Image</h2>
+                <h2 className='flex justify-center text-lg font-semibold text-center bg-purple-400'>Upload an Image</h2>
                 <form className='flex justify-center' onSubmit={uploadFileButtonClick}>
-                    <input className='bg-gray-200 hover:bg-gray-400 active:bg-gray-600'
+                    <input className='bg-gray-200 hover:bg-gray-400 active:bg-gray-600 px-2'
                         type="file"
                         accept="image/*"
                         onChange={(e) =>
@@ -91,7 +96,7 @@ export default function ImageUpload() {
                         }
                         required
                     />
-                    <button className='bg-gray-200 hover:bg-gray-400 active:bg-gray-600' type="submit">Upload</button>
+                    <button className='bg-gray-200 hover:bg-gray-400 active:bg-gray-600 px-2' type="submit">Upload</button>
                 </form>
 
                 <div id="result" style={{ marginTop: "1rem" }}>
@@ -108,10 +113,10 @@ export default function ImageUpload() {
                 </div>
 
                  {/* Delete */}
-                <h2 className='text-lg font-semibold text-center bg-purple-400'>Delete an Image</h2>
+                <h2 className='flex justify-center text-lg font-semibold text-center bg-purple-400'>Delete an Image</h2>
                 <form className='flex flex-col items-center space-y-2' onSubmit={deleteFileButtonClick}>
                     <input
-                        className='px-2 py-1 bg-gray-200 rounded w-full max-w-sm'
+                        className='px-2 py-1 bg-gray-200 rounded w-full max-w-sm text-center'
                         type="text"
                         placeholder="Enter public_id to delete"
                         value={publicIdToDelete}
