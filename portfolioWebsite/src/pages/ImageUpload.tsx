@@ -12,7 +12,15 @@ export default function ImageUpload() {
         height?: number
         error?: string
     } | null>(null)
-    
+    const [imageArrayIndex, setImageArrayIndex] = useState<number | undefined>(undefined)
+    const [imagesInDBCloud, setImagesInDBCloud] = useState<{
+        url?: string
+        public_id?: string
+        format?: string
+        width?: number
+        height?: number
+        error?: string
+    }[]>([])
 
     const uploadFileButtonClick = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
@@ -62,7 +70,7 @@ export default function ImageUpload() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                },
+                    },
                 body: JSON.stringify({ public_id: publicIdToDelete }),
             })
 
@@ -78,8 +86,28 @@ export default function ImageUpload() {
         }
     }
 
-    useEffect(() => {
+    const getImagesFromDBCloud = async() => {
+        console.log("getting images");
+        try {
+            const res = await fetch("http://localhost:8080/api/getImages", {
+                method: "POST",
+            });
 
+            const data = await res.json();
+
+            if (res.ok) {
+                setImagesInDBCloud(data);
+            } else {
+                setImagesInDBCloud([]);
+            }
+        } catch (error: any) {
+            setImagesInDBCloud([]);
+        }
+        
+    }
+
+    useEffect(() => {
+        getImagesFromDBCloud()
     }, [])
 
 
@@ -127,6 +155,23 @@ export default function ImageUpload() {
                         Delete Image
                     </button>
                 </form>
+                
+                {/* display images slideshow with two buttons */}
+                {/* get images button */}
+                <div className='my-4 flex flex-col items-center'>
+                <button className='px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600' onClick={getImagesFromDBCloud}>Get Images</button>
+                
+                {/* current image */}
+                <div className='mt-1'>
+                    {imagesInDBCloud.length > 0 && (
+                        <div>
+                            Hi
+                        </div>
+                    )}
+                </div>
+
+                {/* left and right button */}
+                </div>
             </div>
         </div>
     );
