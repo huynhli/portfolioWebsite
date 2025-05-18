@@ -5,7 +5,6 @@ import HomePage from './pages/HomePage.tsx'
 import ProjectsPage from './pages/ProjectsPage.tsx'
 import BlogPage from './pages/BlogPage.tsx'
 import AboutPage from './pages/AboutPage.tsx'
-import ArticleUpload from './pages/ArticleUpload.tsx'
 import ImageUpload from './pages/ImageUpload.tsx'
 
 export default function App() {
@@ -28,7 +27,6 @@ export default function App() {
             <Route path="/Projects" element={<ProjectsPage />} />
             <Route path="/Blog" element={<BlogPage />} />
             <Route path="/About" element={<AboutPage />} />
-            <Route path="/ArticleUpload" element={<ArticleUpload />} />
             <Route path="/ImageUpload" element={<ImageUpload />} />
         </Route>
       </Routes>

@@ -36,7 +36,7 @@ export default function ProjectsPage() {
         <div className='min-h-screen'>
             {/* description section */}
             <div className="flex justify-center">
-                    <h2 className="flex items-center justify-center my-30 text-3xl h-50 w-200 mx-5 bg-green-400">
+                    <h2 className="flex items-center justify-center my-30 text-6xl h-40 w-160 mx-5 bg-purple-300 rounded-lg">
                         Projects
                     </h2>
             </div>
@@ -46,7 +46,7 @@ export default function ProjectsPage() {
                 {/* responsive grid container */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
                     {isLoading ? ( 
-                        <div className="col-span-full text-center py-8 mb-5">Loading articles...</div>
+                        <div className="col-span-full text-center py-8 mb-5 text-3xl font-bold">Loading articles...</div>
                         ) : allArticles.length > 0 ? (
                             // Map through all articles
                             allArticles.map((article, i) => (
@@ -55,7 +55,7 @@ export default function ProjectsPage() {
                                 </button>
                             ))
                         ) : (
-                        <div className="col-span-full text-center py-8 mb-5">No articles found</div>
+                        <div className="col-span-full text-center py-8 mb-5 text-3xl font-bold">No projects found. Please check back another time.</div>
                     )}
                 </div>
             </div>

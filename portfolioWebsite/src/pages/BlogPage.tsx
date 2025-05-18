@@ -16,13 +16,13 @@ export default function ProjectsPage() {
     const getArticles = async () => {
         try {
             setIsLoading(true)
-            const response = await fetch('backendlinkhere')
-            const allArticlesData = await response.json()
-            setAllArticles(allArticlesData)
-        } catch(error) {    
+            const responseObj = await fetch('https://liamportfolioweb.onrender.com/api/articleBanners')
+            const articleBanners = await responseObj.json()
+            setAllArticles(articleBanners)
+            setAllArticles(["hi"])
+        } catch(error) {
             console.error('Error fetching: ', error)
-            // setError('Failed to load articles')
-            setAllArticles([])
+            setAllArticles(["Hey!", "Something", "is", "wrong", "with", "this!"])
         } finally {
             setIsLoading(false)
         }
@@ -36,15 +36,10 @@ export default function ProjectsPage() {
         <div className='min-h-screen'>
             {/* description section */}
             <div className="flex justify-center">
-                    <div className='flex flex-col items-center justify-center my-30 text-3xl h-50 w-200 mx-5 bg-green-400'>
-                        <h2 className="flex items-center justify-center text-3xl text-center">
-                            Welcome to my blog!
-                        </h2>
-                        <p className='flex items-center justify-center text-2xl mx-15 text-center'>
-                            Here you'll find articles on games and features that catch my interest.
-                        </p>
+                    <div className='flex flex-col items-center justify-center my-30 text-3xl h-40 w-160 mx-5 bg-purple-300 rounded-lg'>
+                        <h2 className="flex items-center justify-center text-3xl text-center mb-2">Welcome to my blog!</h2>
+                        <p className='flex items-center justify-center text-2xl mx-15 text-center'>Here you'll find articles on games and features that catch my interest.</p>
                     </div>
-                    
             </div>
 
             {/* article section */}

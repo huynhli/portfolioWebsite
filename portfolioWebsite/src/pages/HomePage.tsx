@@ -37,7 +37,7 @@ export default function HomePage() {
                 {/* responsive grid container */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
                     {isLoading ? ( 
-                        <div className="col-span-full text-center py-8 mb-5">Loading articles...</div>
+                        <div className="col-span-full text-center py-8 mb-5 text-3xl font-bold">Loading articles...</div>
                         ) : allArticles.length > 0 ? (
                             // Map through all articles
                             allArticles.map((article, i) => (
@@ -46,7 +46,7 @@ export default function HomePage() {
                                 </div>
                             ))
                         ) : (
-                        <div className="col-span-full text-center py-8 mb-5">No articles found</div>
+                        <div className="col-span-full text-center py-8 mb-5 text-3xl font-bold">No articles found</div>
                     )}
                 </div>
             </div>
