@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom'
 import '../main.css'
 import { useEffect, useState, type FormEvent } from 'react'
 
@@ -22,8 +23,27 @@ export default function ImageUpload() {
         error?: string
     }[]>([])
 
+    const location = useLocation()
+    const [token, setToken] = useState<string | null>(localStorage.getItem("jwt"))
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search)
+        const jwt = params.get("token")
+        if (jwt) {
+            localStorage.setItem("jwt", jwt)
+            setToken(jwt)
+            window.history.replaceState({}, "", "/frontend_website/imageUpload") // clean URL
+        }
+    }, [location.search])
+
+    const logout = () => {
+        localStorage.removeItem("jwt")
+        setToken(null)
+    }
+
     const uploadFileButtonClick = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
+        if (!imgData || !token) return
         
         if (!imgData) {
             setUploadResult({error: "No file uploaded"})
@@ -36,6 +56,9 @@ export default function ImageUpload() {
         try {
             const res = await fetch("https://liamportfolioweb.onrender.com/api/uploadImage", {
                 method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
                 body: formData,
             });
 
@@ -59,6 +82,7 @@ export default function ImageUpload() {
 
     const deleteFileButtonClick = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
+        if (!publicIdToDelete.trim() || !token) return
 
         if (!publicIdToDelete.trim()) {
             alert("Please enter a public ID to delete")
@@ -70,7 +94,8 @@ export default function ImageUpload() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    },
+                    Authorization: `Bearer ${token}`,
+                },
                 body: JSON.stringify({ public_id: publicIdToDelete }),
             })
 
@@ -129,6 +154,23 @@ export default function ImageUpload() {
     return (
         <div className='min-h-screen'>
             <div className='flex flex-col bg-green-400'>
+
+                {/* Login section */}
+                <div className="flex justify-center mb-2">
+                    {!token ? (
+                        <a href="https://liamportfolioweb.onrender.com/api/auth/github/login">
+                            <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                Login with GitHub
+                            </button>
+                        </a>
+                    ) : (
+                        <button onClick={logout} className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-900">
+                            Logout
+                        </button>
+                    )}
+                </div>
+
+                {/* Upload */}
                 <h2 className='flex justify-center text-lg font-semibold text-center bg-purple-400'>Upload an Image</h2>
                 <form className='flex justify-center' onSubmit={uploadFileButtonClick}>
                     <input className='bg-gray-200 hover:bg-gray-400 active:bg-gray-600 px-2'

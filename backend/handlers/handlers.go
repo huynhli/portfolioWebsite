@@ -2,13 +2,18 @@ package handlers
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"net/http"
+	"os"
 	"portfolioWebsite/backend/config"
 	"portfolioWebsite/backend/database"
 	"portfolioWebsite/backend/models"
+	"time"
 
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v5"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -193,4 +198,68 @@ func GetImageMetaDatasFromDBCloud(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(images)
+}
+
+func GithubLogin(c *fiber.Ctx) error {
+	url := fmt.Sprintf(
+		"https://github.com/login/oauth/authorize?client_id=%s&redirect_uri=%s&scope=user",
+		os.Getenv("GITHUB_CLIENT_ID"),
+		os.Getenv("GITHUB_REDIRECT_URI"),
+	)
+	return c.Redirect(url)
+}
+
+func GithubCallback(c *fiber.Ctx) error {
+	code := c.Query("code")
+	if code == "" {
+		return c.Status(400).SendString("No code provided")
+	}
+
+	// Exchange code for access token
+	tokenResp, err := http.PostForm("https://github.com/login/oauth/access_token", map[string][]string{
+		"client_id":     {os.Getenv("GITHUB_CLIENT_ID")},
+		"client_secret": {os.Getenv("GITHUB_CLIENT_SECRET")},
+		"code":          {code},
+	})
+	if err != nil {
+		return c.Status(500).SendString("Failed to get access token")
+	}
+	defer tokenResp.Body.Close()
+
+	var tokenData map[string]string
+	json.NewDecoder(tokenResp.Body).Decode(&tokenData)
+
+	accessToken := tokenData["access_token"]
+	if accessToken == "" {
+		return c.Status(500).SendString("No access token received")
+	}
+
+	// Get GitHub user data
+	req, _ := http.NewRequest("GET", "https://api.github.com/user", nil)
+	req.Header.Set("Authorization", "token "+accessToken)
+	client := &http.Client{}
+	resp, _ := client.Do(req)
+	defer resp.Body.Close()
+
+	var userData map[string]interface{}
+	json.NewDecoder(resp.Body).Decode(&userData)
+
+	// Extract the username (store GitHub ID/email if needed)
+	username := userData["login"].(string)
+
+	// Generate JWT
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"username": username,
+		"exp":      time.Now().Add(time.Hour * 24).Unix(), // 1-day expiry
+	})
+
+	jwtSecret := os.Getenv("JWT_SECRET")
+	tokenString, err := token.SignedString([]byte(jwtSecret))
+	if err != nil {
+		return c.Status(500).SendString("Could not generate JWT")
+	}
+
+	// Redirect with token in query
+	redirectURL := fmt.Sprintf("%s/frontend_website/imageUpload?token=%s", os.Getenv("FRONTEND_URL"), tokenString)
+	return c.Redirect(redirectURL)
 }
