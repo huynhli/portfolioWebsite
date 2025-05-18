@@ -228,15 +228,13 @@ func GithubCallback(c *fiber.Ctx) error {
 	}
 	defer tokenResp.Body.Close()
 
-	var tokenData map[string]string
-	json.NewDecoder(tokenResp.Body).Decode(&tokenData)
-
+	// read once
 	bodyBytes, err := io.ReadAll(tokenResp.Body)
 	if err != nil {
 		return c.Status(500).SendString("Failed to read access token response")
 	}
 
-	// Parse as form-encoded
+	// Parse form-encoded body
 	values, err := url.ParseQuery(string(bodyBytes))
 	if err != nil {
 		return c.Status(500).SendString("Failed to parse access token response")
@@ -244,9 +242,9 @@ func GithubCallback(c *fiber.Ctx) error {
 
 	accessToken := values.Get("access_token")
 	if accessToken == "" {
+		fmt.Println("Token response:", string(bodyBytes)) // Debug log
 		return c.Status(500).SendString("No access token received")
 	}
-
 	// Get GitHub user data
 	req, _ := http.NewRequest("GET", "https://api.github.com/user", nil)
 	req.Header.Set("Authorization", "token "+accessToken)
