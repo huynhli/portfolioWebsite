@@ -43,6 +43,7 @@ export default function ImageUpload() {
 
     const uploadFileButtonClick = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
+        console.log("Upload submit triggered")
         if (!imgData) {
             setUploadResult({ error: "No image selected." });
             return;
@@ -58,7 +59,7 @@ export default function ImageUpload() {
 
         const formData = new FormData()
         formData.append("image", imgData)
-
+        console.log("Uploading file:", imgData);
         try {
             const res = await fetch("https://liamportfolioweb.onrender.com/api/uploadImage", {
                 method: "POST",
