@@ -260,6 +260,6 @@ func GithubCallback(c *fiber.Ctx) error {
 	}
 
 	// Redirect with token in query
-	redirectURL := fmt.Sprintf("%s/frontend_website/imageUpload?token=%s", os.Getenv("FRONTEND_URL"), tokenString)
+	redirectURL := fmt.Sprintf("%s/ImageUpload?token=%s", os.Getenv("FRONTEND_URL"), tokenString)
 	return c.Redirect(redirectURL)
 }
