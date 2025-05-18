@@ -4,7 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"portfolioWebsite/backend/config"
 	"portfolioWebsite/backend/database"
@@ -229,7 +231,18 @@ func GithubCallback(c *fiber.Ctx) error {
 	var tokenData map[string]string
 	json.NewDecoder(tokenResp.Body).Decode(&tokenData)
 
-	accessToken := tokenData["access_token"]
+	bodyBytes, err := io.ReadAll(tokenResp.Body)
+	if err != nil {
+		return c.Status(500).SendString("Failed to read access token response")
+	}
+
+	// Parse as form-encoded
+	values, err := url.ParseQuery(string(bodyBytes))
+	if err != nil {
+		return c.Status(500).SendString("Failed to parse access token response")
+	}
+
+	accessToken := values.Get("access_token")
 	if accessToken == "" {
 		return c.Status(500).SendString("No access token received")
 	}
