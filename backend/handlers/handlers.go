@@ -37,7 +37,7 @@ func AddArticle(c *fiber.Ctx) error {
 
 func DeleteArticleById(c *fiber.Ctx) error {
 	var articleID = c.Query("ID")
-	result := database.Database.Collection("articles").FindOneAndDelete(context.TODO(), bson.D{{Key: "ID", Value: articleID}})
+	result := database.Database.Collection("articles").FindOneAndDelete(context.TODO(), bson.D{{Key: "id", Value: articleID}})
 	var articleModel models.Article
 	err := result.Decode(&articleModel)
 	if err != nil {

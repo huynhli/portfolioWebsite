@@ -16,7 +16,7 @@ func SetupRoutes(app *fiber.App) {
 	app.Post("/api/deleteArticle", JWTMiddleware(), handlers.DeleteArticleById)
 	app.Post("/api/uploadImage", JWTMiddleware(), handlers.UploadImage)
 	app.Post("/api/deleteImage", JWTMiddleware(), handlers.DeleteImage)
-	app.Get("/api/getImageMetaDatas", JWTMiddleware(), handlers.GetImageMetaDatasFromDBCloud)
+	app.Get("/api/getImageMetaDatas", handlers.GetImageMetaDatasFromDBCloud)
 	app.Get("/api/auth/github/login", handlers.GithubLogin)
 	app.Get("/api/auth/github/callback", handlers.GithubCallback)
 }

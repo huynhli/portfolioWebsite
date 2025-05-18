@@ -43,8 +43,14 @@ export default function ImageUpload() {
 
     const uploadFileButtonClick = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        if (!imgData || !token) return
-        
+        if (!imgData) {
+            setUploadResult({ error: "No image selected." });
+            return;
+        }
+        if (!token) {
+            setUploadResult({ error: "You must be logged in to upload." });
+            return;
+        }
         if (!imgData) {
             setUploadResult({error: "No file uploaded"})
             return
