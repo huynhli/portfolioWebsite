@@ -43,7 +43,7 @@ func main() {
 func SetupCors(app *fiber.App) {
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "https://liamhuynh.pages.dev/",
-		AllowMethods: "GET,POST,PUT,DELETE",          // Allowed methods
-		AllowHeaders: "Origin, Content-Type, Accept", // Allowed headers
+		AllowMethods: "GET,POST,PUT,DELETE",                         // Allowed methods
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization", // Allowed headers
 	}))
 }
