@@ -32,7 +32,7 @@ export default function ImageUpload() {
         if (jwt) {
             localStorage.setItem("jwt", jwt)
             setToken(jwt)
-            window.history.replaceState({}, "", "/frontend_website/imageUpload") // clean URL
+            window.history.replaceState({}, "", "/imageUpload") // clean URL
         }
     }, [location.search])
 
