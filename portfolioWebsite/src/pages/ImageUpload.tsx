@@ -178,7 +178,7 @@ export default function ImageUpload() {
                 </div>
 
                 {/* Upload */}
-                <h2 className='flex justify-center text-lg font-semibold text-center bg-purple-400'>Upload an Image</h2>
+                <h2 className='flex justify-center text-lg font-semibold text-center bg-purple-300'>Upload an Image</h2>
                 <form className='flex justify-center' onSubmit={uploadFileButtonClick}>
                     <input className='bg-gray-200 hover:bg-gray-400 active:bg-gray-600 px-2'
                         type="file"
@@ -205,7 +205,7 @@ export default function ImageUpload() {
                 </div>
 
                  {/* Delete */}
-                <h2 className='flex justify-center text-lg font-semibold text-center bg-purple-400'>Delete an Image</h2>
+                <h2 className='flex justify-center text-lg font-semibold text-center bg-purple-300'>Delete an Image</h2>
                 <form className='flex flex-col items-center space-y-2' onSubmit={deleteFileButtonClick}>
                     <input
                         className='px-2 py-1 bg-gray-200 rounded w-full max-w-sm text-center'
