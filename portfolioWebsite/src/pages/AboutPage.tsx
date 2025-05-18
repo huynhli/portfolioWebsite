@@ -53,7 +53,7 @@ export default function AboutPage() {
             {/* Download Resume */}
             <div className="flex justify-center">
                     <div className="flex items-center justify-center my-30 text-3xl h-50 w-200 mx-5 bg-green-400">
-                        <button onClick={() => window.open('/ResumeFeb2025.pdf', '_blank')} className='cursor-pointer bg-purple-400 hover:bg-purple-600 rounded-lg p-2'>
+                        <button onClick={() => window.open('/ResumeFeb2025.pdf', '_blank')} className='cursor-pointer bg-purple-400 hover:bg-purple-500 rounded-lg p-6'>
                             Download my resume here!
                         </button>
                     </div>

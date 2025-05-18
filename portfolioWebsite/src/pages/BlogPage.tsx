@@ -22,7 +22,7 @@ export default function ProjectsPage() {
         } catch(error) {    
             console.error('Error fetching: ', error)
             // setError('Failed to load articles')
-            setAllArticles(["Article 1", "Article 2", "Article 3", "Article 4", "Article 5", "Article 6"])
+            setAllArticles([])
         } finally {
             setIsLoading(false)
         }

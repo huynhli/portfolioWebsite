@@ -42,7 +42,7 @@ func main() {
 
 func SetupCors(app *fiber.App) {
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "https://liamhuynh.pages.dev/",
+		AllowOrigins: "https://liamhuynh.pages.dev/, http://localhost:5173",
 		AllowMethods: "GET,POST,PUT,DELETE",                         // Allowed methods
 		AllowHeaders: "Origin, Content-Type, Accept, Authorization", // Allowed headers
 	}))

@@ -3,21 +3,15 @@ import { useState, useEffect } from "react"
 export default function HomePage() {
     const [allArticles, setAllArticles] = useState<string[]>([])
     const [isLoading, setIsLoading] = useState(true)
-    // const [error, setError] = useState<string | null>(null)
 
     const getArticleBanners = async () => {
         try {
             setIsLoading(true)
             const responseObj = await fetch('https://liamportfolioweb.onrender.com/api/articleBanners')
             const articleBanners = await responseObj.json()
-            
             setAllArticles(articleBanners)
-
-            setAllArticles(["Hey!", "Something", "is", "right", "with", "this!"])   // TODO this is testing so delete
-
         } catch(error) {
             console.error('Error fetching: ', error)
-            // setError('Failed to load articles')
             setAllArticles(["Hey!", "Something", "is", "wrong", "with", "this!"])
         } finally {
             setIsLoading(false)
@@ -33,7 +27,7 @@ export default function HomePage() {
             {/* description section */}
             <div className="flex justify-center">
                     <h2 className="self-center my-30 text-3xl w-170 mx-5 bg-purple-400 text-white rounded-lg p-5">
-                        Hi, I'm Liam - a game developer and designer passionate about creating engaging experiences and bringing ideas to life.
+                        Hi, I'm Liam - a game developer and designer as well as a full-stack web developer passionate about creating engaging experiences and bringing ideas to life.
                     </h2>
             </div>
 
