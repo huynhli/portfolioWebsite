@@ -34,7 +34,7 @@ export default function ImageUpload() {
         formData.append("image", imgData)
 
         try {
-            const res = await fetch("http://localhost:8080/api/uploadImage", {
+            const res = await fetch("https://liamportfolioweb.onrender.com/api/uploadImage", {
                 method: "POST",
                 body: formData,
             });
@@ -66,7 +66,7 @@ export default function ImageUpload() {
         }
 
         try {
-            const res = await fetch("http://localhost:8080/api/deleteImage", {
+            const res = await fetch("https://liamportfolioweb.onrender.com/api/deleteImage", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -98,7 +98,7 @@ export default function ImageUpload() {
     const getImagesFromDBCloud = async() => {
         console.log("getting images");
         try {
-            const res = await fetch("http://localhost:8080/api/getImageMetaDatas", {
+            const res = await fetch("https://liamportfolioweb.onrender.com/api/getImageMetaDatas", {
                 method: "GET",
             });
             const data = await res.json();

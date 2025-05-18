@@ -8,7 +8,7 @@ export default function HomePage() {
     const getArticleBanners = async () => {
         try {
             setIsLoading(true)
-            const responseObj = await fetch('http://localhost:8080/api/articleBanners')
+            const responseObj = await fetch('https://liamportfolioweb.onrender.com/api/articleBanners')
             const articleBanners = await responseObj.json()
             
             setAllArticles(articleBanners)
