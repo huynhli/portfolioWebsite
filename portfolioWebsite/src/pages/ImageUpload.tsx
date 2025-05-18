@@ -78,6 +78,15 @@ export default function ImageUpload() {
             if (res.ok) {
                 alert("Deleted successfully")
                 setPublicIdToDelete("")
+                setImagesInDBCloud((prev) => {
+                    const updated = prev.filter(img => img.public_id !== publicIdToDelete);
+
+                    if (imageArrayIndex !== undefined && imageArrayIndex >= updated.length) {
+                        setImageArrayIndex(updated.length === 0 ? undefined : updated.length - 1);
+                    }
+
+                    return updated;
+                });
             } else {
                 alert("Error: " + data.message)
             }
@@ -89,14 +98,14 @@ export default function ImageUpload() {
     const getImagesFromDBCloud = async() => {
         console.log("getting images");
         try {
-            const res = await fetch("http://localhost:8080/api/getImages", {
-                method: "POST",
+            const res = await fetch("http://localhost:8080/api/getImageMetaDatas", {
+                method: "GET",
             });
-
             const data = await res.json();
-
-            if (res.ok) {
+            if (res.ok && Array.isArray(data)) {
                 setImagesInDBCloud(data);
+                console.log('imageArrayIndex:', imageArrayIndex)
+                console.log('imagesInDBCloud:', imagesInDBCloud)
             } else {
                 setImagesInDBCloud([]);
             }
@@ -109,6 +118,12 @@ export default function ImageUpload() {
     useEffect(() => {
         getImagesFromDBCloud()
     }, [])
+
+    useEffect(() => {
+    if (imagesInDBCloud.length > 0) {
+        setImageArrayIndex(0)
+    }
+}, [imagesInDBCloud])
 
 
     return (
@@ -159,18 +174,26 @@ export default function ImageUpload() {
                 {/* display images slideshow with two buttons */}
                 {/* get images button */}
                 <div className='my-4 flex flex-col items-center'>
-                <button className='px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600' onClick={getImagesFromDBCloud}>Get Images</button>
+                    <button className='px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600' onClick={getImagesFromDBCloud}>Get Images</button>
                 
-                {/* current image */}
-                <div className='mt-1'>
-                    {imagesInDBCloud.length > 0 && (
-                        <div>
-                            Hi
-                        </div>
-                    )}
-                </div>
+                    {/* current image */}
+                    <div className='mt-1'>
+                        {imagesInDBCloud.length > 0 && imageArrayIndex !== undefined ? (
+                            <div>
+                                <img src={imagesInDBCloud[imageArrayIndex].url} alt="Here" className="max-w-xs mx-auto rounded" />
+                                <p>Public ID: <code className="bg-gray-200 px-2 py-1 rounded">hey {imagesInDBCloud[imageArrayIndex].public_id}hi </code></p>
+                                <p>This is index: {imageArrayIndex}</p>
+                            </div>
+                        ) : (
+                            <div>No images to show</div>
+                        )}
+                    </div>
 
-                {/* left and right button */}
+                    {/* left and right button */}
+                    <div>
+                        <button className='px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600' onClick={() => setImageArrayIndex((prev) => (prev! - 1 + imagesInDBCloud.length) % imagesInDBCloud.length)}>Left</button>
+                        <button className='px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600' onClick={() => setImageArrayIndex((prev) => (prev! + 1) % imagesInDBCloud.length)}>Right</button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -14,6 +14,7 @@ func SetupRoutes(app *fiber.App) {
 	app.Post("/api/deleteArticle", handlers.DeleteArticleById)
 	app.Post("/api/uploadImage", handlers.UploadImage)
 	app.Post("/api/deleteImage", handlers.DeleteImage)
+	app.Get("/api/getImageMetaDatas", handlers.GetImageMetaDatasFromDBCloud)
 }
 
 func homePage(c *fiber.Ctx) error {

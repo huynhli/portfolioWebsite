@@ -46,12 +46,12 @@ func DeleteArticleById(c *fiber.Ctx) error {
 
 func GetAllArticleBanners(c *fiber.Ctx) error {
 	// query database
-	collection := database.Database.Collection("articles")
+	articleCollection := database.Database.Collection("articles")
 	projection := bson.D{ // filter query
-		{Key: "title", Value: "1"},
-		{Key: "date", Value: "1"},
+		{Key: "title", Value: 1},
+		{Key: "date", Value: 1},
 	}
-	cursor, err := collection.Find(context.TODO(), bson.D{}, options.Find().SetProjection(projection)) // cursor := iterable results of query
+	cursor, err := articleCollection.Find(context.TODO(), bson.D{}, options.Find().SetProjection(projection)) // cursor := iterable results of query
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, "Failed to fetch articles")
 	}
@@ -116,8 +116,10 @@ func UploadImage(c *fiber.Ctx) error {
 	}
 
 	fmt.Println("saving")
+	// Database stores metadata
 	_, err = database.Database.Collection("images").InsertOne(context.TODO(), imageMetadata)
 	if err != nil {
+		// TODO combine w/ delete from cloud
 		return fiber.NewError(fiber.StatusInternalServerError, "Could not save image metadata")
 	}
 
@@ -169,4 +171,26 @@ func DeleteImage(c *fiber.Ctx) error {
 		"cloudinary_result":   destroyResp.Result,
 		"mongo_deleted_count": dbResp.DeletedCount,
 	})
+}
+
+func GetImageMetaDatasFromDBCloud(c *fiber.Ctx) error {
+	articleCollection := database.Database.Collection("images")
+	projection := bson.D{ // filter query
+		{Key: "public_id", Value: 1},
+		{Key: "url", Value: 1},
+	}
+	cursor, err := articleCollection.Find(context.TODO(), bson.D{}, options.Find().SetProjection(projection)) // cursor := iterable results of query
+	if err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, "Failed to fetch articles")
+	}
+	defer cursor.Close(context.TODO())
+
+	fmt.Println("unloading")
+	// unloads cursor into []images
+	var images []models.Image
+	if err := cursor.All(context.TODO(), &images); err != nil {
+		return fiber.NewError(fiber.StatusInternalServerError, "Failed to decode articles")
+	}
+
+	return c.JSON(images)
 }
