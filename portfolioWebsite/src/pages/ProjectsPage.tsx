@@ -36,7 +36,7 @@ export default function ProjectsPage() {
         <div className='min-h-screen'>
             {/* description section */}
             <div className="flex justify-center">
-                    <h2 className="flex items-center justify-center my-30 text-6xl h-40 w-160 mx-5 bg-purple-300 rounded-lg">
+                    <h2 className="flex items-center justify-center my-30 text-6xl h-40 w-160 mx-5 bg-purple-300 rounded-lg font-semibold">
                         Projects
                     </h2>
             </div>
