@@ -198,12 +198,12 @@ export default function ImageUpload() {
             setArticleUploadResult(data)
             if (res.ok) {
                 alert("Uploaded article successfully")
-                console.log(setArticleUploadResult)
+                console.log(articleUploadResult)
                 // reset article var
                 // reset content blocks
             } else {
                     alert("Error: " + data.message)
-                    console.log(setArticleUploadResult)
+                    console.log(articleToSubmit)
             }
         } catch(error: any) {
             alert("Delete failed: " + error.message)    
@@ -346,7 +346,7 @@ export default function ImageUpload() {
                     </form>
 
                 </div>
-                <div>c.JSON({articleToSubmit})</div>
+                <div></div>
 
                 {/* upload/delete project */}
                 <div className='flex flex-col bg-yellow-300 items-center'>
