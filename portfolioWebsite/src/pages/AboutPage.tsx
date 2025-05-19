@@ -84,7 +84,7 @@ export default function AboutPage() {
                     </h2>
             </div>
 
-            {/* Photo gallery (?) */}
+            {/* Photo gallery */}
             <div className='flex justify-center'>
                 <div className='grid grid-cols-2 md:grid-cols-3 gap-4 p-6 max-w-6xl w-full bg-purple-300 rounded-md mb-10'>
                     {['aboutMe1.jpg', 'aboutMe3.jpg', 'aboutMe4.jpg', 'aboutMe5.JPEG', 'aboutMe6.JPG'].map((file, i) => (

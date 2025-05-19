@@ -73,7 +73,7 @@ func GetAllArticleBanners(c *fiber.Ctx) error {
 	return c.JSON(articleBanners)
 }
 
-func GetArticleWithTitle(c *fiber.Ctx) error {
+func GetArticleWithID(c *fiber.Ctx) error {
 	//save query param
 	id := c.Query("id")
 
@@ -249,7 +249,10 @@ func GithubCallback(c *fiber.Ctx) error {
 	req, _ := http.NewRequest("GET", "https://api.github.com/user", nil)
 	req.Header.Set("Authorization", "token "+accessToken)
 	client := &http.Client{}
-	resp, _ := client.Do(req)
+	resp, err := client.Do(req)
+	if err != nil {
+		return c.JSON("Error authorizing client: ", err.Error())
+	}
 	defer resp.Body.Close()
 
 	var userData map[string]interface{}
