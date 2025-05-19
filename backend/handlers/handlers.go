@@ -211,14 +211,18 @@ func GithubLogin(c *fiber.Ctx) error {
 	return c.Redirect(url)
 }
 
+type GitHubUser struct {
+	Login string `json:"login"`
+}
+
 func GithubCallback(c *fiber.Ctx) error {
 	code := c.Query("code")
 	if code == "" {
 		return c.Status(400).SendString("No code provided")
 	}
 
-	// Exchange code for access token
-	tokenResp, err := http.PostForm("https://github.com/login/oauth/access_token", map[string][]string{
+	// Step 1: Exchange code for access token
+	tokenResp, err := http.PostForm("https://github.com/login/oauth/access_token", url.Values{
 		"client_id":     {os.Getenv("GITHUB_CLIENT_ID")},
 		"client_secret": {os.Getenv("GITHUB_CLIENT_SECRET")},
 		"code":          {code},
@@ -228,13 +232,11 @@ func GithubCallback(c *fiber.Ctx) error {
 	}
 	defer tokenResp.Body.Close()
 
-	// read once
 	bodyBytes, err := io.ReadAll(tokenResp.Body)
 	if err != nil {
 		return c.Status(500).SendString("Failed to read access token response")
 	}
 
-	// Parse form-encoded body
 	values, err := url.ParseQuery(string(bodyBytes))
 	if err != nil {
 		return c.Status(500).SendString("Failed to parse access token response")
@@ -242,38 +244,41 @@ func GithubCallback(c *fiber.Ctx) error {
 
 	accessToken := values.Get("access_token")
 	if accessToken == "" {
-		fmt.Println("Token response:", string(bodyBytes)) // Debug log
+		fmt.Println("Token response:", string(bodyBytes)) // Debug
 		return c.Status(500).SendString("No access token received")
 	}
-	// Get GitHub user data
+
+	// Step 2: Get GitHub user data
 	req, _ := http.NewRequest("GET", "https://api.github.com/user", nil)
 	req.Header.Set("Authorization", "token "+accessToken)
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return c.JSON("Error authorizing client: ", err.Error())
+		return c.Status(500).SendString("Failed to fetch user data")
 	}
 	defer resp.Body.Close()
 
-	var userData map[string]interface{}
-	json.NewDecoder(resp.Body).Decode(&userData)
+	if resp.StatusCode != http.StatusOK {
+		return c.Status(500).SendString("GitHub user API returned error")
+	}
 
-	// Extract the username (store GitHub ID/email if needed)
-	username := userData["login"].(string)
+	var githubUser GitHubUser
+	if err := json.NewDecoder(resp.Body).Decode(&githubUser); err != nil {
+		return c.Status(500).SendString("Failed to decode user data")
+	}
 
-	// Generate JWT
+	// Step 3: Generate JWT with GitHub username
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"username": username,
-		"exp":      time.Now().Add(time.Hour * 24).Unix(), // 1-day expiry
+		"username": githubUser.Login,
+		"exp":      time.Now().Add(time.Hour * 24).Unix(),
 	})
 
-	jwtSecret := os.Getenv("JWT_SECRET")
-	tokenString, err := token.SignedString([]byte(jwtSecret))
+	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
 		return c.Status(500).SendString("Could not generate JWT")
 	}
 
-	// Redirect with token in query
+	// Step 4: Redirect to frontend with token
 	redirectURL := fmt.Sprintf("%sImageUpload?token=%s", os.Getenv("FRONTEND_URL"), tokenString)
 	return c.Redirect(redirectURL)
 }

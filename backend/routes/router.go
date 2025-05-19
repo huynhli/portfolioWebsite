@@ -3,6 +3,7 @@ package routes
 import (
 	"os"
 	"portfolioWebsite/backend/handlers"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
@@ -31,13 +32,26 @@ func JWTMiddleware() fiber.Handler {
 		if auth == "" {
 			return c.Status(fiber.StatusUnauthorized).SendString("Missing token")
 		}
-		tokenStr := auth[len("Bearer "):]
+
+		tokenStr := strings.TrimPrefix(auth, "Bearer ")
 		token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 			return []byte(os.Getenv("JWT_SECRET")), nil
 		})
+
 		if err != nil || !token.Valid {
 			return c.Status(fiber.StatusUnauthorized).SendString("Invalid token")
 		}
+
+		claims := token.Claims.(jwt.MapClaims)
+		username := claims["username"].(string)
+
+		if username != "huynhli" {
+			return c.Status(fiber.StatusForbidden).JSON(fiber.Map{
+				"error": "Unauthorized user",
+			})
+		}
+
+		c.Locals("username", username)
 		return c.Next()
 	}
 }

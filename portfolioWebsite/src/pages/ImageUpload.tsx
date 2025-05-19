@@ -346,6 +346,7 @@ export default function ImageUpload() {
                     </form>
 
                 </div>
+                <div>c.JSON({articleToSubmit})</div>
 
                 {/* upload/delete project */}
                 <div className='flex flex-col bg-yellow-300 items-center'>
