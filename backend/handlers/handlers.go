@@ -31,6 +31,7 @@ func AddArticle(c *fiber.Ctx) error {
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, "Failed to add article")
 	}
+
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"message": "Article added successfully"})
 }

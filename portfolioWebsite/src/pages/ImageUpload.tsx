@@ -163,7 +163,6 @@ export default function ImageUpload() {
     const [articleToSubmit, setArticleToSubmit] = useState({
         title: "",
         date: "",
-        id: "",
         content: [] as { type: string; data: string }[],
     });
     const [articleUploadResult, setArticleUploadResult] = useState<string>("")
@@ -311,12 +310,6 @@ export default function ImageUpload() {
                             placeholder="Date"
                             value={articleToSubmit.date}
                             onChange={(e) => setArticleToSubmit(prev => ({ ...prev, date: e.target.value }))}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Article ID"
-                            value={articleToSubmit.id}
-                            onChange={(e) => setArticleToSubmit(prev => ({ ...prev, id: e.target.value }))}
                         />
 
 
