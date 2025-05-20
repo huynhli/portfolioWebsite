@@ -38,7 +38,7 @@ func AddArticle(c *fiber.Ctx) error {
 
 func DeleteArticleById(c *fiber.Ctx) error {
 	type tempIdModel struct {
-		ID string `json:"id"`
+		ID string `json:"article_id"`
 	}
 	var tempId tempIdModel
 	var articleID = c.BodyParser(&tempId)
