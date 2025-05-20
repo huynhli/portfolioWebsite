@@ -17,6 +17,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -42,14 +43,20 @@ func DeleteArticleById(c *fiber.Ctx) error {
 	}
 	var tempId tempIdModel
 	var articleID = c.BodyParser(&tempId)
-	result := database.Database.Collection("articles").FindOneAndDelete(context.TODO(), bson.D{{Key: "_id", Value: articleID}})
+	if articleID != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid request body")
+	}
+	objectID, err := primitive.ObjectIDFromHex(tempId.ID)
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid article ID format")
+	}
+	result := database.Database.Collection("articles").FindOneAndDelete(context.TODO(), bson.D{{Key: "_id", Value: objectID}})
 	var articleModel models.Article
-	err := result.Decode(&articleModel)
+	err = result.Decode(&articleModel)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return fiber.NewError(fiber.StatusNotFound, "No article found with that ID")
 		}
-		// Some other error occurred
 		return fiber.NewError(fiber.StatusInternalServerError, "Failed to delete article")
 	}
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Article deleted successfully", "article": articleModel})
