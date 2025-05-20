@@ -16,7 +16,6 @@ func SetupRoutes(app *fiber.App) {
 	app.Get("/api/getArticleWithID", handlers.GetArticleWithID)
 	app.Post("/api/addArticle", JWTMiddleware(), handlers.AddArticle)
 	app.Post("/api/deleteArticle", JWTMiddleware(), handlers.DeleteArticleById)
-
 	app.Get("/api/getProjects", handlers.GetProjects)
 
 	app.Post("/api/uploadImage", JWTMiddleware(), handlers.UploadImage)

@@ -223,7 +223,6 @@ export default function ImageUpload() {
         }
 
         try {
-            alert("in try")
             const res = await fetch("https://liamportfolioweb.onrender.com/api/deleteArticle", {
                 method: "POST",
                 headers: {
