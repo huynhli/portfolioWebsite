@@ -166,6 +166,7 @@ export default function ImageUpload() {
         content: [] as { type: string; data: string }[],
     });
     const [articleUploadResult, setArticleUploadResult] = useState<string>("")
+    const [articleIdToDelete, setArticleIdToDelete] = useState<string>("")
 
     const addContentBlock = () => {
         setArticleToSubmit(prev => ({
@@ -205,7 +206,42 @@ export default function ImageUpload() {
                     console.log(articleToSubmit)
             }
         } catch(error: any) {
-            alert("Delete failed: " + error.message)    
+            alert("Article upload failed: " + error.message)    
+        }
+    }
+
+    const deleteArticle = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        console.log("deleting article")
+        if (!articleIdToDelete.trim() || !token) {
+            alert("no token?")
+            return
+        }
+        if (!articleIdToDelete.trim()) {
+            alert("Please enter an article ID to delete")
+            return
+        }
+
+        try {
+            alert("in try")
+            const res = await fetch("https://liamportfolioweb.onrender.com/api/deleteArticle", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({ article_id: articleIdToDelete }),
+            })
+
+            const data = await res.json()
+            if (res.ok) {
+                alert("Deleted successfully")
+                setArticleIdToDelete("")
+            } else {
+                alert("Error: " + data.message)
+            }
+        } catch (error: any) {
+            alert("Delete failed: " + error.message)
         }
     }
 
@@ -281,7 +317,7 @@ export default function ImageUpload() {
                         {imagesInDBCloud.length > 0 && imageArrayIndex !== undefined ? (
                             <div>
                                 <img src={imagesInDBCloud[imageArrayIndex].url} alt="Here" className="max-w-xs mx-auto rounded" />
-                                <p>Public ID: <code className="bg-gray-200 px-2 py-1 rounded">hey {imagesInDBCloud[imageArrayIndex].public_id}hi </code></p>
+                                <p>Public ID: <code className="bg-gray-200 px-2 py-1 rounded">{imagesInDBCloud[imageArrayIndex].public_id}</code></p>
                                 <p>This is index: {imageArrayIndex}</p>
                             </div>
                         ) : (
@@ -299,20 +335,22 @@ export default function ImageUpload() {
                 {/* upload/delete article */}
                 <div className='flex flex-col bg-yellow-300 items-center mt-3'>
                     <form onSubmit={submitArticle}>
-                        <input
-                            type="text"
-                            placeholder="Title"
-                            value={articleToSubmit.title}
-                            onChange={(e) => setArticleToSubmit(prev => ({ ...prev, title: e.target.value }))}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Date"
-                            value={articleToSubmit.date}
-                            onChange={(e) => setArticleToSubmit(prev => ({ ...prev, date: e.target.value }))}
-                        />
+                        <div>
+                            <input
+                                type="text"
+                                placeholder="Title"
+                                value={articleToSubmit.title}
+                                onChange={(e) => setArticleToSubmit(prev => ({ ...prev, title: e.target.value }))}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Date"
+                                value={articleToSubmit.date}
+                                onChange={(e) => setArticleToSubmit(prev => ({ ...prev, date: e.target.value }))}
+                            />
+                        </div>
 
-
+                        <div>
                         {articleToSubmit.content.map((block, index) => (
                             <div key={index} className="my-2">
                             <select
@@ -334,12 +372,28 @@ export default function ImageUpload() {
                             </div>
                         ))}
 
-                        <button type="button" onClick={addContentBlock}>Add Block</button>
+                        <button type="button" className='ml-10 bg-blue-400 rounded-lg p-2 my-2 hover:bg-blue-500 active:bg-blue-600' onClick={addContentBlock}>Add Block</button>
                         <button type="submit" className='ml-10 bg-blue-400 rounded-lg p-2 my-2 hover:bg-blue-500 active:bg-blue-600'>Post Article</button>
+                        </div>
                     </form>
 
                 </div>
-                <div></div>
+                {/* <div className='flex flex-col bg-yellow-300 items-center mt-3'> */}
+                    <h2 className='flex justify-center text-lg font-semibold text-center bg-purple-300'>Delete an article</h2>
+                    <form className='flex flex-col items-center space-y-2' onSubmit={deleteArticle}>
+                        <input
+                            className='px-2 py-1 bg-gray-200 rounded w-full max-w-sm text-center'
+                            type="text"
+                            placeholder="Enter article id to delete"
+                            value={articleIdToDelete}
+                            onChange={(e) => setArticleIdToDelete(e.target.value)}
+                            required
+                        />
+                        <button className='px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600' type="submit">
+                            Delete Article
+                        </button>
+                    </form>
+                {/* </div> */}
 
                 {/* upload/delete project */}
                 <div className='flex flex-col bg-yellow-300 items-center'>

@@ -11,13 +11,18 @@ import (
 
 func SetupRoutes(app *fiber.App) {
 	app.Get("/", homePage)
+
 	app.Get("/api/articleBanners", handlers.GetAllArticleBanners)
 	app.Get("/api/getArticleWithID", handlers.GetArticleWithID)
 	app.Post("/api/addArticle", JWTMiddleware(), handlers.AddArticle)
 	app.Post("/api/deleteArticle", JWTMiddleware(), handlers.DeleteArticleById)
+
+	app.Get("/api/getProjects", handlers.GetProjects)
+
 	app.Post("/api/uploadImage", JWTMiddleware(), handlers.UploadImage)
 	app.Post("/api/deleteImage", JWTMiddleware(), handlers.DeleteImage)
 	app.Get("/api/getImageMetaDatas", handlers.GetImageMetaDatasFromDBCloud)
+
 	app.Get("/api/auth/github/login", handlers.GithubLogin)
 	app.Get("/api/auth/github/callback", handlers.GithubCallback)
 }
@@ -52,6 +57,6 @@ func JWTMiddleware() fiber.Handler {
 		}
 
 		c.Locals("username", username)
-		return c.Next()
+		return c.Next() // do next func in route
 	}
 }

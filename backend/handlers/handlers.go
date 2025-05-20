@@ -37,8 +37,12 @@ func AddArticle(c *fiber.Ctx) error {
 }
 
 func DeleteArticleById(c *fiber.Ctx) error {
-	var articleID = c.Query("ID")
-	result := database.Database.Collection("articles").FindOneAndDelete(context.TODO(), bson.D{{Key: "id", Value: articleID}})
+	type tempIdModel struct {
+		ID string `json:"id"`
+	}
+	var tempId tempIdModel
+	var articleID = c.BodyParser(&tempId)
+	result := database.Database.Collection("articles").FindOneAndDelete(context.TODO(), bson.D{{Key: "_id", Value: articleID}})
 	var articleModel models.Article
 	err := result.Decode(&articleModel)
 	if err != nil {
@@ -48,7 +52,6 @@ func DeleteArticleById(c *fiber.Ctx) error {
 		// Some other error occurred
 		return fiber.NewError(fiber.StatusInternalServerError, "Failed to delete article")
 	}
-
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Article deleted successfully", "article": articleModel})
 }
 
@@ -65,7 +68,7 @@ func GetAllArticleBanners(c *fiber.Ctx) error {
 	}
 	defer cursor.Close(context.TODO())
 
-	// unloads cursor into []articleBanners
+	// unloads cursor into []Banners
 	var articleBanners []models.ArticleBanner
 	if err := cursor.All(context.TODO(), &articleBanners); err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, "Failed to decode articles")
@@ -80,7 +83,7 @@ func GetArticleWithID(c *fiber.Ctx) error {
 
 	// query database and unload as struct
 	var article models.Article
-	err := database.Database.Collection("articles").FindOne(context.TODO(), bson.D{{Key: "id", Value: id}}).Decode(&article)
+	err := database.Database.Collection("articles").FindOne(context.TODO(), bson.D{{Key: "_id", Value: id}}).Decode(&article)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return fiber.NewError(fiber.StatusNotFound, "No article found with that id")
@@ -90,6 +93,10 @@ func GetArticleWithID(c *fiber.Ctx) error {
 
 	//return
 	return c.JSON(article)
+}
+
+func GetProjects(c *fiber.Ctx) error {
+	return c.JSON("project")
 }
 
 func UploadImage(c *fiber.Ctx) error {
