@@ -38,30 +38,19 @@ func AddArticle(c *fiber.Ctx) error {
 }
 
 func DeleteArticleById(c *fiber.Ctx) error {
-	// Struct to receive article_id from the request
 	type tempIdModel struct {
 		ID string `json:"article_id"`
 	}
-
 	var tempId tempIdModel
-
-	// Parse JSON body into tempId
-	if err := c.BodyParser(&tempId); err != nil {
+	var articleID = c.BodyParser(&tempId)
+	if articleID != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "Invalid request body")
 	}
-
-	// Convert ID string to MongoDB ObjectID
 	objectID, err := primitive.ObjectIDFromHex(tempId.ID)
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "Invalid article ID format")
 	}
-
-	// Attempt to find and delete the article
-	result := database.Database.Collection("articles").FindOneAndDelete(
-		context.TODO(),
-		bson.D{{Key: "_id", Value: objectID}},
-	)
-
+	result := database.Database.Collection("articles").FindOneAndDelete(context.TODO(), bson.D{{Key: "_id", Value: objectID}})
 	var articleModel models.Article
 	err = result.Decode(&articleModel)
 	if err != nil {
@@ -70,12 +59,7 @@ func DeleteArticleById(c *fiber.Ctx) error {
 		}
 		return fiber.NewError(fiber.StatusInternalServerError, "Failed to delete article")
 	}
-
-	// Return success
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"message": "Article deleted successfully",
-		"article": articleModel,
-	})
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Article deleted successfully", "article": articleModel})
 }
 
 func GetAllArticleBanners(c *fiber.Ctx) error {
