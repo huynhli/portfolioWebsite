@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 export default function HomePage() {
     const [allArticles, setAllArticles] = useState<string[]>([])
     const [isLoading, setIsLoading] = useState(true)
+    const [loadingText, setLoadingText] = useState<string>("Loading main page.")
 
     const getArticleBanners = async () => {
         try {
@@ -10,7 +11,7 @@ export default function HomePage() {
             const responseObj = await fetch('https://liamportfolioweb.onrender.com/api/articleBanners')
             const articleBanners = await responseObj.json()
             setAllArticles(articleBanners)
-            setAllArticles(["hi"])
+            setAllArticles(["Hey there's no articles rn"])
         } catch(error) {
             console.error('Error fetching: ', error)
             setAllArticles(["Hey!", "Something", "is", "wrong", "with", "this!"])
@@ -22,6 +23,19 @@ export default function HomePage() {
     useEffect(() => {
         getArticleBanners()
     }, [])
+
+    useEffect(() => {
+        if (!isLoading) return
+        const loadingTextArray = ["Loading main page.", "Loading main page..", "Loading main page..."]
+        let index = 0
+
+        const interval = setInterval(() => {
+            index = (index + 1) % loadingTextArray.length
+            setLoadingText(loadingTextArray[index])
+        }, 500)
+
+        return () => clearInterval(interval)
+    }, [isLoading])
 
     return (
         <div className='min-h-screen'>
@@ -37,7 +51,7 @@ export default function HomePage() {
                 {/* responsive grid container */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
                     {isLoading ? ( 
-                        <div className="col-span-full text-center py-8 mb-5 text-3xl font-bold">Loading articles...</div>
+                        <div className="col-span-full text-center py-8 mb-5 text-3xl font-bold">{loadingText}</div>
                         ) : allArticles.length > 0 ? (
                             // Map through all articles
                             allArticles.map((article, i) => (

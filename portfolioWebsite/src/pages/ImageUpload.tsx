@@ -138,8 +138,6 @@ export default function ImageUpload() {
             const data = await res.json();
             if (res.ok && Array.isArray(data)) {
                 setImagesInDBCloud(data);
-                console.log('imageArrayIndex:', imageArrayIndex)
-                console.log('imagesInDBCloud:', imagesInDBCloud)
             } else {
                 setImagesInDBCloud([]);
             }
@@ -201,6 +199,7 @@ export default function ImageUpload() {
                 console.log(articleUploadResult)
                 // reset article var
                 // reset content blocks
+                setArticleToSubmit({"title": "", "date": "", "content": []})
             } else {
                     alert("Error: " + data.message)
                     console.log(articleToSubmit)
