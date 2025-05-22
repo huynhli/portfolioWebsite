@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react"
 
 export default function HomePage() {
-    const [allArticles, setAllArticles] = useState<string[]>([])
+    const [allArticles, setAllArticles] = useState<{
+        id: string
+        title: string
+        date: string
+    }[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [loadingText, setLoadingText] = useState<string>("Loading main page.")
 
@@ -11,13 +15,24 @@ export default function HomePage() {
             const responseObj = await fetch('https://liamportfolioweb.onrender.com/api/articleBanners')
             const articleBanners = await responseObj.json()
             setAllArticles(articleBanners)
-            setAllArticles(["Hey there's no articles rn"])
         } catch(error) {
             console.error('Error fetching: ', error)
-            setAllArticles(["Hey!", "Something", "is", "wrong", "with", "this!"])
+            setAllArticles([
+            {
+                id: "error",
+                title: "Something went wrong",
+                date: new Date().toISOString().split('T')[0]
+            }
+            ])
         } finally {
             setIsLoading(false)
         }
+    }
+    
+    const goToArticle = () => {
+        // string windowToGoTo = backendcall(pagenum)
+        const windowToGoTo = '/'
+        window.location.href = windowToGoTo
     }
 
     useEffect(() => {
@@ -55,8 +70,9 @@ export default function HomePage() {
                         ) : allArticles.length > 0 ? (
                             // Map through all articles
                             allArticles.map((article, i) => (
-                                <div key={i} className="bg-blue-400 p-4 h-20 mb-30 flex items-center justify-center text-white font-bold rounded-md shadow-md hover:bg-blue-500 transition-colors">
-                                    <p>{article}</p>
+                                <div key={i} onClick={goToArticle} className="flex flex-col bg-blue-400 p-4 h-20 mb-30 flex items-center justify-center text-white font-bold rounded-md shadow-md hover:bg-blue-500 transition-colors">
+                                    <p>{article.title}</p>
+                                    <p>{article.date}</p>
                                 </div>
                             ))
                         ) : (

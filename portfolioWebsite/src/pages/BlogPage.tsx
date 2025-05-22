@@ -9,7 +9,11 @@ export default function ProjectsPage() {
         window.location.href = windowToGoTo
     }
 
-    const [allArticles, setAllArticles] = useState<string[]>([])
+    const [allArticles, setAllArticles] = useState<{
+        id: string
+        title: string
+        date: string
+    }[]>([])
     const [isLoading, setIsLoading] = useState(true)
     // const [error, setError] = useState<string | null>(null)
     
@@ -21,7 +25,13 @@ export default function ProjectsPage() {
             setAllArticles(articleBanners)
         } catch(error) {
             console.error('Error fetching: ', error)
-            setAllArticles(["Hey!", "Something", "is", "wrong", "with", "this!"])
+            setAllArticles([
+            {
+                id: "error",
+                title: "Something went wrong",
+                date: new Date().toISOString().split('T')[0]
+            }
+            ])
         } finally {
             setIsLoading(false)
         }
@@ -50,8 +60,9 @@ export default function ProjectsPage() {
                         ) : allArticles.length > 0 ? (
                             // Map through all articles
                             allArticles.map((article, i) => (
-                                <button key={i} onClick={goToArticle} className="bg-blue-400 p-4 h-20 mb-30 flex items-center justify-center text-white font-bold rounded-md shadow-md hover:bg-blue-500 transition-colors cursor-pointer">
-                                    {article}
+                                <button key={i} onClick={goToArticle} className="flex flex-col bg-blue-400 p-4 h-20 mb-30 flex items-center justify-center text-white font-bold rounded-md shadow-md hover:bg-blue-500 transition-colors cursor-pointer">
+                                    <p>{article.title}</p>
+                                    <p>{article.date}</p>
                                 </button>
                             ))
                         ) : (
