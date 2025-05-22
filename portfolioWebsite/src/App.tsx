@@ -6,6 +6,7 @@ import ProjectsPage from './pages/ProjectsPage.tsx'
 import BlogPage from './pages/BlogPage.tsx'
 import AboutPage from './pages/AboutPage.tsx'
 import ImageUpload from './pages/ImageUpload.tsx'
+// import ArticleFooter from './components/ArticleFooter.tsx'
 
 export default function App() {
   // defining default layout
@@ -19,6 +20,15 @@ export default function App() {
     )
   }
 
+  // const ArticleLayout = () => {
+  //   return (
+  //     <div>
+  //       <Outlet/>
+  //       <ArticleFooter/>
+  //     </div>
+  //   )
+  // }
+
   return (
     <div>
       <Routes>
@@ -28,6 +38,7 @@ export default function App() {
             <Route path="/Blog" element={<BlogPage />} />
             <Route path="/About" element={<AboutPage />} />
             <Route path="/ImageUpload" element={<ImageUpload />} />
+            {/* <Route path="/BlogArticle" element={<ArticleLayout />} /> */}
         </Route>
       </Routes>
     </div>

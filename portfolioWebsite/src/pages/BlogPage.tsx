@@ -19,7 +19,6 @@ export default function ProjectsPage() {
             const responseObj = await fetch('https://liamportfolioweb.onrender.com/api/articleBanners')
             const articleBanners = await responseObj.json()
             setAllArticles(articleBanners)
-            setAllArticles(["hi"])
         } catch(error) {
             console.error('Error fetching: ', error)
             setAllArticles(["Hey!", "Something", "is", "wrong", "with", "this!"])
