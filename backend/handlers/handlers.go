@@ -86,7 +86,7 @@ func GetAllArticleBanners(c *fiber.Ctx) error {
 
 func GetArticleWithID(c *fiber.Ctx) error {
 	//save query param
-	id := c.Query("id")
+	id := c.Query("artid")
 
 	// query database and unload as struct
 	var article models.Article

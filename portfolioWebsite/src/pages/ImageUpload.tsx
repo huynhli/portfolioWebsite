@@ -162,7 +162,7 @@ export default function ImageUpload() {
         title: "",
         date: "",
         content: [] as { type: string; data: string }[],
-    });
+    })
     const [articleUploadResult, setArticleUploadResult] = useState<string>("")
     const [articleIdToDelete, setArticleIdToDelete] = useState<string>("")
 

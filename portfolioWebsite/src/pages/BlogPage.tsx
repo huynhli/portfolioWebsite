@@ -3,10 +3,11 @@ import { useState, useEffect } from 'react'
 
 export default function ProjectsPage() {
     // const goToArticle = (pageNum) => {
-    const goToArticle = () => {
+    const goToArticle = (article_id: String) => {
         // string windowToGoTo = backendcall(pagenum)
-        const windowToGoTo = '/'
-        window.location.href = windowToGoTo
+        return () => {
+            window.location.href = `/BlogArticle/Article?artid=${article_id}` 
+        }
     }
 
     const [allArticles, setAllArticles] = useState<{
@@ -60,7 +61,7 @@ export default function ProjectsPage() {
                         ) : allArticles.length > 0 ? (
                             // Map through all articles
                             allArticles.map((article, i) => (
-                                <button key={i} onClick={goToArticle} className="flex flex-col bg-blue-400 p-4 h-20 mb-30 flex items-center justify-center text-white font-bold rounded-md shadow-md hover:bg-blue-500 transition-colors cursor-pointer">
+                                <button key={i} onClick={goToArticle(article.id)} className="flex flex-col bg-blue-400 p-4 h-20 mb-30 flex items-center justify-center text-white font-bold rounded-md shadow-md hover:bg-blue-500 transition-colors cursor-pointer">
                                     <p>{article.title}</p>
                                     <p>{article.date}</p>
                                 </button>
