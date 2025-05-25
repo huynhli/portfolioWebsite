@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom'
-import './main.css'
+import '../main.css'
 import { useEffect, useState } from 'react'
 
 export default function ArticleTemplatePage() {
