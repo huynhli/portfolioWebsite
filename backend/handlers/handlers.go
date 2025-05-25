@@ -87,18 +87,25 @@ func GetAllArticleBanners(c *fiber.Ctx) error {
 func GetArticleWithID(c *fiber.Ctx) error {
 	//save query param
 	id := c.Query("artid")
+	fmt.Println("in call")
+
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid article ID format")
+	}
 
 	// query database and unload as struct
 	var article models.Article
-	err := database.Database.Collection("articles").FindOne(context.TODO(), bson.D{{Key: "_id", Value: id}}).Decode(&article)
+	err = database.Database.Collection("articles").FindOne(context.TODO(), bson.D{{Key: "_id", Value: objID}}).Decode(&article)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return fiber.NewError(fiber.StatusNotFound, "No article found with that id")
+			return fiber.NewError(fiber.StatusNotFound, "No article found with that ID")
 		}
 		return fiber.NewError(fiber.StatusInternalServerError, "Failed to fetch article")
 	}
 
 	//return
+	fmt.Println(article)
 	return c.JSON(article)
 }
 

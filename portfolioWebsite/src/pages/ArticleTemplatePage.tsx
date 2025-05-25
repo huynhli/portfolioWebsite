@@ -20,11 +20,14 @@ export default function ArticleTemplatePage() {
     const grabArticle = async () => {
         try {
             setIsLoading(true)
+            console.log(article_id)
             const respObj = await fetch(`https://liamportfolioweb.onrender.com/api/getArticleWithID?artid=${article_id}`)
             const articleInfoFromDB = await respObj.json()
             setArticleInfo(articleInfoFromDB)
+            console.log("hey")
+            console.log(articleInfoFromDB)
         } catch (error) {
-
+            console.error('Error fetching: ', error)
         } finally {
             setIsLoading(false)
         }
@@ -50,8 +53,9 @@ export default function ArticleTemplatePage() {
     return (
         <div>
             <div>
+                hi this works
                 { isLoading ? (
-                    <div className="col-span-full text-center py-8 mb-5 text-3xl font-bold">{loadingText}</div>
+                    <div className="col-span-full text-center py-8 mb-5 text-3xl font-bold">{loadingText} loading</div>
                 ) : (
                     <div>
                         <h1>{articleInfo.title}</h1>
