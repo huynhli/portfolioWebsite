@@ -51,19 +51,18 @@ export default function ArticleTemplatePage() {
     }, [isLoading])
 
     return (
-        <div>
-            <div>
-                hi this works
-                { isLoading ? (
+        <div className='flex justify-center'>
+            <div className='flex flex-col max-w-200 mx-10 my-10'>
+                { isLoading ? ( 
                     <div className="col-span-full text-center py-8 mb-5 text-3xl font-bold">{loadingText} loading</div>
                 ) : (
                     <div>
-                        <h1>{articleInfo.title}</h1>
-                        <h2>{articleInfo.date}</h2>
+                        <p className='flex justify-center text-3xl font-bold'>{articleInfo.title}</p>
+                        <p className='flex justify-center text-xl italic mt-3 mb-15'>{articleInfo.date}</p>
                         {articleInfo.content.map((contentBlock, _) => (
                             contentBlock.type === "Text" ? (
                                 <div>
-                                    <p>{contentBlock.data}</p>
+                                    <p className='text-lg my-2'>{contentBlock.data}</p>
                                 </div>
                             ) : contentBlock.type === "Image" ? (
                                 <div>
@@ -71,11 +70,11 @@ export default function ArticleTemplatePage() {
                                 </div>
                             ) : contentBlock.type === "Subheading" ? (
                                 <div>
-                                    <h4>{contentBlock.data}</h4>
+                                    <p className='text-xl font-bold mt-4'>{contentBlock.data}</p>
                                 </div>
                             ) : (
                                 <div>
-                                    <h3>{contentBlock.data}</h3>
+                                    <p className='text-2xl font-bold mt-4'>{contentBlock.data}</p>
                                 </div>
                             )
                         ))}

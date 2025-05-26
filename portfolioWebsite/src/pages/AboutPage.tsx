@@ -35,6 +35,7 @@ export default function AboutPage() {
                                     <li><a href='https://4e3c7797.song-recommendations-web-app.pages.dev/' target='_blank' rel='noopener noreferrer' className='hover:text-blue-500'>Spotify Song Recommendation Web App</a></li>
                                     <li><a href='' target='_blank' rel='noopener noreferrer' className='hover:text-blue-500'>Youtube Channel Saver (soon)</a></li>
                                     <li><a href='https://frontend-blog.pages.dev/' target='_blank' rel='noopener noreferrer' className='hover:text-blue-500'>My Other Portfolio Website</a></li>
+                                    <li><a href='' target='_blank' rel='noopener noreferrer' className='hover:text-blue-500'>Canada clone of </a><a href='' target='_blank' rel='noopener noreferrer' className='hover:text-blue-500'>https://makemydrivefun.com/</a></li>
                                 </ul>
                             </div>   
                         </div>
