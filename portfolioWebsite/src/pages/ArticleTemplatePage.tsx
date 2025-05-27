@@ -55,7 +55,7 @@ export default function ArticleTemplatePage() {
         <div className='flex justify-center'>
             <div className='flex flex-col max-w-200 mx-10 my-10'>
                 { isLoading ? ( 
-                    <div className="col-span-full text-center py-8 mb-5 text-3xl font-bold">{loadingText} loading</div>
+                    <div className="col-span-full text-center py-8 mb-5 text-3xl font-bold"><p>{loadingText} If nothing loads for a while, please load <a href='https://liamportfolioweb.onrender.com/' className='text-blue-400 hover:text-blue-500 underline'>this page</a> and come back.</p></div>
                 ) : (
                     <div>
                         <p className='flex justify-center text-3xl font-bold'>{articleInfo.title}</p>

@@ -74,9 +74,8 @@ export default function ProjectsPage() {
                 {/* responsive grid container */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
                     {isLoading ? ( 
-                        <div className="col-span-full py-8 mb-5">
-                            <p className='text-center '>{loadingText}</p>
-                            <p className='text-center '>If this page has trouble loading, please wait up to a minute or opt to load my backend <a href='https://liamportfolioweb.onrender.com/' className='text-blue-400 hover:text-blue-500'>here</a></p>
+                        <div className="col-span-full text-center py-8 mb-5 text-3xl font-bold">
+                            <p>{loadingText} If nothing loads for a while, please load <a href='https://liamportfolioweb.onrender.com/' className='text-blue-400 hover:text-blue-500 underline'>this page</a> and come back.</p>
                         </div>
                         ) : allArticles.length > 0 ? (
                             // Map through all articles
