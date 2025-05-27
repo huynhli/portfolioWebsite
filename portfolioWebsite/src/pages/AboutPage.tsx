@@ -77,24 +77,26 @@ export default function AboutPage() {
 
             {/* Education */}
             <div className='flex justify-center my-5'>
-                    <h2 className='flex items-center justify-center my-3 text-3xl h-10 p-8 bg-purple-300'>
+                    <h2 className='flex items-center justify-center my-3 text-3xl h-10 p-8 bg-purple-400 rounded-l-lg'>
                         Education
                     </h2>
-                    <h2 className='flex items-center justify-center my-3 text-3xl h-10 p-8 bg-purple-300'>
+                    <h2 className='flex items-center justify-center my-3 text-3xl h-10 p-8 bg-purple-300 rounded-r-lg'>
                         University of Toronto 2023-2027
                     </h2>
             </div>
 
             {/* Photo gallery */}
             <div className='flex justify-center'>
-                <div className='grid grid-cols-2 md:grid-cols-3 gap-4 p-6 max-w-6xl w-full bg-purple-300 rounded-md mb-10'>
+                <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-6 max-w-6xl w-full bg-purple-300 rounded-md mb-10'>
                     {['aboutMe1.jpg', 'aboutMe3.jpg', 'aboutMe4.jpg', 'aboutMe5.JPEG', 'aboutMe6.JPG'].map((file, i) => (
-                    <img
-                        key={i}
-                        className='w-full h-auto rounded shadow-md'
-                        src={`/images/${file}`}
-                        alt={`About me ${i + 1}`}
-                    />
+                    <div className='relative overflow-hidden w-full rounded-md mb-3'>
+                        <img
+                            key={i}
+                            className='w-full h-100 object-cover'
+                            src={`/images/${file}`}
+                            alt={`About me ${i + 1}`}
+                        />
+                    </div>
                     ))}
                 </div>
             </div>

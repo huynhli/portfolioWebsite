@@ -81,7 +81,8 @@ export default function ProjectsPage() {
                         ) : allArticles.length > 0 ? (
                             // Map through all articles
                             allArticles.map((article, i) => (
-                                <div key={i} onClick={goToArticle(article.id)} className="hover:cursor-pointer transition-transform duration-300 hover:scale-104 flex flex-col bg-purple-400 p-4 min-h-20 mb-30 items-center justify-center  font-bold rounded-md shadow-md hover:bg-purple-400 transition-colors">
+                                <div key={i} onClick={goToArticle(article.id)} className="relative hover:cursor-pointer transition-transform duration-300 hover:scale-104 flex flex-col bg-purple-400 p-4 min-h-20 mb-30 items-center justify-center  font-bold rounded-md shadow-md hover:bg-purple-400 transition-colors">
+                                    <div className="absolute inset-0 bg-white opacity-0 active:opacity-30 transition-opacity duration-200 z-20 rounded-md"></div>
                                     <div className='overflow-hidden w-full rounded-md mb-3'>
                                         <img src={article.cover} className='w-full h-80 object-cover'/>
                                     </div>
