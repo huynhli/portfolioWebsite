@@ -31,10 +31,11 @@ export default function HomePage() {
         }
     }
     
-    const goToArticle = () => {
+    const goToArticle = (article_id: String) => {
         // string windowToGoTo = backendcall(pagenum)
-        const windowToGoTo = '/'
-        window.location.href = windowToGoTo
+        return () => {
+            window.location.href = `/BlogArticle/Article?artid=${article_id}` 
+        }
     }
 
     useEffect(() => {
@@ -70,14 +71,17 @@ export default function HomePage() {
                     {isLoading ? ( 
                         <div className="col-span-full text-center py-8 mb-5 text-3xl font-bold">{loadingText}</div>
                         ) : allArticles.length > 0 ? (
-                            // Map through all articles
                             allArticles.map((article, i) => (
-                                <div key={i} onClick={goToArticle} className="flex flex-col bg-purple-400 p-4 min-h-20 mb-30 items-center justify-center  font-bold rounded-md shadow-md hover:bg-purple-400 transition-colors">
-                                    <div className='overflow-hidden w-full'>
-                                        <img src={article.cover} className='w-full h-80 object-cover'/>
+                                <div key={i} onClick={goToArticle(article.id)} className="group relative hover:cursor-pointer transition-transform duration-300 hover:scale-104 flex flex-col bg-purple-400 p-4 min-h-20 mb-30 items-center justify-center font-bold rounded-md shadow-md">
+                                    {/* Overlay */}
+                                    <div className="absolute inset-0 bg-white bg-opacity-40 opacity-0 active:opacity-30 transition-opacity duration-200 z-20 rounded-md"></div>
+
+                                    {/* Image */}
+                                    <div className="relative overflow-hidden w-full rounded-md mb-3">
+                                        <img src={article.cover} className="w-full h-80 object-cover z-10" />
                                     </div>
-                                    <p>{article.title}</p>
-                                    <p>{article.date}</p>
+                                    <p className="z-10 relative">{article.title}</p>
+                                    <p className="z-10 relative">{article.date}</p>
                                 </div>
                             ))
                         ) : (

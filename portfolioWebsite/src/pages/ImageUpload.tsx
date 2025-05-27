@@ -28,18 +28,12 @@ export default function ImageUpload() {
     const [uploadResult, setUploadResult] = useState<{
         url?: string
         public_id?: string
-        format?: string
-        width?: number
-        height?: number
         error?: string
     } | null>(null)
     const [imageArrayIndex, setImageArrayIndex] = useState<number | undefined>(undefined)
     const [imagesInDBCloud, setImagesInDBCloud] = useState<{
         url?: string
         public_id?: string
-        format?: string
-        width?: number
-        height?: number
         error?: string
     }[]>([])
 
@@ -71,9 +65,6 @@ export default function ImageUpload() {
                 setUploadResult({
                     url: data.url,
                     public_id: data.public_id,
-                    format: data.format,
-                    width: data.width,
-                    height: data.height
                 })
             } else {
                 setUploadResult({ error: data.message || "Unknown error" })
@@ -270,8 +261,6 @@ export default function ImageUpload() {
                             <img src={uploadResult.url} alt="Uploaded" className="max-w-xs mx-auto rounded" />
                             <p>URL: <a href={uploadResult.url} target="_blank" rel="noopener noreferrer" className="underline">{uploadResult.url}</a></p>
                             <p>Public ID: <code className="bg-gray-200 px-2 py-1 rounded">{uploadResult.public_id}</code></p>
-                            <p>Format: {uploadResult.format}</p>
-                            <p>Dimensions: {uploadResult.width} × {uploadResult.height}</p>
                         </div>
                     )}
                 </div>

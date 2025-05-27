@@ -14,6 +14,7 @@ export default function ProjectsPage() {
         id: string
         title: string
         date: string
+        cover: string
     }[]>([])
     const [isLoading, setIsLoading] = useState(true)
     // const [error, setError] = useState<string | null>(null)
@@ -30,7 +31,8 @@ export default function ProjectsPage() {
             {
                 id: "error",
                 title: "Something went wrong",
-                date: new Date().toISOString().split('T')[0]
+                date: new Date().toISOString().split('T')[0],
+                cover: ''
             }
             ])
         } finally {
@@ -62,8 +64,8 @@ export default function ProjectsPage() {
             {/* description section */}
             <div className="flex justify-center">
                     <div className='flex flex-col items-center justify-center my-30 text-3xl h-40 w-160 mx-5 bg-purple-300 rounded-lg'>
-                        <h2 className="flex items-center justify-center text-3xl text-center mb-2 font-semibold text-white">Welcome to my blog!</h2>
-                        <p className='flex items-center justify-center text-2xl mx-15 text-center font-medium text-white'>Here you'll find articles on games and features that catch my interest.</p>
+                        <h2 className="flex items-center justify-center text-3xl text-center mb-2 font-semibold">Welcome to my blog!</h2>
+                        <p className='flex items-center justify-center text-2xl mx-15 text-center font-medium'>Here you'll find articles on games and features that catch my interest.</p>
                     </div>
             </div>
 
@@ -79,10 +81,13 @@ export default function ProjectsPage() {
                         ) : allArticles.length > 0 ? (
                             // Map through all articles
                             allArticles.map((article, i) => (
-                                <button key={i} onClick={goToArticle(article.id)} className="flex flex-col bg-blue-400 p-4 h-20 mb-30 flex items-center justify-center text-white font-bold rounded-md shadow-md hover:bg-blue-500 transition-colors cursor-pointer">
+                                <div key={i} onClick={goToArticle(article.id)} className="hover:cursor-pointer transition-transform duration-300 hover:scale-104 flex flex-col bg-purple-400 p-4 min-h-20 mb-30 items-center justify-center  font-bold rounded-md shadow-md hover:bg-purple-400 transition-colors">
+                                    <div className='overflow-hidden w-full rounded-md mb-3'>
+                                        <img src={article.cover} className='w-full h-80 object-cover'/>
+                                    </div>
                                     <p>{article.title}</p>
                                     <p>{article.date}</p>
-                                </button>
+                                </div>
                             ))
                         ) : (
                         <div className="col-span-full text-center py-8 mb-5">No articles found</div>
