@@ -77,7 +77,7 @@ func GetAllArticleBanners(c *fiber.Ctx) error {
 	defer cursor.Close(context.TODO())
 
 	// unloads cursor into []Banners
-	var articleBanners []models.ArticleBanner
+	articleBanners := make([]models.ArticleBanner, 0)
 	if err := cursor.All(context.TODO(), &articleBanners); err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, "Failed to decode articles")
 	}

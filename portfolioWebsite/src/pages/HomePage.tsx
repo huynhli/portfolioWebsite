@@ -12,7 +12,7 @@ export default function HomePage() {
 
     const getArticleBanners = async () => {
         try {
-            setIsLoading(true)
+            setIsLoading(true)  
             const responseObj = await fetch('https://liamportfolioweb.onrender.com/api/articleBanners')
             const articleBanners = await responseObj.json()
             setAllArticles(articleBanners)
@@ -72,8 +72,10 @@ export default function HomePage() {
                         ) : allArticles.length > 0 ? (
                             // Map through all articles
                             allArticles.map((article, i) => (
-                                <div key={i} onClick={goToArticle} className="flex flex-col bg-purple-400 p-4 h-20 mb-30 flex items-center justify-center  font-bold rounded-md shadow-md hover:bg-purple-400 transition-colors">
-                                    <img src={article.cover} />
+                                <div key={i} onClick={goToArticle} className="flex flex-col bg-purple-400 p-4 min-h-20 mb-30 items-center justify-center  font-bold rounded-md shadow-md hover:bg-purple-400 transition-colors">
+                                    <div className='overflow-hidden w-full'>
+                                        <img src={article.cover} className='w-full h-80 object-cover'/>
+                                    </div>
                                     <p>{article.title}</p>
                                     <p>{article.date}</p>
                                 </div>
