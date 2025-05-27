@@ -56,7 +56,7 @@ export default function HomePage() {
         <div className='min-h-screen'>
             {/* description section */}
             <div className="flex justify-center">
-                    <h2 className="self-center my-30 text-3xl w-170 mx-5 bg-purple-300 text-white rounded-lg p-5">
+                    <h2 className="self-center my-30 text-3xl w-170 mx-5 bg-purple-300 rounded-lg p-5">
                         Hi, I'm Liam - a game developer and designer as well as a full-stack web developer passionate about creating engaging experiences and bringing ideas to life.
                     </h2>
             </div>
@@ -70,7 +70,7 @@ export default function HomePage() {
                         ) : allArticles.length > 0 ? (
                             // Map through all articles
                             allArticles.map((article, i) => (
-                                <div key={i} onClick={goToArticle} className="flex flex-col bg-blue-400 p-4 h-20 mb-30 flex items-center justify-center text-white font-bold rounded-md shadow-md hover:bg-blue-500 transition-colors">
+                                <div key={i} onClick={goToArticle} className="flex flex-col bg-purple-400 p-4 h-20 mb-30 flex items-center justify-center  font-bold rounded-md shadow-md hover:bg-purple-400 transition-colors">
                                     <p>{article.title}</p>
                                     <p>{article.date}</p>
                                 </div>

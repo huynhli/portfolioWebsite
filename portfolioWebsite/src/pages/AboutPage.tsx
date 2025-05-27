@@ -5,7 +5,7 @@ export default function AboutPage() {
         <div className='flex flex-col'>
             {/* Photo */}
             <div className='flex justify-center'>
-                    <div className='flex items-center justify-center mt-3 mb-5 transition-transform duration-300 hover:scale-110'>
+                    <div className='flex items-center justify-center mt-3 mb-5'>
                         <div className='p-2 rounded-lg bg-purple-300'>
                             <img className='rounded-lg max-w-100 max-h-80 object-contain' alt='Photo of me' src='/images/mainPhotoOfMe.jpg'/>
                         </div>
@@ -14,19 +14,19 @@ export default function AboutPage() {
 
             {/* Description section */}
             <div className='flex justify-center'> 
-                <div className='flex flex-col justify-left text-3xl w-200 mx-5 bg-purple-300 rounded-md my-2 transition-transform duration-300 hover:scale-105'>
+                <div className='flex flex-col justify-left text-3xl w-200 mx-5 bg-purple-300 rounded-md my-2'>
                     <p className='my-5 mx-5'>Hi, I'm Liam.</p>
                     <p className='my-5 mx-5'>I'm an aspiring game designer and developer with a background as a full-stack web developer with a growing passion for creating interactive web and mobile experiences.</p>
                     <p className='my-5 mx-5'>I enjoy coding and seeing my code come to life.</p>
                     <p className='my-5 mx-5'>I like working.</p>
-                    <p className='my-5 mx-5'>Find me <a className='text-blue-400 underline hover:text-blue-500 active:text-blue-600' href='https://www.linkedin.com/in/liam-huynh-91aa1a1a1/'>here on LinkedIn</a>!</p>
+                    <p className='my-5 mx-5'>Find me <a className='text-blue-500 underline hover:text-blue-400 active:text-blue-600' href='https://www.linkedin.com/in/liam-huynh-91aa1a1a1/'>here on LinkedIn</a>!</p>
                 </div>
             </div>
 
             {/* Tri-panel section --> webdev experience, game experience, app experience */}
             <div className='flex justify-center my-2'>
                     <div className='grid grid-cols-1 xl:grid-cols-3 gap-6 w-full mx-8 my-6 max-w-8xl'>
-                        <div className='rounded-lg flex flex-col justify-center items-center p-4 text-3xl bg-purple-400 transition-transform duration-300 hover:scale-104'>
+                        <div className='rounded-lg flex flex-col justify-center items-center p-4 text-3xl bg-purple-300 transition-transform duration-300 hover:scale-104'>
                             {/*  p-4 h-20 mb-30 flex items-center justify-center text-white font-bold rounded-md shadow-md hover:bg-blue-500 transition-colors */}
                             <p className='flex items-center text-center mb-4 min-h-25'>Web Development</p>
                             <div className='rounded-lg bg-purple-300 h-full w-full p-3'>
@@ -39,7 +39,7 @@ export default function AboutPage() {
                                 </ul>
                             </div>   
                         </div>
-                        <div className='rounded-lg flex flex-col items-center p-4 text-3xl bg-purple-400 transition-transform duration-300 hover:scale-104'>
+                        <div className='rounded-lg flex flex-col items-center p-4 text-3xl bg-purple-300 transition-transform duration-300 hover:scale-104'>
                             {/*  p-4 h-20 mb-30 flex items-center justify-center text-white font-bold rounded-md shadow-md hover:bg-blue-500 transition-colors */}
                             <p className='flex items-center text-center mb-4 min-h-25'>Game Development <br/>and Design</p>
                             <div className='rounded-lg bg-purple-300 h-full w-full p-3'>
@@ -54,7 +54,7 @@ export default function AboutPage() {
                                 </ul>
                             </div>   
                         </div>
-                        <div className='rounded-lg flex flex-col items-center p-4 text-3xl bg-purple-400 transition-transform duration-300 hover:scale-104'>
+                        <div className='rounded-lg flex flex-col justify-center items-center p-4 text-3xl bg-purple-300 transition-transform duration-300 hover:scale-104'>
                             {/*  p-4 h-20 mb-30 flex items-center justify-center text-white font-bold rounded-md shadow-md hover:bg-blue-500 transition-colors */}
                             <p className='flex items-center text-center mb-4 min-h-25'>Mobile Apps</p>
                             <div className='rounded-lg bg-purple-300 h-full w-full p-3'>
@@ -68,8 +68,8 @@ export default function AboutPage() {
 
             {/* Download Resume */}
             <div className='flex justify-center'>
-                    <div className='flex items-center justify-center m-3 text-5xl mx-5 '>
-                        <button onClick={() => window.open('/ResumeFeb2025.pdf', '_blank')} className='cursor-pointer bg-purple-300 hover:bg-purple-400 rounded-lg p-6  transition-transform duration-300 hover:scale-110'>
+                    <div className='flex items-center justify-center m-3 text-2xl mx-5 '>
+                        <button onClick={() => window.open('/ResumeFeb2025.pdf', '_blank')} className='cursor-pointer bg-purple-300 hover:bg-purple-300 rounded-lg py-6 px-14  transition-transform duration-300 hover:scale-110'>
                             Download my resume here!
                         </button>
                     </div>
@@ -77,7 +77,7 @@ export default function AboutPage() {
 
             {/* Education */}
             <div className='flex justify-center my-5'>
-                    <h2 className='flex items-center justify-center my-3 text-3xl h-10 p-8 bg-purple-400'>
+                    <h2 className='flex items-center justify-center my-3 text-3xl h-10 p-8 bg-purple-300'>
                         Education
                     </h2>
                     <h2 className='flex items-center justify-center my-3 text-3xl h-10 p-8 bg-purple-300'>

@@ -45,23 +45,17 @@ export default function ImageUpload() {
 
     const uploadFileButtonClick = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        console.log("Upload submit triggered")
         if (!imgData) {
-            setUploadResult({ error: "No image selected." });
-            return;
+            setUploadResult({ error: "No image selected." })
+            return
         }
         if (!token) {
-            setUploadResult({ error: "You must be logged in to upload." });
-            return;
-        }
-        if (!imgData) {
-            setUploadResult({error: "No file uploaded"})
+            setUploadResult({ error: "You must be logged in to upload." })
             return
         }
 
         const formData = new FormData()
         formData.append("image", imgData)
-        console.log("Uploading file:", imgData);
         try {
             const res = await fetch("https://liamportfolioweb.onrender.com/api/uploadImage", {
                 method: "POST",
@@ -69,9 +63,9 @@ export default function ImageUpload() {
                     Authorization: `Bearer ${token}`,
                 },
                 body: formData,
-            });
+            })
 
-            const data = await res.json();
+            const data = await res.json()
 
             if (res.ok) {
                 setUploadResult({
@@ -80,12 +74,12 @@ export default function ImageUpload() {
                     format: data.format,
                     width: data.width,
                     height: data.height
-                });
+                })
             } else {
-                setUploadResult({ error: data.message || "Unknown error" });
+                setUploadResult({ error: data.message || "Unknown error" })
             }
         } catch (error: any) {
-            setUploadResult({ error: "Upload failed: " + error.message });
+            setUploadResult({ error: "Upload failed: " + error.message })
         }
     }
 
@@ -113,14 +107,14 @@ export default function ImageUpload() {
                 alert("Deleted successfully")
                 setPublicIdToDelete("")
                 setImagesInDBCloud((prev) => {
-                    const updated = prev.filter(img => img.public_id !== publicIdToDelete);
+                    const updated = prev.filter(img => img.public_id !== publicIdToDelete)
 
                     if (imageArrayIndex !== undefined && imageArrayIndex >= updated.length) {
-                        setImageArrayIndex(updated.length === 0 ? undefined : updated.length - 1);
+                        setImageArrayIndex(updated.length === 0 ? undefined : updated.length - 1)
                     }
 
-                    return updated;
-                });
+                    return updated
+                })
             } else {
                 alert("Error: " + data.message)
             }
@@ -130,19 +124,18 @@ export default function ImageUpload() {
     }
 
     const getImagesFromDBCloud = async() => {
-        console.log("getting images");
         try {
             const res = await fetch("https://liamportfolioweb.onrender.com/api/getImageMetaDatas", {
                 method: "GET",
-            });
-            const data = await res.json();
+            })
+            const data = await res.json()
             if (res.ok && Array.isArray(data)) {
-                setImagesInDBCloud(data);
+                setImagesInDBCloud(data)
             } else {
-                setImagesInDBCloud([]);
+                setImagesInDBCloud([])
             }
         } catch (error: any) {
-            setImagesInDBCloud([]);
+            setImagesInDBCloud([])
         }
         
     }
@@ -161,27 +154,26 @@ export default function ImageUpload() {
     const [articleToSubmit, setArticleToSubmit] = useState({
         title: "",
         date: "",
+        cover: "",
         content: [] as { type: string; data: string }[],
     })
-    const [articleUploadResult, setArticleUploadResult] = useState<string>("")
     const [articleIdToDelete, setArticleIdToDelete] = useState<string>("")
 
     const addContentBlock = () => {
         setArticleToSubmit(prev => ({
             ...prev,
             content: [...prev.content, { type: "Text", data: "" }],
-        }));
-    };
+        }))
+    }
 
     const updateContentBlock = (index: number, field: "type" | "data", value: string) => {
-        const updated = [...articleToSubmit.content];
-        updated[index][field] = value;
-        setArticleToSubmit(prev => ({ ...prev, content: updated }));
-    };
+        const updated = [...articleToSubmit.content]
+        updated[index][field] = value
+        setArticleToSubmit(prev => ({ ...prev, content: updated }))
+    }
 
     const submitArticle = async(event: FormEvent <HTMLFormElement>) =>  {
-        console.log("submitting article")
-        event.preventDefault();
+        event.preventDefault()
         try {
             const res = await fetch("https://liamportfolioweb.onrender.com/api/addArticle", {
                 method: "POST",
@@ -190,19 +182,15 @@ export default function ImageUpload() {
                     Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify(articleToSubmit),
-            });
-            const data = await res.json();
-            console.log("trying")
-            setArticleUploadResult(data)
+            })
+            const data = await res.json()
             if (res.ok) {
                 alert("Uploaded article successfully")
-                console.log(articleUploadResult)
                 // reset article var
                 // reset content blocks
-                setArticleToSubmit({"title": "", "date": "", "content": []})
+                setArticleToSubmit({"title": "", "date": "", "cover": "", "content": []})
             } else {
                     alert("Error: " + data.message)
-                    console.log(articleToSubmit)
             }
         } catch(error: any) {
             alert("Article upload failed: " + error.message)    
@@ -211,7 +199,6 @@ export default function ImageUpload() {
 
     const deleteArticle = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        console.log("deleting article")
         if (!articleIdToDelete.trim() || !token) {
             alert("no token?")
             return
@@ -346,6 +333,12 @@ export default function ImageUpload() {
                                 value={articleToSubmit.date}
                                 onChange={(e) => setArticleToSubmit(prev => ({ ...prev, date: e.target.value }))}
                             />
+                            <input
+                                type="text"
+                                placeholder="Cover"
+                                value={articleToSubmit.cover}
+                                onChange={(e) => setArticleToSubmit(prev => ({ ...prev, cover: e.target.value }))}
+                            />
                         </div>
 
                         <div>
@@ -399,5 +392,5 @@ export default function ImageUpload() {
                 </div>
             </div>
         </div>
-    );
+    )
 }
