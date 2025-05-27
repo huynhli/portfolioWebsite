@@ -68,6 +68,7 @@ func GetAllArticleBanners(c *fiber.Ctx) error {
 	projection := bson.D{ // filter query
 		{Key: "title", Value: 1},
 		{Key: "date", Value: 1},
+		{Key: "cover", Value: 1},
 	}
 	cursor, err := articleCollection.Find(context.TODO(), bson.D{}, options.Find().SetProjection(projection)) // cursor := iterable results of query
 	if err != nil {
@@ -87,7 +88,6 @@ func GetAllArticleBanners(c *fiber.Ctx) error {
 func GetArticleWithID(c *fiber.Ctx) error {
 	//save query param
 	id := c.Query("artid")
-	fmt.Println("in call")
 
 	objID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -105,7 +105,6 @@ func GetArticleWithID(c *fiber.Ctx) error {
 	}
 
 	//return
-	fmt.Println(article)
 	return c.JSON(article)
 }
 
@@ -114,25 +113,19 @@ func GetProjects(c *fiber.Ctx) error {
 }
 
 func UploadImage(c *fiber.Ctx) error {
-	fmt.Println("image handler called")
 	fileHeader, err := c.FormFile("image")
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "Image not found in form data")
 	}
 
-	fmt.Println("image found")
-
 	file, err := fileHeader.Open()
 	if err != nil {
-		fmt.Println("cant open")
 		return fiber.NewError(fiber.StatusInternalServerError, "Could not open image file")
 	}
 	defer file.Close()
 
-	fmt.Println("uploading")
 	uploadResult, err := config.Cloudinary.Upload.Upload(context.Background(), file, uploader.UploadParams{})
 	if err != nil {
-		fmt.Printf("Cloudinary upload error: %v\n", err)
 		return fiber.NewError(fiber.StatusInternalServerError, "Could not upload image")
 	}
 
@@ -144,7 +137,6 @@ func UploadImage(c *fiber.Ctx) error {
 		Height:   uploadResult.Height,
 	}
 
-	fmt.Println("saving")
 	// Database stores metadata
 	_, err = database.Database.Collection("images").InsertOne(context.TODO(), imageMetadata)
 	if err != nil {
@@ -214,7 +206,6 @@ func GetImageMetaDatasFromDBCloud(c *fiber.Ctx) error {
 	}
 	defer cursor.Close(context.TODO())
 
-	fmt.Println("unloading")
 	// unloads cursor into []images
 	var images []models.Image
 	if err := cursor.All(context.TODO(), &images); err != nil {
@@ -266,7 +257,6 @@ func GithubCallback(c *fiber.Ctx) error {
 
 	accessToken := values.Get("access_token")
 	if accessToken == "" {
-		fmt.Println("Token response:", string(bodyBytes)) // Debug
 		return c.Status(500).SendString("No access token received")
 	}
 

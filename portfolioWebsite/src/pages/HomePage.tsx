@@ -5,6 +5,7 @@ export default function HomePage() {
         id: string
         title: string
         date: string
+        cover: string
     }[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [loadingText, setLoadingText] = useState<string>("Loading main page.")
@@ -21,7 +22,8 @@ export default function HomePage() {
             {
                 id: "error",
                 title: "Something went wrong",
-                date: new Date().toISOString().split('T')[0]
+                date: new Date().toISOString().split('T')[0],
+                cover: ''
             }
             ])
         } finally {
@@ -71,6 +73,7 @@ export default function HomePage() {
                             // Map through all articles
                             allArticles.map((article, i) => (
                                 <div key={i} onClick={goToArticle} className="flex flex-col bg-purple-400 p-4 h-20 mb-30 flex items-center justify-center  font-bold rounded-md shadow-md hover:bg-purple-400 transition-colors">
+                                    <img src={article.cover} />
                                     <p>{article.title}</p>
                                     <p>{article.date}</p>
                                 </div>
