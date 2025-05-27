@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom'
 import '../main.css'
 import { useEffect, useState } from 'react'
+import Linkify from 'linkify-react'
 
 export default function ArticleTemplatePage() {
     const [isLoading, setIsLoading] = useState(true)
@@ -59,10 +60,20 @@ export default function ArticleTemplatePage() {
                     <div>
                         <p className='flex justify-center text-3xl font-bold'>{articleInfo.title}</p>
                         <p className='flex justify-center text-xl italic mt-3 mb-15'>{articleInfo.date}</p>
-                        {articleInfo.content.map((contentBlock, _) => (
+                        {articleInfo.content.map((contentBlock, i) => (
                             contentBlock.type === "Text" ? (
-                                <div>
-                                    <p className='text-lg my-2'>{contentBlock.data}</p>
+                                <div key={i}>
+                                    <p className='text-lg my-2'>
+                                        <Linkify
+                                        options={{
+                                            target: '_blank',
+                                            rel: 'noopener noreferrer',
+                                            className: () => 'text-blue-500 underline hover:text-blue-600'
+                                        }}
+                                        >
+                                        {contentBlock.data}
+                                        </Linkify>
+                                    </p>
                                 </div>
                             ) : contentBlock.type === "Image" ? (
                                 <div>
