@@ -37,6 +37,29 @@ func AddArticle(c *fiber.Ctx) error {
 		"message": "Article added successfully"})
 }
 
+func GetArticleWithID(c *fiber.Ctx) error {
+	//save query param
+	id := c.Query("artid")
+
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return fiber.NewError(fiber.StatusBadRequest, "Invalid article ID format")
+	}
+
+	// query database and unload as struct
+	var article models.Article
+	err = database.Database.Collection("articles").FindOne(context.TODO(), bson.D{{Key: "_id", Value: objID}}).Decode(&article)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return fiber.NewError(fiber.StatusNotFound, "No article found with that ID")
+		}
+		return fiber.NewError(fiber.StatusInternalServerError, "Failed to fetch article")
+	}
+
+	//return
+	return c.JSON(article)
+}
+
 func DeleteArticleById(c *fiber.Ctx) error {
 	type tempIdModel struct {
 		ID string `json:"article_id"`
@@ -85,29 +108,6 @@ func GetAllArticleBanners(c *fiber.Ctx) error {
 	return c.JSON(articleBanners)
 }
 
-func GetArticleWithID(c *fiber.Ctx) error {
-	//save query param
-	id := c.Query("artid")
-
-	objID, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return fiber.NewError(fiber.StatusBadRequest, "Invalid article ID format")
-	}
-
-	// query database and unload as struct
-	var article models.Article
-	err = database.Database.Collection("articles").FindOne(context.TODO(), bson.D{{Key: "_id", Value: objID}}).Decode(&article)
-	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			return fiber.NewError(fiber.StatusNotFound, "No article found with that ID")
-		}
-		return fiber.NewError(fiber.StatusInternalServerError, "Failed to fetch article")
-	}
-
-	//return
-	return c.JSON(article)
-}
-
 func GetProjects(c *fiber.Ctx) error {
 	return c.JSON("project")
 }
@@ -146,8 +146,6 @@ func UploadImage(c *fiber.Ctx) error {
 
 	return c.JSON(imageMetadata)
 }
-
-// func ShowImage(c *fiber.)
 
 func DeleteImage(c *fiber.Ctx) error {
 	type RequestBody struct {

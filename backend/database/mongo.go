@@ -36,25 +36,6 @@ func ConnectMongoDB() {
 	log.Println("Connected to MongoDB")
 }
 
-// func AddArticle(article models.Article) (*mongo.InsertOneResult, error) {
-// 	collection := Database.Collection("articles")
-// 	return collection.InsertOne(context.TODO(), article)
-// }
-
-// func GetAllArticles() ([]models.Article, error) {
-// 	collection := Database.Collection("articles")
-
-// 	cursor, err := collection.Find(context.TODO(), bson.D{})
-// 	if err != nil {
-//     	return nil, err
-// 	}
-// 	defer cursor.Close(context.TODO())
-
-// 	var articles []models.Article
-// 	err = cursor.All(context.TODO(), &articles)
-// 	return articles, err
-// }
-
 func DisconnectMongoDB() {
 	if err := Client.Disconnect(context.TODO()); err != nil {
 		log.Fatal(err)
