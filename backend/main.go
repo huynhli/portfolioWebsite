@@ -13,27 +13,31 @@ import (
 
 func main() {
 	fmt.Println("running main")
+
+	// connect to cloud
 	config.LoadConfig()
 	config.InitCloudinary()
+
+	// connect to db
 	database.ConnectMongoDB()
 	defer database.DisconnectMongoDB()
 
-	//Set port from env var
+	// Set port from env var
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080" // Default to 8080 if PORT is not set
 	}
 
-	//create new Fiber app
+	// create new Fiber app
 	app := fiber.New()
 
-	//enable CORS to allow requests to backend
+	// enable CORS to allow requests to backend
 	SetupCors(app)
 
-	//routing
+	// setup routing
 	routes.SetupRoutes(app)
 
-	//port listen and serve
+	// port listen and serve
 	err := app.Listen(":" + port)
 	if err != nil {
 		fmt.Println("Error starting server: ", err)
