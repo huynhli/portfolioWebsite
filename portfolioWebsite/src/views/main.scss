@@ -1,0 +1,78 @@
+@use "sass:math";
+@use "sass:list";
+
+.snowflake {
+  --size: 1vw;
+  width: var(--size);
+  height: var(--size);
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: -5vh;
+}
+
+@keyframes snowfall {
+  0% {
+    transform: translate3d(var(--left-ini), 0, 0);
+  }
+  100% {
+    transform: translate3d(var(--left-end), 900px, 0);
+  }
+}
+
+@for $i from 1 through 50 {
+  .snowflake:nth-child(#{$i}) {
+    --size: #{5 + math.random(15)}px;
+    --left-ini: #{math.random(20) - 10}vw;
+    --left-end: #{math.random(20) - 10}vw;
+    left: #{math.random(100)}vw;
+    animation: snowfall #{5 + math.random(10)}s linear infinite;
+    animation-delay: -#{math.random(10)}s;
+  }
+}
+
+/* small blur every 6 snowflakes */
+.snowflake:nth-child(6n) {
+  filter: blur(1px);
+}
+
+// -----------------------------
+$colours: (rgb(14, 125, 180), rgb(36, 85, 153), rgb(89, 54, 180));
+
+.light-streak {
+    --size: 1vw;
+    width: var(--size);
+    height: calc(var(--size) * 7);
+    border-radius: 10px;
+    position: absolute;
+    top: -5vh;
+}
+
+@keyframes light-fall {
+    0% {
+        transform: translate3d(var(--left-ini), 0, 0);
+    }
+    100% {
+        transform: translate3d(var(--left-ini), 1200px, 0);
+    }
+}
+
+// Loop for 50 streaks
+@for $i from 1 through 50 {
+    .light-streak:nth-child(#{$i}) {
+        // size
+        --size: #{2 + math.random(5)}px;
+
+        // distance from left
+        left: #{math.random(100)}vw;
+
+        --left-ini: #{math.random(20) - 10}vw;
+
+        // animation speed
+        animation: light-fall #{0.1 + math.random(3)}s linear infinite;
+        // scatter amt
+        animation-delay: -#{math.random(1000)}s;
+
+        background-color: list.nth($colours, math.random(list.length($colours)));
+    }
+}

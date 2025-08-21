@@ -19,7 +19,7 @@ export default function Header() {
     }
 
     return (
-        <div className='flex justify-between h-20 '>
+        <div className='flex justify-between h-20'>
             <div className='self-center px-8'>
                 <button className="underline-hover px-2 py-1 duration-400 rounded-t-lg hover:bg-purple-300 hover:cursor-pointer active:bg-purple-300" onClick={goToHome}>
                     Liam Huynh
