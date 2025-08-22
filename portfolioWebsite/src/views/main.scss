@@ -76,3 +76,20 @@ $colours: (rgb(14, 125, 180), rgb(36, 85, 153), rgb(89, 54, 180));
         background-color: list.nth($colours, math.random(list.length($colours)));
     }
 }
+
+// --------------------------------------------------
+.move-card:hover {
+  animation: move-card-anim #{0.4}s linear forwards;
+  animation-delay: 0.7s;
+}
+
+@keyframes move-card-anim {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-200px, -20px);    /* end left, back to center y */
+  }
+
+  // .move-second-card:
+}
