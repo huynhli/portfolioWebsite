@@ -72,7 +72,7 @@ export default function HomePage() {
             <section className="fixed flex flex-col h-screen w-screen justify-center items-center">
                 <StarBg />
                 <div className="
-                    h-[80%] w-[80%]
+                    h-[80%] w-full
                     group/outer relative 
                     flex flex-row justify-center items-center
                     ">
@@ -190,7 +190,7 @@ export default function HomePage() {
                     
                 </div>
 
-                {/* resume button that follows you */}
+                {/* resume button that follows you (?) */}
                 
                 
             </section>
