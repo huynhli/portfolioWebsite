@@ -1,13 +1,13 @@
 // import { useState, useEffect } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import StarBg from "../components/StarBg"
+import { useState } from "react";
+import ExperiencePoint from "../components/ExperiencePoint";
 
 export default function HomePage() {
     const { scrollYProgress } = useScroll()
-
-    const wavesY = useTransform(scrollYProgress, [0, 0.4], [100, 0])
-    const wavesScaleY = useTransform(scrollYProgress, [0, 0.2], [2, 1])
-    const bottomWavesY = useTransform(scrollYProgress, [0.4, 0.6], [-100, 700])
+    const [windowHeight] = useState<number>(window.innerHeight);
+    const wavesY = useTransform(scrollYProgress, [0, 0.6], [windowHeight, 0])
     // const bottomWavesSpring = useSpring(bottomWavesY, { stiffness: 100, damping: 10})
     // stiffness = spring force, damping = resistance 
 
@@ -72,7 +72,7 @@ export default function HomePage() {
             <section className="fixed flex flex-col h-screen w-screen justify-center items-center">
                 <StarBg />
                 <div className="
-                    h-[80%] w-full
+                    h-[80%] w-full px-[10%]
                     group/outer relative 
                     flex flex-row justify-center items-center
                     ">
@@ -92,7 +92,7 @@ export default function HomePage() {
                     </motion.div>
                     <div
                         className="
-                            absolute z-40 w-[40%] h-[80%] -mt-[20%]
+                            absolute z-40 w-[30%] h-[80%] mb-[20%]
                             opacity-0 translate-x-0
                             group-hover/outer:opacity-100 group-hover/outer:translate-x-[60%] group-hover/outer:translate-y-[20%]
                             transition-translate duration-500 ease-in-out
@@ -184,16 +184,50 @@ export default function HomePage() {
                             hover:scale-115
                             "
                         >
-                            <h1 className="text-white text-[clamp(1rem,1.5vw,2rem)]">Combining my full-stack and game development experiences, I'm obsessed with seeing ideas come to life and sharing that experience with others.</h1>
+                            <h1 className="text-white text-[clamp(1rem,1.5vw,2rem)]">Combining full-stack and game development experiences, I'm obsessed with seeing ideas come to life and sharing that experience with others.</h1>
                         </div>
                     </div>
                     
                 </div>
 
-                {/* resume button that follows you (?) */}
-                
+                {/* TODO resume button */}
                 
             </section>
+
+            {/* Roadmap-y section */}
+            <motion.section
+                style={{ y: wavesY }}
+                className="
+                min-h-[200vh] z-100 py-[2%]
+                border-t-5 rounded-t-4xl border-white bg-[#141414]
+                grid grid-cols-1 sm:grid-cols-6
+                grid-rows-9
+                "
+            >
+                
+                {/* experience */}
+                <div className="text-white col-span-4 row-span-2 pt-[2%] px-[10%]">
+                    <h1 className="text-4xl">EXPERIENCE</h1>
+                    <ExperiencePoint 
+                        position="Full-stack Developer" 
+                        company="TBSP Games"
+                        date="Jul 2025 - Aug 2025" 
+                        frameworks={["React", "Redux", "Tanstack Query", "Motion", "Jest", "Docker"]} 
+                        points={[
+                            "Reduced client-side latency by over 600 ms by optimizing RESTful API data fetching workflows and server state management with Tanstack Query and Axios", 
+                            "Doubled interactive visual effects and improved perceived app responsiveness by enhancing user engagement and loweringperceived latency with Framer Motion animation", 
+                            "Improved DevOps efficiency and deployment reliability by containerizing frontend applications with Docker and orchestrating clusters via Kubernetes, streamlining CI/CD workflows and reducing environment-related errors by 40%"]} 
+                    />
+                </div>
+
+                {/* projects */}
+                <div className="bg-white col-start-3 col-span-4 row-span-2 row-start-4">hiiiiiiiiiiiiiiiiiiiiii
+
+                </div>
+
+                {/* stack */}
+                <div className="bg-white col-start-2 col-span-4 row-start-7 row-span-3"></div>
+            </motion.section>
             
             {/* <motion.section className="pointer-events-none absolute w-full top-100 z-10 scale-y-50"
                 // style = start values, animate = end values, transition for type 
