@@ -1,5 +1,6 @@
 // import { useState, useEffect } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
+import StarBg from "../components/StarBg"
 
 export default function HomePage() {
     const { scrollYProgress } = useScroll()
@@ -71,7 +72,7 @@ export default function HomePage() {
             <section className="fixed flex flex-col h-screen w-screen justify-center items-center">
 
                 {/* snow fx TODO change to star fx */}
-                <motion.div className="absolute pointer-events-none z-[-1] w-[100%] h-[100%] z-10 "
+                {/* <motion.div className="absolute pointer-events-none z-[-1] w-[100%] h-[100%]"
                     style={{ opacity: 0}}
                     animate={{ opacity: 1 }}
                     // x, y, scale(x/y), rotate, rotateX, rotateY, skewX, skewY, opacity, colours, width, height, padding,margin, border radius, filter, zindex
@@ -79,11 +80,9 @@ export default function HomePage() {
                     transition={{ duration: 2, delay: 0.2, ease: "easeInOut" }}
                     // duration, delay, ease, repeat, repeatType, spring. per property transition
                 >
-                    {Array.from({ length: 50 }).map((_, i) => (
-                        <div key={i} className="snowflake"></div>
-                    ))}
-                </motion.div>
-
+                    
+                </motion.div> */}
+                <StarBg />
                 <div className="
                     h-[80%] w-[80%]
                     group/outer relative 
@@ -92,11 +91,11 @@ export default function HomePage() {
                     <motion.div
                         style={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ duration: 4, delay: 0.2, ease: "easeInOut" }}
+                        transition={{ duration: 3, delay: 0.2, ease: "easeInOut" }}
                         className="
                             flex flex-col z-50 pointer-events-none w-[40%] h-[40%] p-[2%] bg-zinc-900 
                             border-1 border-white rounded-lg justify-center
-                            transition duration-400 delay-80 
+                            transition-transform duration-400 delay-80 
                             group-hover/outer:scale-115 group-hover/outer:-rotate-2 group-hover/outer:-translate-x-[60%] group-hover/outer:-translate-y-20
                             "
                     >
@@ -115,7 +114,7 @@ export default function HomePage() {
                         {/* icons */}
                         <a
                             className="
-                            absolute z-20 w-[12%] h-[12%]
+                            absolute z-0 w-[12%] h-[12%]
                             bottom-[20%] left-[30%]
                             flex justify-center items-center
                             opacity-0
@@ -135,7 +134,7 @@ export default function HomePage() {
                         </a>
                         <a
                             className="
-                            absolute z-20 w-[12%] h-[12%]
+                            absolute z-0 w-[12%] h-[12%]
                             bottom-[20%] left-[45%]
                             flex justify-center items-center
                             opacity-0
@@ -156,7 +155,7 @@ export default function HomePage() {
                         </a>
                         <a
                             className="
-                            absolute z-20 w-[12%] h-[12%]
+                            absolute z-0 w-[12%] h-[12%]
                             bottom-[20%] right-[30%]
                             flex justify-center items-center
                             opacity-0

@@ -1,42 +1,62 @@
 @use "sass:math";
 @use "sass:list";
 
-.snowflake {
-  --size: 1vw;
-  width: var(--size);
-  height: var(--size);
-  background: white;
-  border-radius: 50%;
-  position: absolute;
-  top: -5vh;
-}
+// $colours: (rgb(255, 217, 0), rgb(144, 249, 255), rgb(222, 81, 30), rgb(255, 255, 255), rgb(124, 54, 11), rgb(224, 138, 0), rgb(94, 172, 255));
 
-@keyframes snowfall {
-  0% {
-    transform: translate3d(var(--left-ini), 0, 0);
-  }
-  100% {
-    transform: translate3d(var(--left-end), 110vh, 0);
-  }
-}
+// .stars {
+//   --size: 0.5px;
+//   width: var(--size);
+//   height: var(--size);
+//   background: white;
+//   border-radius: 50%;
+//   position: absolute;
+// }
 
-@for $i from 1 through 50 {
-  .snowflake:nth-child(#{$i}) {
-    --size: #{5 + math.random(15)}px;
-    --left-ini: #{math.random(20) - 10}vw;
-    --left-end: #{math.random(20) - 10}vw;
-    left: #{math.random(100)}vw;
-    animation: snowfall #{5 + math.random(10)}s linear infinite;
-    animation-delay: -#{math.random(10)}s;
-  }
-}
+// /* Generate 50 stars with random properties */
+// @for $i from 1 through 50 {
+//   $size: math.random(3) + 1px;               
+//   $left: math.random(100) * 1vw;            
+//   $top: math.random(100) * 1vh;                
+//   $xMove: (math.random(200) - 100) * 1px;
+//   $yMove: (math.random(200) - 100) * 1px;
+//   $colour: list.nth($colours, math.random(list.length($colours)));
+//   $delay: -#{math.random(10)}s;          
 
-/* small blur every 6 snowflakes */
-.snowflake:nth-child(6n) {
-  filter: blur(1px);
-}
+//   .stars:nth-child(#{$i}) {
+//     width: $size;
+//     height: $size;
+//     left: $left;
+//     top: $top;
+//     background-color: $colour;
+//     animation: starfall-#{$i} 1s linear infinite; 
+//     animation-delay: $delay;
+//   }
 
-// -----------------------------
+//   @keyframes starfall-#{$i} {
+//     0% {
+//       transform: translate(0, 0);
+//       opacity: 0;  
+//     }
+//     20% {
+//       opacity: 1;     
+//     }
+//     80% {
+//       opacity: 1;    
+//     }
+//     100% {
+//       transform: translate($xMove, $yMove);
+//       opacity: 0;  
+//     }
+//   }
+// }
+
+// /* small blur every 6 stars */
+// .stars:nth-child(6n) {
+//   filter: blur(1px);
+// }
+
+
+-----------------------------
 $colours: (rgb(14, 125, 180), rgb(36, 85, 153), rgb(89, 54, 180));
 
 .light-streak {
@@ -61,19 +81,19 @@ $colours: (rgb(14, 125, 180), rgb(36, 85, 153), rgb(89, 54, 180));
 @for $i from 1 through 50 {
     .light-streak:nth-child(#{$i}) {
         // size
-        --size: #{2 + math.random(5)}px;
+        --size: #{2 + math.math.random(5)}px;
 
         // distance from left
-        left: #{math.random(100)}vw;
+        left: #{math.math.random(100)}vw;
 
-        --left-ini: #{math.random(20) - 10}vw;
+        --left-ini: #{math.math.random(20) - 10}vw;
 
         // animation speed
-        animation: light-fall #{0.1 + math.random(3)}s linear infinite;
+        animation: light-fall #{0.1 + math.math.random(3)}s linear infinite;
         // scatter amt
-        animation-delay: -#{math.random(1000)}s;
+        animation-delay: -#{math.math.random(1000)}s;
 
-        background-color: list.nth($colours, math.random(list.length($colours)));
+        background-color: list.nth($colours, math.math.random(list.length($colours)));
     }
 }
 
