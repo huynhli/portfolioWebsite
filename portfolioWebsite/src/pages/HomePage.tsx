@@ -66,8 +66,11 @@ export default function HomePage() {
 
     return (
         <div className='relative flex flex-col'>
+            
+            {/* landing */}
+            <section className="fixed flex flex-col h-screen w-screen justify-center items-center">
 
-            <section className="relative flex flex-col h-200 justify-center items-center">
+                {/* snow fx TODO change to star fx */}
                 <motion.div className="absolute pointer-events-none z-[-1] w-[100%] h-[100%] z-10 "
                     style={{ opacity: 0}}
                     animate={{ opacity: 1 }}
@@ -82,40 +85,120 @@ export default function HomePage() {
                 </motion.div>
 
                 <div className="
-                    bg-white h-100 pb-10 px-[20%] pt-30 w-[80%]
-                    group relative flex flex-row justify-center items-center
+                    h-[80%] w-[80%]
+                    group/outer relative 
+                    flex flex-row justify-center items-center
                     ">
                     <motion.div
                         style={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 4, delay: 0.2, ease: "easeInOut" }}
                         className="
-                            flex flex-col z-50 pointer-events-none w-[25%] min-w-90 max-w-100 h-50 px-5 bg-zinc-900 border-1 border-white rounded-lg justify-center
-                            transition duration-400 delay-80 group-hover:scale-115 group-hover:-rotate-3 group-hover:-translate-x-50 group-hover:-translate-y-10
+                            flex flex-col z-50 pointer-events-none w-[40%] h-[40%] p-[2%] bg-zinc-900 
+                            border-1 border-white rounded-lg justify-center
+                            transition duration-400 delay-80 
+                            group-hover/outer:scale-115 group-hover/outer:-rotate-2 group-hover/outer:-translate-x-[60%] group-hover/outer:-translate-y-20
                             "
                     >
-                        <h1 className="text-white text-[clamp(2rem,2vw,2rem)]">Frontend Developer</h1>
-                        <h2 className="text-white text-[clamp(1rem,1vw,1rem)] mb-5">Hi! I'm Liam, a Frontend Developer dedicated to making scalable, high-performance user-centered web solutions.</h2>
+                        <h1 className="text-white text-7xl pb-[5%]">Frontend Developer</h1>
+                        <h2 className="text-white text-2xl">Hi! I'm Liam, a Frontend Developer dedicated to making scalable, high-performance, and user-centered web solutions.</h2>
                     </motion.div>
                     <div
                         className="
-                            absolute flex-col z-40 w-[25%] min-w-90 max-w-100 h-50 px-5 bg-zinc-900 border border-white rounded-lg justify-center
+                            absolute z-40 w-[40%] h-[80%] -mt-[20%]
                             opacity-0 translate-x-0
-                            group-hover:opacity-100 group-hover:translate-x-60
-                            transition-all duration-400 ease-in-out
+                            group-hover/outer:opacity-100 group-hover/outer:translate-x-[60%] group-hover/outer:translate-y-[20%]
+                            transition-translate duration-500 ease-in-out
+                            group/inner
                         "
                     >
-                        <h1 className="text-white text-[clamp(2rem,2vw,2rem)]">Second section</h1>
-                        <h2 className="text-white text-[clamp(1rem,1vw,1rem)] mb-5">Here is more info about me.</h2>
+                        {/* icons */}
+                        <a
+                            className="
+                            absolute z-20 w-[12%] h-[12%]
+                            bottom-[20%] left-[30%]
+                            flex justify-center items-center
+                            opacity-0
+                            group-hover/outer:opacity-100 group-hover/outer:-translate-y-[12vw] group-hover/outer:-translate-x-[5vw]
+                            transition duration-500 group-hover/outer:delay-[400ms]
+                            "
+                        >
+                            <img src='/images/itch_logo.png'
+                            className="
+                            bg-red-400 p-1 w-full
+                            border-1 rounded-lg border-white
+                            hover:scale-115 
+                            transition-scale duration-100 ease-in
+                            "
+                            tabIndex={0}
+                            />
+                        </a>
+                        <a
+                            className="
+                            absolute z-20 w-[12%] h-[12%]
+                            bottom-[20%] left-[45%]
+                            flex justify-center items-center
+                            opacity-0
+                            group-hover/outer:opacity-100 group-hover/outer:-translate-y-[12vw]
+                            transition duration-500 group-hover/outer:delay-[400ms]
+                            "
+                        >
+                            <img src='/images/itch_logo.png'
+                            className="
+                            bg-red-400 p-1 w-full
+                            border-1 rounded-lg border-white
+                            hover:scale-115 
+                            transition-scale duration-100 ease-in
+                            "
+                            tabIndex={0}
+                            />
+                            
+                        </a>
+                        <a
+                            className="
+                            absolute z-20 w-[12%] h-[12%]
+                            bottom-[20%] right-[30%]
+                            flex justify-center items-center
+                            opacity-0
+                            cursor-pointer
+                            group-hover/outer:opacity-100 group-hover/outer:-translate-y-[12vw] group-hover/outer:translate-x-[5vw]
+                            transition duration-500 group-hover/outer:delay-[400ms]
+                            hover:scale-115
+                            "
+                        >
+                            <img src='/images/itch_logo.png'
+                            className="
+                            bg-red-400 p-1 w-full
+                            border-1 rounded-lg border-white
+                            hover:scale-115 
+                            transition-scale duration-100 ease-in
+                            "
+                            tabIndex={0}
+                            />
+                        </a>
+
+                        {/* txt */}
+                        <div
+                            className="
+                            w-full h-[40%] p-[7%] mt-[60%]
+                            absolute flex justify-center items-center bg-zinc-900 
+                            border border-white rounded-lg justify-center
+                            transition-transform duration-300 ease-in-out group-hover/inner:scale-115
+                            hover:scale-115
+                            "
+                        >
+                            <h1 className="text-white text-[clamp(1rem,1.5vw,2rem)]">Combining my full-stack and game development experiences, I'm obsessed with seeing ideas come to life and sharing that experience with others.</h1>
+                        </div>
                     </div>
+                    
                 </div>
 
                 {/* resume button that follows you */}
-
+                
                 
             </section>
             
-            <motion.section className="pointer-events-none absolute w-full top-100 z-10 scale-y-50"
+            {/* <motion.section className="pointer-events-none absolute w-full top-100 z-10 scale-y-50"
                 // style = start values, animate = end values, transition for type 
                 style={{ y: wavesY, scaleY: wavesScaleY }}
                 
@@ -142,7 +225,7 @@ export default function HomePage() {
             >
                 <img src='/images/waves2.png' className="w-full h-[400px] object-fill" />
                 <img src='/images/waves.png' className="w-full h-[400px] object-fill rotate-180" />
-            </motion.section>
+            </motion.section> */}
 
             {/* 
             <div className="flex justify-center p-4">

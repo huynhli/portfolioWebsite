@@ -1,6 +1,6 @@
 import { Routes, Route, Outlet } from 'react-router-dom'
-import Header from './components/Header.tsx'
-import Footer from './components/Footer.tsx'
+// import Header from './components/Header.tsx'
+// import Footer from './components/Footer.tsx'
 import HomePage from './pages/HomePage.tsx'
 import ProjectsPage from './pages/ProjectsPage.tsx'
 import BlogPage from './pages/BlogPage.tsx'
@@ -14,9 +14,9 @@ export default function App() {
   const Layout = () => {
     return (
       <div>
-        <Header/>
+        {/* <Header/> */}
         <Outlet/>
-        <Footer/>
+        {/* <Footer/> */}
       </div>  
     )
   }
