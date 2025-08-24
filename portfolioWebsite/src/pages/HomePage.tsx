@@ -70,18 +70,6 @@ export default function HomePage() {
             
             {/* landing */}
             <section className="fixed flex flex-col h-screen w-screen justify-center items-center">
-
-                {/* snow fx TODO change to star fx */}
-                {/* <motion.div className="absolute pointer-events-none z-[-1] w-[100%] h-[100%]"
-                    style={{ opacity: 0}}
-                    animate={{ opacity: 1 }}
-                    // x, y, scale(x/y), rotate, rotateX, rotateY, skewX, skewY, opacity, colours, width, height, padding,margin, border radius, filter, zindex
-
-                    transition={{ duration: 2, delay: 0.2, ease: "easeInOut" }}
-                    // duration, delay, ease, repeat, repeatType, spring. per property transition
-                >
-                    
-                </motion.div> */}
                 <StarBg />
                 <div className="
                     h-[80%] w-[80%]
@@ -118,18 +106,23 @@ export default function HomePage() {
                             bottom-[20%] left-[30%]
                             flex justify-center items-center
                             opacity-0
-                            group-hover/outer:opacity-100 group-hover/outer:-translate-y-[12vw] group-hover/outer:-translate-x-[5vw]
+                            cursor-pointer
+                            group-hover/outer:opacity-100 group-hover/outer:-translate-y-[14vw] group-hover/outer:-translate-x-[5vw]
                             transition duration-500 group-hover/outer:delay-[400ms]
                             "
+                            tabIndex={0}
+                            href="https://github.com/huynhli" target="_blank" rel="noreferrer"
                         >
-                            <img src='/images/itch_logo.png'
+                            <img src='/images/github_logo.png'
+                            alt="GitHub logo, opens up to GitHub profile"
                             className="
-                            bg-red-400 p-1 w-full
-                            border-1 rounded-lg border-white
+                            bg-white p-1 w-full
+                            border-1 rounded-lg border-black
+                            invert
                             hover:scale-115 
                             transition-scale duration-100 ease-in
                             "
-                            tabIndex={0}
+
                             />
                         </a>
                         <a
@@ -138,18 +131,21 @@ export default function HomePage() {
                             bottom-[20%] left-[45%]
                             flex justify-center items-center
                             opacity-0
-                            group-hover/outer:opacity-100 group-hover/outer:-translate-y-[12vw]
+                            cursor-pointer
+                            group-hover/outer:opacity-100 group-hover/outer:-translate-y-[14vw]
                             transition duration-500 group-hover/outer:delay-[400ms]
                             "
+                            tabIndex={0}
+                            href="https://www.linkedin.com/in/liam-huynh-91aa1a1a1/" target="_blank" rel="noreferrer"
                         >
-                            <img src='/images/itch_logo.png'
+                            <img src='/images/linkedin_logo.png'
+                            alt="LinkedIn logo, opens up to LinkedIn profile"
                             className="
-                            bg-red-400 p-1 w-full
+                            w-full
                             border-1 rounded-lg border-white
                             hover:scale-115 
                             transition-scale duration-100 ease-in
                             "
-                            tabIndex={0}
                             />
                             
                         </a>
@@ -160,19 +156,21 @@ export default function HomePage() {
                             flex justify-center items-center
                             opacity-0
                             cursor-pointer
-                            group-hover/outer:opacity-100 group-hover/outer:-translate-y-[12vw] group-hover/outer:translate-x-[5vw]
+                            group-hover/outer:opacity-100 group-hover/outer:-translate-y-[14vw] group-hover/outer:translate-x-[5vw]
                             transition duration-500 group-hover/outer:delay-[400ms]
                             hover:scale-115
                             "
+                            tabIndex={0}
+                            href="https://trachscor.itch.io/" target="_blank" rel="noreferrer"
                         >
                             <img src='/images/itch_logo.png'
+                            alt="Itch.io logo, opens up to Itch.io profile"
                             className="
                             bg-red-400 p-1 w-full
                             border-1 rounded-lg border-white
                             hover:scale-115 
                             transition-scale duration-100 ease-in
                             "
-                            tabIndex={0}
                             />
                         </a>
 
