@@ -101,7 +101,7 @@ export default function HomePage() {
                     >
                         {/* icons */}
                         <a
-                            className="
+                            className=" icon-link-github
                             absolute z-0 w-[12%] h-[12%]
                             bottom-[20%] left-[30%]
                             flex justify-center items-center
@@ -126,7 +126,7 @@ export default function HomePage() {
                             />
                         </a>
                         <a
-                            className="
+                            className=" icon-link
                             absolute z-0 w-[12%] h-[12%]
                             bottom-[20%] left-[45%]
                             flex justify-center items-center
@@ -134,6 +134,7 @@ export default function HomePage() {
                             cursor-pointer
                             group-hover/outer:opacity-100 group-hover/outer:-translate-y-[14vw]
                             transition duration-500 group-hover/outer:delay-[400ms]
+                            active:
                             "
                             tabIndex={0}
                             href="https://www.linkedin.com/in/liam-huynh-91aa1a1a1/" target="_blank" rel="noreferrer"
@@ -150,7 +151,7 @@ export default function HomePage() {
                             
                         </a>
                         <a
-                            className="
+                            className=" icon-link
                             absolute z-0 w-[12%] h-[12%]
                             bottom-[20%] right-[30%]
                             flex justify-center items-center
@@ -211,6 +212,7 @@ export default function HomePage() {
                     <ExperiencePoint 
                         position="Full-stack Developer" 
                         company="TBSP Games"
+                        companyLink = "https://tablespoongames.pages.dev/"
                         date="Jul 2025 - Aug 2025" 
                         frameworks={["React", "Redux", "Tanstack Query", "Motion", "Jest", "Docker"]} 
                         points={[

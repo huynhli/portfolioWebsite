@@ -109,3 +109,25 @@ $colours-streak: (rgb(14, 125, 180), rgb(36, 85, 153), rgb(89, 54, 180));
     transform: translate(-200px, -20px);
   }
 }
+
+
+.icon-link {
+  display: inline-block;
+
+  img {
+    transition: filter 0.2s ease, transform 0.2s ease;
+  }
+
+  &:hover img {
+    filter: brightness(0.7); // or use darken() if it's a background color
+  }
+}
+
+.icon-link-github img {
+  filter: invert(1); // if you want light-on-dark by default
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.icon-link-github:hover img {
+  filter: invert(1) brightness(0.7); // darken while staying inverted
+}

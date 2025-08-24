@@ -2,11 +2,12 @@ type pointProps = {
     position: string
     frameworks: string[]
     company: string
+    companyLink: string
     date: string
     points: string[]
 }
 
-export default function ExperiencePoint ({ position, frameworks, company, date, points } : pointProps) {
+export default function ExperiencePoint ({ position, frameworks, company, companyLink, date, points } : pointProps) {
 
     return (
         <div className="py-3">
@@ -20,7 +21,7 @@ export default function ExperiencePoint ({ position, frameworks, company, date, 
                 </ul>
             </div>
             <div className="flex flex-col sm:flex-row sm:justify-between py-1">
-                <h2 className="italic text-2xl">{company}</h2>
+                <a href={companyLink} target="_blank" rel="noreferrer" className="italic text-2xl underline text-blue-400 hover:text-blue-500 active:text-blue-600">{company}</a>
                 <h2 className="italic text-2xl">{date}</h2>
             </div>
             <div className="leading-relaxed">
