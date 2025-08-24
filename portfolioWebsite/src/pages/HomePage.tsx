@@ -1,13 +1,54 @@
 // import { useState, useEffect } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import StarBg from "../components/StarBg"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ExperiencePoint from "../components/ExperiencePoint";
+import Landing from "../components/Landing";
+
+function useWindowSize() {
+    const [size, setSize] = useState({ 
+        width: typeof window !== 'undefined' ? window.innerWidth : 0, 
+        height: typeof window !== 'undefined' ? window.innerHeight : 0 
+    });
+
+    useEffect(() => {
+        const handleResize = () => setSize({ 
+            width: window.innerWidth, 
+            height: window.innerHeight 
+        });
+        
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    return size;
+}
 
 export default function HomePage() {
+    
     const { scrollYProgress } = useScroll()
-    const [windowHeight] = useState<number>(window.innerHeight);
-    const wavesY = useTransform(scrollYProgress, [0, 0.6], [windowHeight, 0])
+    const {width:windowWidth, height:windowHeight} = useWindowSize()
+    // const [windowHeight] = useState<number>(window.innerHeight);
+    const page2Slide = useTransform(scrollYProgress, [0, 0.6], [windowHeight, 0])
+    
+    // const [windowWidth] = useState<number>(window.innerWidth)
+    const rocketX = useTransform(
+        scrollYProgress,
+        [0.07, 0.13, 0.18, 0.24, 0.35],
+        [0, windowWidth * 0.15, 0, windowWidth * 0.1, -(windowWidth*0.7)]
+    );
+    const rocketY = useTransform(
+        scrollYProgress,
+        [0.15, 0.25, 0.35, 0.4, 0.5],
+        [0, windowHeight * 0.5, windowHeight * 0.5, windowHeight * 0.65, windowHeight * 0.9]
+    );
+
+    const textOpacityExp = useTransform(scrollYProgress, [0, 0.075], [0, 1])
+    const textXExp = useTransform(scrollYProgress, [0, 0.075], [300, 0])
+
+    
+
+    
     // const bottomWavesSpring = useSpring(bottomWavesY, { stiffness: 100, damping: 10})
     // stiffness = spring force, damping = resistance 
 
@@ -69,147 +110,46 @@ export default function HomePage() {
         <div className='relative flex flex-col'>
             
             {/* landing */}
-            <section className="fixed flex flex-col h-screen w-screen justify-center items-center">
-                <StarBg />
-                <div className="
-                    h-[80%] w-full px-[10%]
-                    group/outer relative 
-                    flex flex-row justify-center items-center
-                    ">
-                    <motion.div
-                        style={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 3, delay: 0.2, ease: "easeInOut" }}
-                        className="
-                            flex flex-col z-50 pointer-events-none w-[40%] h-[40%] p-[2%] bg-zinc-900 
-                            border-1 border-white rounded-lg justify-center
-                            transition-transform duration-400 delay-80 
-                            group-hover/outer:scale-115 group-hover/outer:-rotate-2 group-hover/outer:-translate-x-[60%] group-hover/outer:-translate-y-20
-                            "
-                    >
-                        <h1 className="text-white text-7xl pb-[5%]">Frontend Developer</h1>
-                        <h2 className="text-white text-2xl">Hi! I'm Liam, a Frontend Developer dedicated to making scalable, high-performance, and user-centered web solutions.</h2>
-                    </motion.div>
-                    <div
-                        className="
-                            absolute z-40 w-[30%] h-[80%] mb-[20%]
-                            opacity-0 translate-x-0
-                            group-hover/outer:opacity-100 group-hover/outer:translate-x-[60%] group-hover/outer:translate-y-[20%]
-                            transition-translate duration-500 ease-in-out
-                            group/inner
-                        "
-                    >
-                        {/* icons */}
-                        <a
-                            className=" icon-link-github
-                            absolute z-0 w-[12%] h-[12%]
-                            bottom-[20%] left-[30%]
-                            flex justify-center items-center
-                            opacity-0
-                            cursor-pointer
-                            group-hover/outer:opacity-100 group-hover/outer:-translate-y-[14vw] group-hover/outer:-translate-x-[5vw]
-                            transition duration-500 group-hover/outer:delay-[400ms]
-                            "
-                            tabIndex={0}
-                            href="https://github.com/huynhli" target="_blank" rel="noreferrer"
-                        >
-                            <img src='/images/github_logo.png'
-                            alt="GitHub logo, opens up to GitHub profile"
-                            className="
-                            bg-white p-1 w-full
-                            border-1 rounded-lg border-black
-                            invert
-                            hover:scale-115 
-                            transition-scale duration-100 ease-in
-                            "
-
-                            />
-                        </a>
-                        <a
-                            className=" icon-link
-                            absolute z-0 w-[12%] h-[12%]
-                            bottom-[20%] left-[45%]
-                            flex justify-center items-center
-                            opacity-0
-                            cursor-pointer
-                            group-hover/outer:opacity-100 group-hover/outer:-translate-y-[14vw]
-                            transition duration-500 group-hover/outer:delay-[400ms]
-                            active:
-                            "
-                            tabIndex={0}
-                            href="https://www.linkedin.com/in/liam-huynh-91aa1a1a1/" target="_blank" rel="noreferrer"
-                        >
-                            <img src='/images/linkedin_logo.png'
-                            alt="LinkedIn logo, opens up to LinkedIn profile"
-                            className="
-                            w-full
-                            border-1 rounded-lg border-white
-                            hover:scale-115 
-                            transition-scale duration-100 ease-in
-                            "
-                            />
-                            
-                        </a>
-                        <a
-                            className=" icon-link
-                            absolute z-0 w-[12%] h-[12%]
-                            bottom-[20%] right-[30%]
-                            flex justify-center items-center
-                            opacity-0
-                            cursor-pointer
-                            group-hover/outer:opacity-100 group-hover/outer:-translate-y-[14vw] group-hover/outer:translate-x-[5vw]
-                            transition duration-500 group-hover/outer:delay-[400ms]
-                            hover:scale-115
-                            "
-                            tabIndex={0}
-                            href="https://trachscor.itch.io/" target="_blank" rel="noreferrer"
-                        >
-                            <img src='/images/itch_logo.png'
-                            alt="Itch.io logo, opens up to Itch.io profile"
-                            className="
-                            bg-red-400 p-1 w-full
-                            border-1 rounded-lg border-white
-                            hover:scale-115 
-                            transition-scale duration-100 ease-in
-                            "
-                            />
-                        </a>
-
-                        {/* txt */}
-                        <div
-                            className="
-                            w-full h-[40%] p-[7%] mt-[60%]
-                            absolute flex justify-center items-center bg-zinc-900 
-                            border border-white rounded-lg justify-center
-                            transition-transform duration-300 ease-in-out group-hover/inner:scale-115
-                            hover:scale-115
-                            "
-                        >
-                            <h1 className="text-white text-[clamp(1rem,1.5vw,2rem)]">Combining full-stack and game development experiences, I'm obsessed with seeing ideas come to life and sharing that experience with others.</h1>
-                        </div>
-                    </div>
-                    
-                </div>
-
-                {/* TODO resume button */}
-                
-            </section>
+            <Landing/>
 
             {/* Roadmap-y section */}
             <motion.section
-                style={{ y: wavesY }}
+                style={{ y: page2Slide }}
                 className="
                 min-h-[200vh] z-100 py-[2%]
                 border-t-5 rounded-t-4xl border-white bg-[#141414]
-                grid grid-cols-1 sm:grid-cols-6
+                grid grid-cols-1 2xl:grid-cols-6
                 grid-rows-9
                 "
             >
-                
+                <StarBg/>
+                {/* rocketship */}
+                <motion.div
+                    className="hidden 2xl:flex self-center row-start-1 col-start-5 col-span-2 bg-white h-[50%] w-[50%]"
+                    style={{x:rocketX, y:rocketY}}
+                >
+
+                </motion.div>
+
                 {/* experience */}
-                <div className="text-white col-span-4 row-span-2 pt-[2%] px-[10%]">
-                    <h1 className="text-4xl">EXPERIENCE</h1>
+                <div className="text-white col-span-4 col-start-1 row-span-2 pt-[2%] px-[10%]">
+                    <motion.h1 className="text-4xl" style={{opacity:textOpacityExp, x:textXExp}}>EXPERIENCE</motion.h1>
                     <ExperiencePoint 
+                        scrollYProgress={scrollYProgress}
+                        pointNum={1}
+                        position="Full-stack Developer" 
+                        company="TBSP Games"
+                        companyLink = "https://tablespoongames.pages.dev/"
+                        date="Jul 2025 - Aug 2025" 
+                        frameworks={["React", "Redux", "Tanstack Query", "Motion", "Jest", "Docker"]} 
+                        points={[
+                            "Reduced client-side latency by over 600 ms by optimizing RESTful API data fetching workflows and server state management with Tanstack Query and Axios", 
+                            "Doubled interactive visual effects and improved perceived app responsiveness by enhancing user engagement and loweringperceived latency with Framer Motion animation", 
+                            "Improved DevOps efficiency and deployment reliability by containerizing frontend applications with Docker and orchestrating clusters via Kubernetes, streamlining CI/CD workflows and reducing environment-related errors by 40%"]} 
+                    />
+                    <ExperiencePoint 
+                        scrollYProgress={scrollYProgress}
+                        pointNum={2}
                         position="Full-stack Developer" 
                         company="TBSP Games"
                         companyLink = "https://tablespoongames.pages.dev/"
@@ -223,8 +163,12 @@ export default function HomePage() {
                 </div>
 
                 {/* projects */}
-                <div className="bg-white col-start-3 col-span-4 row-span-2 row-start-4">hiiiiiiiiiiiiiiiiiiiiii
+                <div className="bg-white col-start-3 col-span-4 row-span-2 row-start-4 px-[10%]">
+                    <motion.h1 
+                        className=""
+                    >
 
+                    </motion.h1>
                 </div>
 
                 {/* stack */}
