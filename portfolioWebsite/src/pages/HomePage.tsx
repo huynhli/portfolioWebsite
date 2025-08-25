@@ -4,6 +4,7 @@ import StarBg from "../components/StarBg"
 import { useState, useEffect } from "react";
 import ExperiencePoint from "../components/ExperiencePoint";
 import Landing from "../components/Landing";
+import ProjectPoint from "../components/ProjectPoint";
 
 function useWindowSize() {
     const [size, setSize] = useState({ 
@@ -40,75 +41,17 @@ export default function HomePage() {
     const rocketY = useTransform(
         scrollYProgress,
         [0.15, 0.25, 0.35, 0.4, 0.5],
-        [0, windowHeight * 0.5, windowHeight * 0.5, windowHeight * 0.65, windowHeight * 0.9]
+        [0, windowHeight * 0.6, windowHeight * 0.6, windowHeight * 0.85, windowHeight * 1.2]
     );
 
     const textOpacityExp = useTransform(scrollYProgress, [0, 0.075], [0, 1])
     const textXExp = useTransform(scrollYProgress, [0, 0.075], [300, 0])
 
-    
-
-    
-    // const bottomWavesSpring = useSpring(bottomWavesY, { stiffness: 100, damping: 10})
-    // stiffness = spring force, damping = resistance 
-
-    // const [allArticles, setAllArticles] = useState<{
-    //     id: string
-    //     title: string
-    //     date: string
-    //     cover: string
-    // }[]>([])
-    // const [isLoading, setIsLoading] = useState(true)
-    // const [loadingText, setLoadingText] = useState<string>("Loading main page.")
-
-    // const getArticleBanners = async () => {
-    //     try {
-    //         setIsLoading(true)  
-    //         const responseObj = await fetch('https://liamportfolioweb.onrender.com/api/articleBanners')
-    //         const articleBanners = await responseObj.json()
-    //         setAllArticles(articleBanners)
-    //     } catch(error) {
-    //         console.error('Error fetching: ', error)
-    //         setAllArticles([
-    //         {
-    //             id: "error",
-    //             title: "Something went wrong",
-    //             date: new Date().toISOString().split('T')[0],
-    //             cover: ''
-    //         }
-    //         ])
-    //     } finally {
-    //         setIsLoading(false)
-    //     }
-    // }
-    
-    // const goToArticle = (article_id: String) => {
-    //     // string windowToGoTo = backendcall(pagenum)
-    //     return () => {
-    //         window.location.href = `/BlogArticle/Article?artid=${article_id}` 
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     getArticleBanners()
-    // }, [])
-
-    // useEffect(() => {
-    //     if (!isLoading) return
-    //     const loadingTextArray = ["Loading main page.", "Loading main page..", "Loading main page..."]
-    //     let index = 0
-
-    //     const interval = setInterval(() => {
-    //         index = (index + 1) % loadingTextArray.length
-    //         setLoadingText(loadingTextArray[index])
-    //     }, 500)
-
-    //     return () => clearInterval(interval)
-    // }, [isLoading])
+    const projectOpacity = useTransform(scrollYProgress, [0.25, 0.3], [0, 1])
+    const projectX = useTransform(scrollYProgress, [0.25, 0.35], [300, 0])
 
     return (
         <div className='relative flex flex-col'>
-            
             {/* landing */}
             <Landing/>
 
@@ -116,10 +59,10 @@ export default function HomePage() {
             <motion.section
                 style={{ y: page2Slide }}
                 className="
-                min-h-[200vh] z-100 py-[2%]
-                border-t-5 rounded-t-4xl border-white bg-[#141414]
-                grid grid-cols-1 2xl:grid-cols-6
-                grid-rows-9
+                    min-h-[200vh] z-100 py-[2%]
+                    border-t-5 rounded-t-4xl border-white bg-[#141414]
+                    flex flex-col items-center
+                    2xl:grid 2xl:grid-cols-6 grid-rows-9
                 "
             >
                 <StarBg/>
@@ -163,12 +106,43 @@ export default function HomePage() {
                 </div>
 
                 {/* projects */}
-                <div className="bg-white col-start-3 col-span-4 row-span-2 row-start-4 px-[10%]">
+                <div className="relative col-start-3 col-span-4 row-span-2 row-start-4 text-white mt-[10%] 2xl:mt-0 mx-[5%]">
                     <motion.h1 
-                        className=""
-                    >
+                        className="text-4xl pb-[1%]"
+                        style={{opacity: projectOpacity, x: projectX}}
 
+                    >
+                        PROJECTS
                     </motion.h1>
+                    <div className="border-1 border-white h-full grid grid-cols-8 grid-rows-3">
+                        <ProjectPoint
+                            scrollYProgress={scrollYProgress}
+                            title="Game Design Blog"
+                            desc="Articles I write about game dessign choices I make, love, or both!"
+                            stack={["Typescript","React", "Jest", "Tanstack Query", "Motion", "TailwindCSS"]}
+                            order={1}
+                        />
+                        <ProjectPoint
+                            scrollYProgress={scrollYProgress}
+                            title="What 2 Eat"
+                            desc="Is choosing dinner too overwhelming? Try this."
+                            stack={["Typescript","React", "Jest", "Tanstack Query", "Motion", "TailwindCSS"]}
+                            order={2}
+                        />
+                        <ProjectPoint
+                            scrollYProgress={scrollYProgress}
+                            title="Spotify Song Recommendations"
+                            desc="Recommendations based on your spotify songs, playlists, artists, or albums!"
+                            stack={["Typescript","React", "Restful APIs", "Tanstack Query", "TailwindCSS"]}
+                            order={3}
+                        />
+                        <div className="z-50 col-start-6 col-span-3 row-span-3 row-start-1 border-y-1 border-white">
+                            <div className="bg-green-200 w-full h-full border-l-2 rounded-l-[35%] border-white">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
 
                 {/* stack */}
@@ -229,6 +203,61 @@ export default function HomePage() {
                 </div>
             </div> */}
         </div>
+     // const bottomWavesSpring = useSpring(bottomWavesY, { stiffness: 100, damping: 10})
+    // stiffness = spring force, damping = resistance 
 
+    // const [allArticles, setAllArticles] = useState<{
+    //     id: string
+    //     title: string
+    //     date: string
+    //     cover: string
+    // }[]>([])
+    // const [isLoading, setIsLoading] = useState(true)
+    // const [loadingText, setLoadingText] = useState<string>("Loading main page.")
+
+    // const getArticleBanners = async () => {
+    //     try {
+    //         setIsLoading(true)  
+    //         const responseObj = await fetch('https://liamportfolioweb.onrender.com/api/articleBanners')
+    //         const articleBanners = await responseObj.json()
+    //         setAllArticles(articleBanners)
+    //     } catch(error) {
+    //         console.error('Error fetching: ', error)
+    //         setAllArticles([
+    //         {
+    //             id: "error",
+    //             title: "Something went wrong",
+    //             date: new Date().toISOString().split('T')[0],
+    //             cover: ''
+    //         }
+    //         ])
+    //     } finally {
+    //         setIsLoading(false)
+    //     }
+    // }
+    
+    // const goToArticle = (article_id: String) => {
+    //     // string windowToGoTo = backendcall(pagenum)
+    //     return () => {
+    //         window.location.href = `/BlogArticle/Article?artid=${article_id}` 
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     getArticleBanners()
+    // }, [])
+
+    // useEffect(() => {
+    //     if (!isLoading) return
+    //     const loadingTextArray = ["Loading main page.", "Loading main page..", "Loading main page..."]
+    //     let index = 0
+
+    //     const interval = setInterval(() => {
+    //         index = (index + 1) % loadingTextArray.length
+    //         setLoadingText(loadingTextArray[index])
+    //     }, 500)
+
+    //     return () => clearInterval(interval)
+    // }, [isLoading])
     )
 }

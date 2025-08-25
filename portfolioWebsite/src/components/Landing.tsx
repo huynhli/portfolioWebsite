@@ -50,7 +50,7 @@ export default function Landing() {
                             group-hover/outer:opacity-100 
                             top-[30%] lg:top-0
                             lg:group-hover/outer:-translate-y-[14vh] lg:group-hover/outer:-translate-x-[10vw]
-                            group-hover/outer:-translate-y-[10vh] group-hover/outer:translate-x-[52vw]
+                            group-hover/outer:-translate-y-[10vh] group-hover/outer:translate-x-[49vw]
                             transition duration-500 group-hover/outer:delay-[200ms]
                             "
                             tabIndex={0}
@@ -77,7 +77,7 @@ export default function Landing() {
                             group-hover/outer:opacity-100 
                             top-[30%] lg:top-0
                             lg:group-hover/outer:-translate-y-[14vh] lg:group-hover/outer:translate-x-0
-                            group-hover/outer:translate-x-[52vw]
+                            group-hover/outer:translate-x-[49vw]
                             transition duration-500 group-hover/outer:delay-[200ms]
                             bg-
                             "
@@ -105,7 +105,7 @@ export default function Landing() {
                             group-hover/outer:opacity-100 
                             top-[30%] lg:top-0
                             lg:group-hover/outer:-translate-y-[14vh] lg:group-hover/outer:translate-x-[10vw]
-                            group-hover/outer:translate-y-[10vh] group-hover/outer:translate-x-[52vw]
+                            group-hover/outer:translate-y-[10vh] group-hover/outer:translate-x-[49vw]
                             transition duration-500 group-hover/outer:delay-[200ms]
                             hover:scale-115
                             "
