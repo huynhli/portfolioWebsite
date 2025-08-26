@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import ExperiencePoint from "../components/ExperiencePoint";
 import Landing from "../components/Landing";
 import ProjectPoint from "../components/ProjectPoint";
+import ProjectImage from "../components/ProjectImg";
 
 function useWindowSize() {
     const [size, setSize] = useState({ 
@@ -49,6 +50,8 @@ export default function HomePage() {
 
     const projectOpacity = useTransform(scrollYProgress, [0.25, 0.3], [0, 1])
     const projectX = useTransform(scrollYProgress, [0.25, 0.35], [300, 0])
+
+    const [hoverIndex, setHoverIndex] = useState<number>(0)
 
     return (
         <div className='relative flex flex-col'>
@@ -106,7 +109,11 @@ export default function HomePage() {
                 </div>
 
                 {/* projects */}
-                <div className="relative col-start-3 col-span-4 row-span-2 row-start-4 text-white mt-[10%] 2xl:mt-0 mx-[5%]">
+                <div className="
+                    relative 2xl:col-start-3 2xl:col-span-4 2xl:row-span-2 2xl:row-start-4 text-white mt-[10%] 2xl:mt-0 mx-[5%]
+                    
+                    "
+                >
                     <motion.h1 
                         className="text-4xl pb-[1%]"
                         style={{opacity: projectOpacity, x: projectX}}
@@ -114,13 +121,14 @@ export default function HomePage() {
                     >
                         PROJECTS
                     </motion.h1>
-                    <div className="border-1 border-white h-full grid grid-cols-8 grid-rows-3">
+                    <div className="border-1 border-white grid grid-cols-8 grid-rows-3">
                         <ProjectPoint
                             scrollYProgress={scrollYProgress}
                             title="Game Design Blog"
                             desc="Articles I write about game dessign choices I make, love, or both!"
                             stack={["Typescript","React", "Jest", "Tanstack Query", "Motion", "TailwindCSS"]}
                             order={1}
+                            setter={setHoverIndex}
                         />
                         <ProjectPoint
                             scrollYProgress={scrollYProgress}
@@ -128,6 +136,7 @@ export default function HomePage() {
                             desc="Is choosing dinner too overwhelming? Try this."
                             stack={["Typescript","React", "Jest", "Tanstack Query", "Motion", "TailwindCSS"]}
                             order={2}
+                            setter={setHoverIndex}
                         />
                         <ProjectPoint
                             scrollYProgress={scrollYProgress}
@@ -135,10 +144,16 @@ export default function HomePage() {
                             desc="Recommendations based on your spotify songs, playlists, artists, or albums!"
                             stack={["Typescript","React", "Restful APIs", "Tanstack Query", "TailwindCSS"]}
                             order={3}
+                            setter={setHoverIndex}
                         />
-                        <div className="z-50 col-start-6 col-span-3 row-span-3 row-start-1 border-y-1 border-white">
-                            <div className="bg-green-200 w-full h-full border-l-2 rounded-l-[35%] border-white">
-                                
+                        <div className="z-50 col-start-5 col-span-4 2xl:col-start-6 2xl:col-span-3 row-span-3 row-start-1 border-y-1 border-white">
+                            <div className="bg-green-200 w-full h-full border-l-2 rounded-l-[35%] border-white flex justify-items center-items">
+                                {/* only need to pass in url */}
+                                {hoverIndex === 0 ? (<button>View all Projects!</button>) : 
+                                    hoverIndex === 1 ? (<ProjectImage imgUrl="" projectName="Game Design Blog"/>) :
+                                        hoverIndex === 2 ? (<ProjectImage imgUrl="" projectName="What 2 Eat"/>) :
+                                            (<ProjectImage imgUrl="" projectName="Spotify Song Recommendations"/>)// hoverIndex === 3
+                                }
                             </div>
                         </div>
                     </div>
@@ -146,7 +161,9 @@ export default function HomePage() {
                 </div>
 
                 {/* stack */}
-                <div className="bg-white col-start-2 col-span-4 row-start-7 row-span-3"></div>
+                <div className="bg-white h-full w-full 2xl:col-start-2 2xl:col-span-4 2xl:row-start-7 2xl:row-span-3">
+                    <p>Hello gang</p>
+                </div>
             </motion.section>
             
             {/* <motion.section className="pointer-events-none absolute w-full top-100 z-10 scale-y-50"
