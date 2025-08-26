@@ -1,5 +1,5 @@
 import { motion, MotionValue, useTransform } from "framer-motion"
-import { useState, type Dispatch, type SetStateAction } from "react"
+import { type Dispatch, type SetStateAction } from "react"
 
 type projectProp = {
     scrollYProgress: MotionValue<number>
@@ -7,22 +7,22 @@ type projectProp = {
     desc: string
     stack: string[]
     order: number
-    setter: Dispatch<SetStateAction<number>>
+    imgSetter: Dispatch<SetStateAction<number>>
+    setImgTimeout: Dispatch<SetStateAction<number>>
+    imgTimeout: number
 }
 
-export default function ProjectPoint({scrollYProgress, title, desc, stack, order, setter}:projectProp) {
+export default function ProjectPoint({scrollYProgress, title, desc, stack, order, imgSetter, setImgTimeout, imgTimeout}:projectProp) {
     const pointX = useTransform(scrollYProgress, [0.2+(order*0.05), 0.25+(order*0.05)], [40, 0])
     const pointOpacity = useTransform(scrollYProgress, [0.2+(order*0.05), 0.25+(order*0.05)], [0, 1])
 
-    const [ projResetTimeout, setProjResetTimeout ] = useState<number>(0)
-
     const enteringProjPoint = () => {
-        setter(order)
-        clearInterval(projResetTimeout)
+        clearTimeout(imgTimeout)
+        imgSetter(order)
     }
 
     const leavingProjPoint = () => {
-        setProjResetTimeout(setTimeout(() => {setter(0)}, 1000))
+        setImgTimeout(setTimeout(() => {imgSetter(0)}, 1000))
     }
 
     return (

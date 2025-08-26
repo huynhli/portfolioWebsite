@@ -27,7 +27,6 @@ function useWindowSize() {
 }
 
 export default function HomePage() {
-    
     const { scrollYProgress } = useScroll()
     const {width:windowWidth, height:windowHeight} = useWindowSize()
     // const [windowHeight] = useState<number>(window.innerHeight);
@@ -52,6 +51,8 @@ export default function HomePage() {
     const projectX = useTransform(scrollYProgress, [0.25, 0.35], [300, 0])
 
     const [hoverIndex, setHoverIndex] = useState<number>(0)
+
+    const [projImgTimeout, setProjImgTimeout] = useState<number>(0)
 
     return (
         <div className='relative flex flex-col'>
@@ -128,7 +129,9 @@ export default function HomePage() {
                             desc="Articles I write about game dessign choices I make, love, or both!"
                             stack={["Typescript","React", "Jest", "Tanstack Query", "Motion", "TailwindCSS"]}
                             order={1}
-                            setter={setHoverIndex}
+                            imgSetter={setHoverIndex}
+                            setImgTimeout={setProjImgTimeout} 
+                            imgTimeout={projImgTimeout}
                         />
                         <ProjectPoint
                             scrollYProgress={scrollYProgress}
@@ -136,7 +139,9 @@ export default function HomePage() {
                             desc="Is choosing dinner too overwhelming? Try this."
                             stack={["Typescript","React", "Jest", "Tanstack Query", "Motion", "TailwindCSS"]}
                             order={2}
-                            setter={setHoverIndex}
+                            imgSetter={setHoverIndex}
+                            setImgTimeout={setProjImgTimeout} 
+                            imgTimeout={projImgTimeout}
                         />
                         <ProjectPoint
                             scrollYProgress={scrollYProgress}
@@ -144,15 +149,17 @@ export default function HomePage() {
                             desc="Recommendations based on your spotify songs, playlists, artists, or albums!"
                             stack={["Typescript","React", "Restful APIs", "Tanstack Query", "TailwindCSS"]}
                             order={3}
-                            setter={setHoverIndex}
+                            imgSetter={setHoverIndex}
+                            setImgTimeout={setProjImgTimeout} 
+                            imgTimeout={projImgTimeout}
                         />
                         <div className="z-50 col-start-5 col-span-4 2xl:col-start-6 2xl:col-span-3 row-span-3 row-start-1 border-y-1 border-white">
                             <div className="bg-green-200 w-full h-full border-l-2 rounded-l-[35%] border-white flex justify-center center-items">
                                 {/* only need to pass in url */}
                                 {hoverIndex === 0 ? (<button>View all Projects!</button>) : 
-                                    hoverIndex === 1 ? (<ProjectImage order={1} setter={setHoverIndex} imgUrl="/images/tempGameBlogImg.png" projectName="Game Design Blog"/>) :
-                                        hoverIndex === 2 ? (<ProjectImage order={2} setter={setHoverIndex} imgUrl="" projectName="What 2 Eat"/>) :
-                                            (<ProjectImage order={3} setter={setHoverIndex} imgUrl="/images/tempSpotifyRecsImg.png" projectName="Spotify Song Recommendations"/>)// hoverIndex === 3
+                                    hoverIndex === 1 ? (<ProjectImage order={1} imgSetter={setHoverIndex} setImgTimeout={setProjImgTimeout} imgTimeout={projImgTimeout} imgUrl="/images/tempGameBlogImg.png" projectName="Game Design Blog"/>) :
+                                        hoverIndex === 2 ? (<ProjectImage order={2} imgSetter={setHoverIndex} setImgTimeout={setProjImgTimeout} imgTimeout={projImgTimeout} imgUrl="" projectName="What 2 Eat"/>) :
+                                            (<ProjectImage order={3} imgSetter={setHoverIndex} setImgTimeout={setProjImgTimeout} imgTimeout={projImgTimeout} imgUrl="/images/tempSpotifyRecsImg.png" projectName="Spotify Song Recommendations"/>)// hoverIndex === 3
                                 }
                             </div>
                         </div>

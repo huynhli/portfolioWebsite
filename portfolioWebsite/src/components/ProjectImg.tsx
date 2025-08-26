@@ -1,23 +1,23 @@
 import { motion } from "framer-motion"
-import { useState, type Dispatch, type SetStateAction } from "react"
+import { type Dispatch, type SetStateAction } from "react"
 
 
 type projectImageProps = {
     imgUrl: string
     projectName: string
     order: number
-    setter: Dispatch<SetStateAction<number>>
+    imgSetter: Dispatch<SetStateAction<number>>
+    setImgTimeout: Dispatch<SetStateAction<number>>
+    imgTimeout: number
 }
-export default function ProjectImage({imgUrl, projectName, order, setter } : projectImageProps ) {
-    const [ projResetTimeout, setProjResetTimeout ] = useState<number>(0)
-    
+export default function ProjectImage({imgUrl, projectName, order, imgSetter, setImgTimeout, imgTimeout } : projectImageProps ) {
     const enteringProjImg = () => {
-        setter(order)
-        clearInterval(projResetTimeout)
+        imgSetter(order)
+        clearTimeout(imgTimeout)
     }
 
     const leavingProjImg = () => {
-        setProjResetTimeout(setTimeout(() => {setter(0)}, 1000))
+        setImgTimeout(setTimeout(() => {imgSetter(0)}, 1500))
     }
 
     return (
