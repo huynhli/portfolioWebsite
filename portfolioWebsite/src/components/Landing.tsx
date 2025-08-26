@@ -16,11 +16,11 @@ export default function Landing() {
                         animate={{ opacity: 1 }}
                         transition={{ duration: 3, delay: 0.2, ease: "easeInOut" }}
                         className="
-                            flex flex-col z-50 min-w-[30%] max-w-[40%] h-[80%] p-[2%] bg-zinc-900 
+                            flex flex-col z-50 min-w-[30%] max-w-[40%] min-h-[80%] p-[2%] bg-zinc-900 
                             border-1 border-white rounded-lg justify-center
                             transition-transform duration-400 delay-80 
-                            group-hover/outer:scale-115 group-hover/outer:-rotate-2
-                            lg:group-hover/outer:-translate-x-[60%] lg:group-hover/outer:-translate-y-20
+                            group-hover/outer:scale-110 group-hover/outer:-rotate-2
+                            lg:group-hover/outer:-translate-x-[50%] lg:group-hover/outer:-translate-y-20
                             group-hover/outer:-translate-y-[20%]
                             "
                     >
@@ -49,7 +49,7 @@ export default function Landing() {
                             cursor-pointer
                             group-hover/outer:opacity-100 
                             top-[30%] lg:top-0
-                            lg:group-hover/outer:-translate-y-[14vh] lg:group-hover/outer:-translate-x-[10vw]
+                            lg:group-hover/outer:-translate-y-[120%] lg:group-hover/outer:-translate-x-[10vw]
                             group-hover/outer:-translate-y-[10vh] group-hover/outer:translate-x-[49vw]
                             transition duration-500 group-hover/outer:delay-[200ms]
                             "
@@ -76,8 +76,8 @@ export default function Landing() {
                             cursor-pointer
                             group-hover/outer:opacity-100 
                             top-[30%] lg:top-0
-                            lg:group-hover/outer:-translate-y-[14vh] lg:group-hover/outer:translate-x-0
-                            group-hover/outer:translate-x-[49vw]
+                            lg:group-hover/outer:-translate-y-[120%] lg:group-hover/outer:translate-x-0
+                            group-hover/outer:translate-x-[38vw]
                             transition duration-500 group-hover/outer:delay-[200ms]
                             bg-
                             "
@@ -104,7 +104,7 @@ export default function Landing() {
                             cursor-pointer
                             group-hover/outer:opacity-100 
                             top-[30%] lg:top-0
-                            lg:group-hover/outer:-translate-y-[14vh] lg:group-hover/outer:translate-x-[10vw]
+                            lg:group-hover/outer:-translate-y-[120%] lg:group-hover/outer:translate-x-[10vw]
                             group-hover/outer:translate-y-[10vh] group-hover/outer:translate-x-[49vw]
                             transition duration-500 group-hover/outer:delay-[200ms]
                             hover:scale-115
@@ -126,10 +126,10 @@ export default function Landing() {
                         {/* txt */}
                         <div
                             className="
-                            lg:w-full lg:h-[130%] h-[110%] w-[40%] p-[2%] lg:p-[7%]
+                            lg:w-[110%] lg:min-h-[130%] min-h-[110%] w-[40%] p-[2%] lg:p-[7%]
                             absolute flex justify-center items-center bg-zinc-900 
                             border border-white rounded-lg justify-center
-                            transition-transform duration-300 ease-in-out lg:group-hover/inner:scale-115
+                            transition-transform duration-300 ease-in-out lg:group-hover/inner:scale-105
                             "
                         >
                             <h1 className="text-white text-[clamp(1rem,2vw,1.5rem)]">Combining full-stack and game development experiences, I'm obsessed with seeing ideas come to life and sharing that experience with others.</h1>
