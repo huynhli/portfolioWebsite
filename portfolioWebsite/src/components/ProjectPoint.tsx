@@ -1,5 +1,5 @@
 import { motion, MotionValue, useTransform } from "framer-motion"
-import type { Dispatch, SetStateAction } from "react"
+import { useState, type Dispatch, type SetStateAction } from "react"
 
 type projectProp = {
     scrollYProgress: MotionValue<number>
@@ -14,6 +14,17 @@ export default function ProjectPoint({scrollYProgress, title, desc, stack, order
     const pointX = useTransform(scrollYProgress, [0.2+(order*0.05), 0.25+(order*0.05)], [40, 0])
     const pointOpacity = useTransform(scrollYProgress, [0.2+(order*0.05), 0.25+(order*0.05)], [0, 1])
 
+    const [ projResetTimeout, setProjResetTimeout ] = useState<number>(0)
+
+    const enteringProjPoint = () => {
+        setter(order)
+        clearInterval(projResetTimeout)
+    }
+
+    const leavingProjPoint = () => {
+        setProjResetTimeout(setTimeout(() => {setter(0)}, 1000))
+    }
+
     return (
         <motion.div 
             className={`
@@ -22,8 +33,8 @@ export default function ProjectPoint({scrollYProgress, title, desc, stack, order
                 hover:-translate-x-[5%] hover:-mr-[7%] hover:pr-[7%]
                 `}
             style={{x: pointX, opacity: pointOpacity}}
-            onMouseEnter={() => {setter(order)}}
-            onMouseLeave={() => {setter(0)}}
+            onMouseEnter={enteringProjPoint}
+            onMouseLeave={leavingProjPoint}
         >
             <div className="flex flex-row">
                 <h1 className="text-2xl pr-2">{title}</h1>

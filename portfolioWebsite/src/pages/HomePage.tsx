@@ -147,12 +147,12 @@ export default function HomePage() {
                             setter={setHoverIndex}
                         />
                         <div className="z-50 col-start-5 col-span-4 2xl:col-start-6 2xl:col-span-3 row-span-3 row-start-1 border-y-1 border-white">
-                            <div className="bg-green-200 w-full h-full border-l-2 rounded-l-[35%] border-white flex justify-items center-items">
+                            <div className="bg-green-200 w-full h-full border-l-2 rounded-l-[35%] border-white flex justify-center center-items">
                                 {/* only need to pass in url */}
                                 {hoverIndex === 0 ? (<button>View all Projects!</button>) : 
-                                    hoverIndex === 1 ? (<ProjectImage imgUrl="" projectName="Game Design Blog"/>) :
-                                        hoverIndex === 2 ? (<ProjectImage imgUrl="" projectName="What 2 Eat"/>) :
-                                            (<ProjectImage imgUrl="" projectName="Spotify Song Recommendations"/>)// hoverIndex === 3
+                                    hoverIndex === 1 ? (<ProjectImage order={1} setter={setHoverIndex} imgUrl="/images/tempGameBlogImg.png" projectName="Game Design Blog"/>) :
+                                        hoverIndex === 2 ? (<ProjectImage order={2} setter={setHoverIndex} imgUrl="" projectName="What 2 Eat"/>) :
+                                            (<ProjectImage order={3} setter={setHoverIndex} imgUrl="/images/tempSpotifyRecsImg.png" projectName="Spotify Song Recommendations"/>)// hoverIndex === 3
                                 }
                             </div>
                         </div>
