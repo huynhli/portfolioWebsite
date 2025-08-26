@@ -1,57 +1,49 @@
 // import { useState, useEffect } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import StarBg from "../components/StarBg"
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import ExperiencePoint from "../components/ExperiencePoint";
 import Landing from "../components/Landing";
 import ProjectPoint from "../components/ProjectPoint";
 import ProjectImage from "../components/ProjectImg";
 
-function useWindowSize() {
-    const [size, setSize] = useState({ 
-        width: typeof window !== 'undefined' ? window.innerWidth : 0, 
-        height: typeof window !== 'undefined' ? window.innerHeight : 0 
-    });
-
-    useEffect(() => {
-        const handleResize = () => setSize({ 
-            width: window.innerWidth, 
-            height: window.innerHeight 
-        });
-        
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
-
-    return size;
-}
-
 export default function HomePage() {
     const { scrollYProgress } = useScroll()
-    const {width:windowWidth, height:windowHeight} = useWindowSize()
-    // const [windowHeight] = useState<number>(window.innerHeight);
-    const page2Slide = useTransform(scrollYProgress, [0, 0.6], [windowHeight, 0])
+    const page2Slide = useTransform(scrollYProgress, [0, 0.6], [window.innerHeight, 0])
     
-    // const [windowWidth] = useState<number>(window.innerWidth)
+
+    // Roadmap animations code
+    const roadmapRef = useRef<HTMLElement | null>(null)
+    const [roadmapSize, setRoadmapSize] = useState({width: 0, height: 0})
+    useEffect(() => {
+        if (!roadmapRef.current) return
+        const observer = new ResizeObserver(([entry]) => {
+            const { width, height } = entry.contentRect
+            setRoadmapSize({ width, height })
+        })
+
+        observer.observe(roadmapRef.current)
+        return () => observer.disconnect()
+    }, [])
+
     const rocketX = useTransform(
         scrollYProgress,
         [0.07, 0.13, 0.18, 0.24, 0.35],
-        [0, windowWidth * 0.15, 0, windowWidth * 0.1, -(windowWidth*0.7)]
+        [0, roadmapSize.width * 0.15, 0, roadmapSize.width * 0.1, -(roadmapSize.width*0.7)]
     );
     const rocketY = useTransform(
         scrollYProgress,
-        [0.15, 0.25, 0.35, 0.4, 0.5],
-        [0, windowHeight * 0.6, windowHeight * 0.6, windowHeight * 0.85, windowHeight * 1.2]
+        [0.15, 0.25, 0.35, 0.4, 0.5, 0.6],
+        [0, roadmapSize.height * 0.235, roadmapSize.height * 0.21, roadmapSize.height * 0.3, roadmapSize.height * 0.5, roadmapSize.height * 0.58]
     );
 
+    // Roadmap text animations
     const textOpacityExp = useTransform(scrollYProgress, [0, 0.075], [0, 1])
     const textXExp = useTransform(scrollYProgress, [0, 0.075], [300, 0])
 
     const projectOpacity = useTransform(scrollYProgress, [0.25, 0.3], [0, 1])
     const projectX = useTransform(scrollYProgress, [0.25, 0.35], [300, 0])
-
     const [hoverIndex, setHoverIndex] = useState<number>(0)
-
     const [projImgTimeout, setProjImgTimeout] = useState<number>(0)
 
     return (
@@ -61,6 +53,7 @@ export default function HomePage() {
 
             {/* Roadmap-y section */}
             <motion.section
+                ref={roadmapRef}
                 style={{ y: page2Slide }}
                 className="
                     min-h-[200vh] z-100 py-[2%]
@@ -168,9 +161,11 @@ export default function HomePage() {
                 </div>
 
                 {/* stack */}
-                <div className="bg-white h-full w-full 2xl:col-start-2 2xl:col-span-4 2xl:row-start-7 2xl:row-span-3">
-                    <p>Hello gang</p>
+                <div className="bg-white h-full 2xl:w-full w-[80%] 2xl:col-start-2 2xl:col-span-4 2xl:mt-0 mt-[10%] 2xl:row-start-7 2xl:row-span-2">
+                    <h1>My Stack</h1>
                 </div>
+
+                <div className="bg-white h-full 2xl:w-full w-[80%] 2xl:col-start-2 2xl:col-span-4 2xl:mt-0 mt-[10%] 2xl:row-start-9 2xl:row-span-1"></div>
             </motion.section>
             
             {/* <motion.section className="pointer-events-none absolute w-full top-100 z-10 scale-y-50"

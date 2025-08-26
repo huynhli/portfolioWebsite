@@ -31,7 +31,6 @@ func ConnectMongoDB() {
 		log.Fatal("MongoDB connection error:", err)
 	}
 
-	Database = Client.Database("your-db-name")
 	Database = Client.Database("portfolioWebsite")
 	log.Println("Connected to MongoDB")
 }
