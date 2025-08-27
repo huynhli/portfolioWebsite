@@ -6,6 +6,7 @@ import ExperiencePoint from "../components/ExperiencePoint";
 import Landing from "../components/Landing";
 import ProjectPoint from "../components/ProjectPoint";
 import ProjectImage from "../components/ProjectImg";
+import TechStackSection from "../components/TechStackSection";
 
 export default function HomePage() {
     const { scrollYProgress } = useScroll()
@@ -28,13 +29,13 @@ export default function HomePage() {
 
     const rocketX = useTransform(
         scrollYProgress,
-        [0.07, 0.13, 0.18, 0.24, 0.35],
-        [0, roadmapSize.width * 0.15, 0, roadmapSize.width * 0.1, -(roadmapSize.width*0.7)]
+        [0.09, 0.12, 0.14, 0.18, 0.23, 0.28, 0.37, 0.4, 0.43],
+        [0, roadmapSize.width * 0.15, 0, roadmapSize.width * 0.1, -(roadmapSize.width*0.7), -(roadmapSize.width*0.75), -(roadmapSize.width*0.67), -(roadmapSize.width*0.77), -(roadmapSize.width*0.28)]
     );
     const rocketY = useTransform(
         scrollYProgress,
-        [0.15, 0.25, 0.35, 0.4, 0.5, 0.6],
-        [0, roadmapSize.height * 0.235, roadmapSize.height * 0.21, roadmapSize.height * 0.3, roadmapSize.height * 0.5, roadmapSize.height * 0.58]
+        [0.08, 0.2, 0.25, 0.4, 0.47, 0.52],
+        [0, roadmapSize.height * 0.22, roadmapSize.height * 0.20, roadmapSize.height * 0.45, roadmapSize.height * 0.41, roadmapSize.height * 0.47]
     );
 
     // Roadmap text animations
@@ -56,24 +57,23 @@ export default function HomePage() {
                 ref={roadmapRef}
                 style={{ y: page2Slide }}
                 className="
-                    min-h-[200vh] z-100 py-[2%]
+                    z-100 py-[2%]
                     border-t-5 rounded-t-4xl border-white bg-[#141414]
                     flex flex-col items-center
-                    2xl:grid 2xl:grid-cols-6 grid-rows-9
+                    2xl:grid 2xl:grid-cols-6 grid-rows-[auto]
+                    relative
                 "
             >
                 <StarBg/>
                 {/* rocketship */}
                 <motion.div
-                    className="hidden 2xl:flex self-center row-start-1 col-start-5 col-span-2 bg-white h-[50%] w-[50%]"
+                    className="absolute top-10 right-[10%] hidden 2xl:flex self-center bg-white h-[200px] w-[200px]"
                     style={{x:rocketX, y:rocketY}}
-                >
-
-                </motion.div>
+                />
 
                 {/* experience */}
-                <div className="text-white col-span-4 col-start-1 row-span-2 pt-[2%] px-[10%]">
-                    <motion.h1 className="text-4xl" style={{opacity:textOpacityExp, x:textXExp}}>EXPERIENCE</motion.h1>
+                <div className="text-white col-span-4 col-start-1 row-span-2 pt-[5px] px-[10%]">
+                    <motion.h1 className="text-6xl" style={{opacity:textOpacityExp, x:textXExp}}>EXPERIENCE</motion.h1>
                     <ExperiencePoint 
                         scrollYProgress={scrollYProgress}
                         pointNum={1}
@@ -105,11 +105,11 @@ export default function HomePage() {
                 {/* projects */}
                 <div className="
                     relative 2xl:col-start-3 2xl:col-span-4 2xl:row-span-2 2xl:row-start-4 text-white mt-[10%] 2xl:mt-0 mx-[5%]
-                    
+                    2xl:mt-60
                     "
                 >
                     <motion.h1 
-                        className="text-4xl pb-[1%]"
+                        className="text-6xl pb-[1%]"
                         style={{opacity: projectOpacity, x: projectX}}
 
                     >
@@ -147,7 +147,7 @@ export default function HomePage() {
                             imgTimeout={projImgTimeout}
                         />
                         <div className="z-50 col-start-5 col-span-4 2xl:col-start-6 2xl:col-span-3 row-span-3 row-start-1 border-y-1 border-white">
-                            <div className="bg-green-200 w-full h-full border-l-2 rounded-l-[35%] border-white flex justify-center center-items">
+                            <div className="w-full h-full border-l-2 rounded-l-[35%] border-white flex justify-center center-items">
                                 {/* only need to pass in url */}
                                 {hoverIndex === 0 ? (<button>View all Projects!</button>) : 
                                     hoverIndex === 1 ? (<ProjectImage order={1} imgSetter={setHoverIndex} setImgTimeout={setProjImgTimeout} imgTimeout={projImgTimeout} imgUrl="/images/tempGameBlogImg.png" projectName="Game Design Blog"/>) :
@@ -160,12 +160,74 @@ export default function HomePage() {
                     
                 </div>
 
-                {/* stack */}
-                <div className="bg-white h-full 2xl:w-full w-[80%] 2xl:col-start-2 2xl:col-span-4 2xl:mt-0 mt-[10%] 2xl:row-start-7 2xl:row-span-2">
-                    <h1>My Stack</h1>
-                </div>
+                {/* stack + contact */}
+                <div className="2xl:mt-60 text-white flex flex-col 2xl:w-full w-[80%] 2xl:col-start-2 2xl:col-span-4 2xl:mt-0 mt-[10%] 2xl:row-start-7 2xl:row-span-7">
+                    <h1 className="mb-8 text-7xl">My Stack</h1>
+                    {/* Frontend */}
+                    <TechStackSection 
+                        title="Frontend"
+                        frameworks={[
+                            ["react","React"], 
+                            ["tanstackQuery","Tanstack Query"], 
+                            ["redux","Redux"], 
+                            ["zustand","Zustand"],
+                            ["reactRouter","React Router"], 
+                            ["motion","Motion"],  
+                            ["tailwindcss","Tailwind CSS"], 
+                            ["sass","SASS"], 
+                            ["shadcn","Shadcn"], 
+                            ["jest","Jest"], 
+                            ["vitest","Vitest"]
+                        ]}
+                    />            
+                    {/* Backend */}
+                    <TechStackSection 
+                        title="Backend"
+                        frameworks={[
+                            ["fiber", "Fiber"],
+                            ["express", "Express"],
+                            ["mongodb", "MongoDB"],
+                            ["postgresql", "PostgreSQL"],
+                            ["supabase", "Supabase"],
+                        ]}
+                    /> 
+                    {/* Languages */}
+                    <TechStackSection 
+                        title="Languages"
+                        frameworks={[
+                            ["html","HTML"], 
+                            ["css","CSS"], 
+                            ["js","Javascript"], 
+                            ["typescript","Typescript"],
+                            ["golang", "Golang"]
+                        ]}
+                    />
+                    {/* Tools */}
+                    <TechStackSection 
+                        title="Tools"
+                        frameworks={[
+                            ["docker", "Docker"],
+                            ["kubernetes", "Kubernetes"],
+                            ["npm", "NPM"],
+                            ["vite", "Vite"],
+                            ["git", "Git"],
+                            ["github", "Github"],
+                            ["bash", "Bash"],
+                        ]}
+                    />
 
-                <div className="bg-white h-full 2xl:w-full w-[80%] 2xl:col-start-2 2xl:col-span-4 2xl:mt-0 mt-[10%] 2xl:row-start-9 2xl:row-span-1"></div>
+                    {/* contact info */}
+                    <div className="h-50 flex flex-col items-center text-7xl 2xl:w-full w-[80%] mt-[10%]">
+                        Find me:
+                        <div className="mt-8 mb-2 text-5xl flex flex-row justify-between w-full italic">
+                            <a className='hover:underline' href='mailto:liamtamh@gmail.com'>liamtamh@gmail.com</a>
+                            <a className='hover:underline flex flex-row' href='https://www.linkedin.com/in/liam-huynh-91aa1a1a1/' target="_blank" rel='_noreferrer'><img className='w-12 mr-2' src='/images/linkedin_logo.png'/>LinkedIn</a>
+                            <a className='hover:underline flex flex-row' href='https://github.com/huynhli' target="_blank" rel='_noreferrer'><img className='w-12 mr-2' src='/images/tools/logo_github.png'/>Github</a>
+                            {/* TODO fill in txt fx liquid lef to right */}
+                        </div>
+                    </div>
+                </div>
+                
             </motion.section>
             
             {/* <motion.section className="pointer-events-none absolute w-full top-100 z-10 scale-y-50"

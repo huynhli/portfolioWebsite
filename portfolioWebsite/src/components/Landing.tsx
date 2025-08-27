@@ -11,6 +11,8 @@ export default function Landing() {
                     flex flex-row justify-center items-center
                     bg-zinc-800
                     ">
+
+                    {/* main card */}
                     <motion.div
                         style={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -27,6 +29,9 @@ export default function Landing() {
                         <h1 className="text-white text-[clamp(1.5rem,3.5vw,3rem)]">Hi! I'm <b className="font-extrabold">Liam</b>, <br/>a frontend developer</h1>
                         <h2 className="text-white text-[clamp(1rem,2.5vw,1.75rem)]">dedicated to making scalable, high-performance, and user-centered web solutions.</h2>
                     </motion.div>
+                    
+                    
+                    {/* icons + card 2 */}
                     <div
                         className="
                             absolute z-600 w-[110%] lg:w-[30%] h-[50%] top-[20%]
@@ -40,7 +45,7 @@ export default function Landing() {
                             flex justify-center
                         "
                     >
-                        {/* icons */}
+                        
                         <a
                             className="
                             absolute z-0 w-[100px] h-[100px]
@@ -139,7 +144,7 @@ export default function Landing() {
                 </div>
 
                 {/* TODO resume button */}
-                
+                {/* TODO floating arrow animate pointing down + onclick scrolls down a bit */}
             </section>
     )
 }

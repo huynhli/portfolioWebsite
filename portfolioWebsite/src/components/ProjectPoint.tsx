@@ -29,7 +29,7 @@ export default function ProjectPoint({scrollYProgress, title, desc, stack, order
         <motion.div 
             className={`
                 h-full row-start-${order} 2xl:col-span-5 col-span-4 col-start-1 flex flex-col justify-center border-white border-t-1 border-s-1 ${order === 3 ? "border-b-1": ""} p-[2%] py-[5%]
-                2xl:hover:-translate-x-[15%] transition-all 2xl:hover:-mr-[21%] 2xl:hover:pr-[21%] bg-purple-200 hover:border-l-1 hover:border-y-1
+                2xl:hover:-translate-x-[15%] transition-all 2xl:hover:-mr-[21%] 2xl:hover:pr-[21%] hover:border-l-1 hover:border-y-1
                 hover:-translate-x-[5%] hover:-mr-[7%] hover:pr-[7%]
                 `}
             style={{x: pointX, opacity: pointOpacity}}
