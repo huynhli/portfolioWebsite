@@ -179,9 +179,8 @@ export default function HomePage() {
                                 :   
                                     <motion.img
                                         className="
-                                            h-full w-full bg-blue-200 object-contain
+                                            h-full w-full bg-blue-200 object-fill
                                             border-l-2 rounded-l-[35%] border-white
-                                            
                                             "
                                         whileHover={{}}
                                         onMouseEnter={() => {
