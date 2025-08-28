@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion"
 import StarBg from "../components/StarBg"
-import { useState, useEffect, useRef, type Dispatch, type SetStateAction } from "react" 
+import { useState, useEffect, useRef } from "react" 
 import ExperiencePoint from "../components/ExperiencePoint" 
 import Landing from "../components/Landing" 
 import ProjectPoint from "../components/ProjectPoint" 
@@ -60,24 +60,23 @@ export default function HomePage() {
     const projectX = useTransform(roadmapYProgress, [0.3, 0.38], [300, 0])
 
     const [hoverIndex, setHoverIndex] = useState<number>(0)
-    const [projImgTimeout, setProjImgTimeout] = useState<number>(0)
 
-    const projImgTimeoutRef = useRef<number | null>(null);
+    const projImgTimeoutRef = useRef<number | null>(null) 
 
     const enteringProjPoint = (index: number) => {
         if (projImgTimeoutRef.current) {
-            clearTimeout(projImgTimeoutRef.current);
-            projImgTimeoutRef.current = null;
+            clearTimeout(projImgTimeoutRef.current) 
+            projImgTimeoutRef.current = null 
         }
-        setHoverIndex(index);
+        setHoverIndex(index) 
     }
 
     const leavingProjPoint = () => {
-        if (projImgTimeoutRef.current) clearTimeout(projImgTimeoutRef.current);
+        if (projImgTimeoutRef.current) clearTimeout(projImgTimeoutRef.current) 
         projImgTimeoutRef.current = window.setTimeout(() => {
-            setHoverIndex(0);
-            projImgTimeoutRef.current = null;
-        }, 1000);
+            setHoverIndex(0) 
+            projImgTimeoutRef.current = null 
+        }, 1000) 
     }
     const projectImages = ['/images/tempGameBlogImg.png', '/images/tempSpotifyRecsImg.png', '/images/tempSpotifyRecsImg.png']
 
@@ -187,8 +186,8 @@ export default function HomePage() {
                                         whileHover={{}}
                                         onMouseEnter={() => {
                                             if (projImgTimeoutRef.current) {
-                                                clearTimeout(projImgTimeoutRef.current);
-                                                projImgTimeoutRef.current = null;
+                                                clearTimeout(projImgTimeoutRef.current) 
+                                                projImgTimeoutRef.current = null 
                                             }
                                         }}
                                         onMouseLeave={leavingProjPoint}
