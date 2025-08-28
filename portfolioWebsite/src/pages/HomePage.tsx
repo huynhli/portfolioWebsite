@@ -4,7 +4,6 @@ import { useState, useEffect, useRef, type Dispatch, type SetStateAction } from 
 import ExperiencePoint from "../components/ExperiencePoint" 
 import Landing from "../components/Landing" 
 import ProjectPoint from "../components/ProjectPoint" 
-import ProjectImage from "../components/ProjectImg" 
 import TechStackSection from "../components/TechStackSection" 
 import { useNavigate } from "react-router-dom"
 
