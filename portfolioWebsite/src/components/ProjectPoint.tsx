@@ -1,5 +1,4 @@
 import { motion, MotionValue, useTransform } from "framer-motion"
-import { type Dispatch, type SetStateAction } from "react"
 
 type projectProp = {
     scrollYProgress: MotionValue<number>
@@ -7,23 +6,13 @@ type projectProp = {
     desc: string
     stack: string[]
     order: number
-    imgSetter: Dispatch<SetStateAction<number>>
-    setImgTimeout: Dispatch<SetStateAction<number>>
-    imgTimeout: number
+    enterProj: (index: number) => void
+    leaveProj: () => void
 }
 
-export default function ProjectPoint({scrollYProgress, title, desc, stack, order, imgSetter, setImgTimeout, imgTimeout}:projectProp) {
+export default function ProjectPoint({scrollYProgress, title, desc, stack, order, enterProj, leaveProj}:projectProp) {
     const pointX = useTransform(scrollYProgress, [0.32+(order*0.03), 0.36+(order*0.03)], [200, 0])
     const pointOpacity = useTransform(scrollYProgress, [0.32+(order*0.03), 0.36+(order*0.03)], [0, 1])
-
-    const enteringProjPoint = () => {
-        clearTimeout(imgTimeout)
-        imgSetter(order)
-    }
-
-    const leavingProjPoint = () => {
-        setImgTimeout(setTimeout(() => {imgSetter(0)}, 1000))
-    }
 
     return (
         
@@ -34,8 +23,8 @@ export default function ProjectPoint({scrollYProgress, title, desc, stack, order
                 hover:-translate-x-[5%] hover:-mr-[21%] hover:pr-[21%]
                 `}
             style={{x: pointX, opacity: pointOpacity}}
-            onMouseEnter={enteringProjPoint}
-            onMouseLeave={leavingProjPoint}
+            onMouseEnter={() => enterProj(order)}
+            onMouseLeave={() => leaveProj()}
         >
             <div className="flex flex-row">
                 <h1 className="text-4xl pr-2">{title}</h1>

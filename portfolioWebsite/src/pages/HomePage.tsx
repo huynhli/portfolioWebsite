@@ -1,14 +1,20 @@
-// import { useState, useEffect } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import StarBg from "../components/StarBg"
-import { useState, useEffect, useRef } from "react" 
+import { useState, useEffect, useRef, type Dispatch, type SetStateAction } from "react" 
 import ExperiencePoint from "../components/ExperiencePoint" 
 import Landing from "../components/Landing" 
 import ProjectPoint from "../components/ProjectPoint" 
 import ProjectImage from "../components/ProjectImg" 
 import TechStackSection from "../components/TechStackSection" 
+import { useNavigate } from "react-router-dom"
 
 export default function HomePage() {
+    const navigate = useNavigate()
+    const goToProjects = () => {
+        navigate('/projects')
+    }
+    
+
     const { scrollYProgress } = useScroll()
     const page2Slide = useTransform(scrollYProgress, [0, 0.6], [window.innerHeight, 0])
     
@@ -53,8 +59,28 @@ export default function HomePage() {
 
     const projectOpacity = useTransform(roadmapYProgress, [0.3, 0.4], [0, 1])
     const projectX = useTransform(roadmapYProgress, [0.3, 0.38], [300, 0])
+
     const [hoverIndex, setHoverIndex] = useState<number>(0)
     const [projImgTimeout, setProjImgTimeout] = useState<number>(0)
+
+    const projImgTimeoutRef = useRef<number | null>(null);
+
+    const enteringProjPoint = (index: number) => {
+        if (projImgTimeoutRef.current) {
+            clearTimeout(projImgTimeoutRef.current);
+            projImgTimeoutRef.current = null;
+        }
+        setHoverIndex(index);
+    }
+
+    const leavingProjPoint = () => {
+        if (projImgTimeoutRef.current) clearTimeout(projImgTimeoutRef.current);
+        projImgTimeoutRef.current = window.setTimeout(() => {
+            setHoverIndex(0);
+            projImgTimeoutRef.current = null;
+        }, 1000);
+    }
+    const projectImages = ['/images/tempGameBlogImg.png', '/images/tempSpotifyRecsImg.png', '/images/tempSpotifyRecsImg.png']
 
     const stackOpacity = useTransform(roadmapYProgress, [0.45, 0.5], [0, 1])
     const stackX = useTransform(roadmapYProgress, [0.45, 0.5], [300, 0])
@@ -115,6 +141,7 @@ export default function HomePage() {
                     <motion.h1 
                         className="text-6xl pb-[1%]"
                         style={{opacity: projectOpacity, x: projectX}}
+                        onClick={goToProjects}
                     >
                         PROJECTS
                     </motion.h1>
@@ -125,9 +152,8 @@ export default function HomePage() {
                             desc="Articles I write about game dessign choices I make, love, or both!"
                             stack={["Typescript","React", "Jest", "Tanstack Query", "Motion", "TailwindCSS"]}
                             order={1}
-                            imgSetter={setHoverIndex}
-                            setImgTimeout={setProjImgTimeout} 
-                            imgTimeout={projImgTimeout}
+                            enterProj={enteringProjPoint}
+                            leaveProj={leavingProjPoint}
                         />
                         <ProjectPoint
                             scrollYProgress={roadmapYProgress}
@@ -135,9 +161,8 @@ export default function HomePage() {
                             desc="Is choosing dinner too overwhelming? Try this."
                             stack={["Typescript","React", "Jest", "Tanstack Query", "Motion", "TailwindCSS"]}
                             order={2}
-                            imgSetter={setHoverIndex}
-                            setImgTimeout={setProjImgTimeout} 
-                            imgTimeout={projImgTimeout}
+                            enterProj={enteringProjPoint}
+                            leaveProj={leavingProjPoint}
                         />
                         <ProjectPoint
                             scrollYProgress={roadmapYProgress}
@@ -145,17 +170,32 @@ export default function HomePage() {
                             desc="Recommendations based on your spotify songs, playlists, artists, or albums!"
                             stack={["Typescript","React", "Restful APIs", "Tanstack Query", "TailwindCSS"]}
                             order={3}
-                            imgSetter={setHoverIndex}
-                            setImgTimeout={setProjImgTimeout} 
-                            imgTimeout={projImgTimeout}
+                            enterProj={enteringProjPoint}
+                            leaveProj={leavingProjPoint}
                         />
                         <div className="z-50 col-start-5 col-span-4 2xl:col-start-6 2xl:col-span-3 row-span-3 row-start-1 border-y-1 border-white">
                             <div className="w-full h-full border-x-2 rounded-l-[35%] border-white flex justify-center center-items">
-                                {/* only need to pass in url */}
-                                {hoverIndex === 0 ? (<button>View all Projects!</button>) : 
-                                    hoverIndex === 1 ? (<ProjectImage order={1} imgSetter={setHoverIndex} setImgTimeout={setProjImgTimeout} imgTimeout={projImgTimeout} imgUrl="/images/tempGameBlogImg.png" projectName="Game Design Blog"/>) :
-                                        hoverIndex === 2 ? (<ProjectImage order={2} imgSetter={setHoverIndex} setImgTimeout={setProjImgTimeout} imgTimeout={projImgTimeout} imgUrl="/images/tempSpotifyRecsImg.png" projectName="What 2 Eat"/>) :
-                                            (<ProjectImage order={3} imgSetter={setHoverIndex} setImgTimeout={setProjImgTimeout} imgTimeout={projImgTimeout} imgUrl="/images/tempSpotifyRecsImg.png" projectName="Spotify Song Recommendations"/>)// hoverIndex === 3
+                                {hoverIndex === 0 
+                                ? 
+                                    <button onClick={goToProjects} className="text-3xl mx-10 2xl:text-6xl text-blue-500 underline cursor-pointer">View all my projects here!</button> 
+                                :   
+                                    <motion.img
+                                        className="
+                                            h-full w-full bg-blue-200 object-contain
+                                            border-l-2 rounded-l-[35%] border-white
+                                            
+                                            "
+                                        whileHover={{}}
+                                        onMouseEnter={() => {
+                                            if (projImgTimeoutRef.current) {
+                                                clearTimeout(projImgTimeoutRef.current);
+                                                projImgTimeoutRef.current = null;
+                                            }
+                                        }}
+                                        onMouseLeave={leavingProjPoint}
+                                        src={projectImages[hoverIndex-1]}
+                                        alt={`An image of the project: ${hoverIndex === 1 ? 'Game Design Blog' : hoverIndex === 2 ? 'What 2 Eat' : 'Spotify Song Recs'}`}
+                                    />
                                 }
                             </div>
                         </div>
@@ -231,9 +271,9 @@ export default function HomePage() {
                     <div className="h-50 flex flex-col items-center text-5xl xl:text-6xl 2xl:text-7xl 2xl:w-full 2xl:mx-0 mx-[10%] mt-[10%]">
                         Find me:
                         <div className="mt-3 xl:mt-12 mb-2 text-3xl xl:text-4xl 2xl:text-5xl flex flex-col justify-center items-center xl:flex-row xl:justify-between w-full italic">
-                            <a className='hover:underline mb-2' href='mailto:liamtamh@gmail.com'>liamtamh@gmail.com</a>
-                            <a className='hover:underline mb-2 flex flex-row' href='https://www.linkedin.com/in/liam-huynh-91aa1a1a1/' target="_blank" rel='_noreferrer'><img className='w-9 2xl:w-12 mr-2' src='/images/linkedin_logo.png'/>LinkedIn</a>
-                            <a className='hover:underline flex flex-row' href='https://github.com/huynhli' target="_blank" rel='_noreferrer'><img className='w-9 2xl:w-12 mr-2' src='/images/stack_logos/tools/logo_github.png'/>Github</a>
+                            <a className='text-blue-400 hover:underline mb-2' href='mailto:liamtamh@gmail.com'>liamtamh@gmail.com</a>
+                            <a className='text-blue-400 hover:underline mb-2 flex flex-row' href='https://www.linkedin.com/in/liam-huynh-91aa1a1a1/' target="_blank" rel='_noreferrer'><img className='w-9 2xl:w-12 mr-2' src='/images/linkedin_logo.png'/>LinkedIn</a>
+                            <a className='text-blue-400 hover:underline flex flex-row' href='https://github.com/huynhli' target="_blank" rel='_noreferrer'><img className='w-9 2xl:w-12 mr-2' src='/images/stack_logos/tools/logo_github.png'/>Github</a>
                             {/* TODO fill in txt fx liquid lef to right */}
                         </div>
                     </div>
@@ -241,36 +281,11 @@ export default function HomePage() {
                 
             </motion.section>
             
-            {/* <motion.section className="pointer-events-none absolute w-full top-100 z-10 scale-y-50"
-                // style = start values, animate = end values, transition for type 
-                style={{ y: wavesY, scaleY: wavesScaleY }}
-                
-            >
-                <img src='/images/waves.png' className="w-full h-[400px] object-fill block" />
-                <img src='/images/waves2.png' className="w-full h-[400px] object-fill block rotate-180" />
-            </motion.section>
-
-            <section className="relative h-200">
-                <div className="left-0 w-full top-100 h-400 pointer-events-none z-[-1]">
-                    {Array.from({ length: 50 }).map((_, i) => (
-                        <div key={i} className="light-streak"></div>
-                    ))}
-                </div>
-
-                
-            </section>
             
-
-            <motion.section className="pointer-events-none relative flex-col top-[-400px] w-full z-10 scale-y-50"
-                // style = start values, animate = end values, transition for type 
-                style={{ y: bottomWavesY }}
-                
-            >
-                <img src='/images/waves2.png' className="w-full h-[400px] object-fill" />
-                <img src='/images/waves.png' className="w-full h-[400px] object-fill rotate-180" />
-            </motion.section> */}
-
-            {/* 
+        </div>
+    )
+}
+        {/* 
             <div className="flex justify-center p-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
                     {isLoading ? ( 
@@ -294,7 +309,7 @@ export default function HomePage() {
                     )}
                 </div>
             </div> */}
-        </div>
+
      // const bottomWavesSpring = useSpring(bottomWavesY, { stiffness: 100, damping: 10})
     // stiffness = spring force, damping = resistance 
 
@@ -351,5 +366,3 @@ export default function HomePage() {
 
     //     return () => clearInterval(interval)
     // }, [isLoading])
-    )
-}

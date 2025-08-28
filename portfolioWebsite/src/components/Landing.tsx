@@ -20,7 +20,7 @@ export default function Landing() {
                         className="
                             flex flex-col z-50 min-w-[30%] max-w-[40%] min-h-[80%] p-[2%] bg-zinc-900
                             border-1 border-white rounded-lg justify-center
-                            transition-transform duration-400 delay-80 
+                            transition-transform duration-400 delay-40 
                             group-hover/outer:scale-110 group-hover/outer:-rotate-2
                             lg:group-hover/outer:-translate-x-[50%] lg:group-hover/outer:-translate-y-20
                             group-hover/outer:-translate-y-[20%]
