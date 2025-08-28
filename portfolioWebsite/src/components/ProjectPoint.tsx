@@ -13,8 +13,8 @@ type projectProp = {
 }
 
 export default function ProjectPoint({scrollYProgress, title, desc, stack, order, imgSetter, setImgTimeout, imgTimeout}:projectProp) {
-    const pointX = useTransform(scrollYProgress, [0.2+(order*0.05), 0.25+(order*0.05)], [40, 0])
-    const pointOpacity = useTransform(scrollYProgress, [0.2+(order*0.05), 0.25+(order*0.05)], [0, 1])
+    const pointX = useTransform(scrollYProgress, [0.15+(order*0.05), 0.22+(order*0.05)], [60, 0])
+    const pointOpacity = useTransform(scrollYProgress, [0.15+(order*0.05), 0.2+(order*0.05)], [0, 1])
 
     const enteringProjPoint = () => {
         clearTimeout(imgTimeout)
@@ -26,18 +26,19 @@ export default function ProjectPoint({scrollYProgress, title, desc, stack, order
     }
 
     return (
+        
         <motion.div 
             className={`
                 h-full row-start-${order} 2xl:col-span-5 col-span-4 col-start-1 flex flex-col justify-center border-white border-t-1 border-s-1 ${order === 3 ? "border-b-1": ""} p-[2%] py-[5%]
-                2xl:hover:-translate-x-[15%] transition-all 2xl:hover:-mr-[21%] 2xl:hover:pr-[21%] hover:border-l-1 hover:border-y-1
-                hover:-translate-x-[5%] hover:-mr-[7%] hover:pr-[7%]
+                2xl:hover:-translate-x-[15%] transition-all hover:border-l-1 hover:border-y-1
+                hover:-translate-x-[5%] hover:-mr-[21%] hover:pr-[21%]
                 `}
             style={{x: pointX, opacity: pointOpacity}}
             onMouseEnter={enteringProjPoint}
             onMouseLeave={leavingProjPoint}
         >
             <div className="flex flex-row">
-                <h1 className="text-2xl pr-2">{title}</h1>
+                <h1 className="text-4xl pr-2">{title}</h1>
                 <div className="h-full bg-white w-[3px] mx-1"/>
                 <ul>{stack.map((framework, key) => (
                     <li key={key} className="italic text-xl inline-block mx-1">{framework}{key != stack.length-1 ? ", ": ""}</li>

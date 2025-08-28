@@ -23,7 +23,7 @@ export default function ProjectImage({imgUrl, projectName, order, imgSetter, set
     return (
         <motion.img
             className="
-                h-full w-full bg-blue-200 object-fill
+                h-full w-full bg-blue-200 object-contain
                 border-l-2 rounded-l-[35%] border-white
                 
                 "

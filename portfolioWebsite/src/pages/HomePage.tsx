@@ -1,12 +1,12 @@
 // import { useState, useEffect } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import StarBg from "../components/StarBg"
-import { useState, useEffect, useRef } from "react";
-import ExperiencePoint from "../components/ExperiencePoint";
-import Landing from "../components/Landing";
-import ProjectPoint from "../components/ProjectPoint";
-import ProjectImage from "../components/ProjectImg";
-import TechStackSection from "../components/TechStackSection";
+import { useState, useEffect, useRef } from "react" 
+import ExperiencePoint from "../components/ExperiencePoint" 
+import Landing from "../components/Landing" 
+import ProjectPoint from "../components/ProjectPoint" 
+import ProjectImage from "../components/ProjectImg" 
+import TechStackSection from "../components/TechStackSection" 
 
 export default function HomePage() {
     const { scrollYProgress } = useScroll()
@@ -30,22 +30,30 @@ export default function HomePage() {
     const rocketX = useTransform(
         scrollYProgress,
         [0.09, 0.12, 0.14, 0.18, 0.23, 0.28, 0.37, 0.4, 0.43],
-        [0, roadmapSize.width * 0.15, 0, roadmapSize.width * 0.1, -(roadmapSize.width*0.7), -(roadmapSize.width*0.75), -(roadmapSize.width*0.67), -(roadmapSize.width*0.77), -(roadmapSize.width*0.28)]
-    );
+        [0, roadmapSize.width * 0.05, -(roadmapSize.width * 0.15), roadmapSize.width * 0.1, -(roadmapSize.width*0.7), -(roadmapSize.width*0.75), -(roadmapSize.width*0.67), -(roadmapSize.width*0.77), -(roadmapSize.width*0.35)]
+    ) 
     const rocketY = useTransform(
         scrollYProgress,
-        [0.08, 0.2, 0.25, 0.4, 0.47, 0.52],
-        [0, roadmapSize.height * 0.22, roadmapSize.height * 0.20, roadmapSize.height * 0.45, roadmapSize.height * 0.41, roadmapSize.height * 0.47]
-    );
+        [0.08, 0.21, 0.25, 0.4, 0.47, 0.52],
+        [0, roadmapSize.height * 0.12, roadmapSize.height * 0.11, roadmapSize.height * 0.47, roadmapSize.height * 0.45, roadmapSize.height * 0.5]
+    ) 
+    // const rocketRotate = useTransform(
+    //     scrollYProgress,
+    //     [],
+    //     []
+    // )
 
     // Roadmap text animations
     const textOpacityExp = useTransform(scrollYProgress, [0, 0.075], [0, 1])
     const textXExp = useTransform(scrollYProgress, [0, 0.075], [300, 0])
 
-    const projectOpacity = useTransform(scrollYProgress, [0.25, 0.3], [0, 1])
-    const projectX = useTransform(scrollYProgress, [0.25, 0.35], [300, 0])
+    const projectOpacity = useTransform(scrollYProgress, [0.15, 0.2], [0, 1])
+    const projectX = useTransform(scrollYProgress, [0.15, 0.25], [300, 0])
     const [hoverIndex, setHoverIndex] = useState<number>(0)
     const [projImgTimeout, setProjImgTimeout] = useState<number>(0)
+
+    const stackOpacity = useTransform(scrollYProgress, [0.35, 0.5], [0, 1])
+    const stackX = useTransform(scrollYProgress, [0.35, 0.45], [300, 0])
 
     return (
         <div className='relative flex flex-col'>
@@ -65,11 +73,16 @@ export default function HomePage() {
                 "
             >
                 <StarBg/>
+
                 {/* rocketship */}
                 <motion.div
-                    className="absolute top-10 right-[10%] hidden 2xl:flex self-center bg-white h-[200px] w-[200px]"
+                    className="absolute top-10 right-[10%] hidden 2xl:flex self-center h-[200px] w-[200px]"
                     style={{x:rocketX, y:rocketY}}
-                />
+                >
+                    <img src="/images/rocket.png"/>
+
+                </motion.div>
+                
 
                 {/* experience */}
                 <div className="text-white col-span-4 col-start-1 row-span-2 pt-[5px] px-[10%]">
@@ -77,19 +90,6 @@ export default function HomePage() {
                     <ExperiencePoint 
                         scrollYProgress={scrollYProgress}
                         pointNum={1}
-                        position="Full-stack Developer" 
-                        company="TBSP Games"
-                        companyLink = "https://tablespoongames.pages.dev/"
-                        date="Jul 2025 - Aug 2025" 
-                        frameworks={["React", "Redux", "Tanstack Query", "Motion", "Jest", "Docker"]} 
-                        points={[
-                            "Reduced client-side latency by over 600 ms by optimizing RESTful API data fetching workflows and server state management with Tanstack Query and Axios", 
-                            "Doubled interactive visual effects and improved perceived app responsiveness by enhancing user engagement and loweringperceived latency with Framer Motion animation", 
-                            "Improved DevOps efficiency and deployment reliability by containerizing frontend applications with Docker and orchestrating clusters via Kubernetes, streamlining CI/CD workflows and reducing environment-related errors by 40%"]} 
-                    />
-                    <ExperiencePoint 
-                        scrollYProgress={scrollYProgress}
-                        pointNum={2}
                         position="Full-stack Developer" 
                         company="TBSP Games"
                         companyLink = "https://tablespoongames.pages.dev/"
@@ -111,11 +111,10 @@ export default function HomePage() {
                     <motion.h1 
                         className="text-6xl pb-[1%]"
                         style={{opacity: projectOpacity, x: projectX}}
-
                     >
                         PROJECTS
                     </motion.h1>
-                    <div className="border-1 border-white grid grid-cols-8 grid-rows-3">
+                    <div className="grid grid-cols-8 grid-rows-3 2xl:h-[700px] h-[900px]">
                         <ProjectPoint
                             scrollYProgress={scrollYProgress}
                             title="Game Design Blog"
@@ -147,11 +146,11 @@ export default function HomePage() {
                             imgTimeout={projImgTimeout}
                         />
                         <div className="z-50 col-start-5 col-span-4 2xl:col-start-6 2xl:col-span-3 row-span-3 row-start-1 border-y-1 border-white">
-                            <div className="w-full h-full border-l-2 rounded-l-[35%] border-white flex justify-center center-items">
+                            <div className="w-full h-full border-x-2 rounded-l-[35%] border-white flex justify-center center-items">
                                 {/* only need to pass in url */}
                                 {hoverIndex === 0 ? (<button>View all Projects!</button>) : 
                                     hoverIndex === 1 ? (<ProjectImage order={1} imgSetter={setHoverIndex} setImgTimeout={setProjImgTimeout} imgTimeout={projImgTimeout} imgUrl="/images/tempGameBlogImg.png" projectName="Game Design Blog"/>) :
-                                        hoverIndex === 2 ? (<ProjectImage order={2} imgSetter={setHoverIndex} setImgTimeout={setProjImgTimeout} imgTimeout={projImgTimeout} imgUrl="" projectName="What 2 Eat"/>) :
+                                        hoverIndex === 2 ? (<ProjectImage order={2} imgSetter={setHoverIndex} setImgTimeout={setProjImgTimeout} imgTimeout={projImgTimeout} imgUrl="/images/tempSpotifyRecsImg.png" projectName="What 2 Eat"/>) :
                                             (<ProjectImage order={3} imgSetter={setHoverIndex} setImgTimeout={setProjImgTimeout} imgTimeout={projImgTimeout} imgUrl="/images/tempSpotifyRecsImg.png" projectName="Spotify Song Recommendations"/>)// hoverIndex === 3
                                 }
                             </div>
@@ -162,7 +161,7 @@ export default function HomePage() {
 
                 {/* stack + contact */}
                 <div className="2xl:mt-60 text-white flex flex-col 2xl:w-full w-[80%] 2xl:col-start-2 2xl:col-span-4 2xl:mt-0 mt-[10%] 2xl:row-start-7 2xl:row-span-7">
-                    <h1 className="mb-8 text-7xl">My Stack</h1>
+                    <motion.h1 className="mb-8 text-7xl" style={{x: stackX, opacity:stackOpacity}}>My Stack</motion.h1>
                     {/* Frontend */}
                     <TechStackSection 
                         title="Frontend"
