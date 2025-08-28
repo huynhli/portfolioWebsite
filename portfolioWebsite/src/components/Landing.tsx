@@ -9,7 +9,7 @@ export default function Landing() {
                     h-[40%] w-full max-px-[10%] min-px-[5%]
                     group/outer relative 
                     flex flex-row justify-center items-center
-                    bg-zinc-800
+                    bg-[rgba(39,39,42,0.2)]
                     ">
 
                     {/* main card */}
@@ -18,7 +18,7 @@ export default function Landing() {
                         animate={{ opacity: 1 }}
                         transition={{ duration: 3, delay: 0.2, ease: "easeInOut" }}
                         className="
-                            flex flex-col z-50 min-w-[30%] max-w-[40%] min-h-[80%] p-[2%] bg-zinc-900 
+                            flex flex-col z-50 min-w-[30%] max-w-[40%] min-h-[80%] p-[2%] bg-zinc-900
                             border-1 border-white rounded-lg justify-center
                             transition-transform duration-400 delay-80 
                             group-hover/outer:scale-110 group-hover/outer:-rotate-2
