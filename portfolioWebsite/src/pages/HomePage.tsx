@@ -228,7 +228,7 @@ export default function HomePage() {
                     />
 
                     {/* contact info */}
-                    <div className="h-50 flex flex-col items-center text-5xl xl:text-6xl 2xl:text-7xl 2xl:w-full mx-[10%] mt-[10%]">
+                    <div className="bg-blue-200 h-50 flex flex-col items-center text-5xl xl:text-6xl 2xl:text-7xl 2xl:w-full 2xl:mx-0 mx-[10%] mt-[10%]">
                         Find me:
                         <div className="mt-3 xl:mt-12 mb-2 text-3xl xl:text-4xl 2xl:text-5xl flex flex-col justify-center items-center xl:flex-row xl:justify-between w-full italic">
                             <a className='hover:underline mb-2' href='mailto:liamtamh@gmail.com'>liamtamh@gmail.com</a>
