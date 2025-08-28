@@ -14,12 +14,15 @@ type pointProps = {
 
 export default function ExperiencePoint ({ scrollYProgress, pointNum, position, frameworks, company, companyLink, date, points } : pointProps) {
     const offset = (pointNum-1) / 20
-    const pointsOpacity = useTransform(scrollYProgress, [0+offset, 0.2+offset], [0, 1])
-    const pointsY = useTransform(scrollYProgress, [0+offset, 0.2+offset], [200, 0])
-    const projTitleOpacity = useTransform(scrollYProgress, [0+offset, 0.175+offset], [0, 1])
-    const projTitleY = useTransform(scrollYProgress, [0+offset, 0.175+offset], [150, 0])
-    const posOpacity= useTransform(scrollYProgress, [0+offset, 0.15+offset], [0, 1])
-    const posY= useTransform(scrollYProgress, [0+offset, 0.15+offset], [100, 0])
+
+    const posOpacity= useTransform(scrollYProgress, [0.1+offset, 0.33+offset], [0, 1])
+    const posY= useTransform(scrollYProgress, [0.25+offset, 0.3+offset], [100, 0])
+
+    const projTitleOpacity = useTransform(scrollYProgress, [0.1+offset, 0.35+offset], [0, 1])
+    const projTitleY = useTransform(scrollYProgress, [0.25+offset, 0.31+offset], [150, 0])
+    
+    const pointsOpacity = useTransform(scrollYProgress, [0.1+offset, 0.37+offset], [0, 1])
+    const pointsY = useTransform(scrollYProgress, [0.25+offset, 0.33+offset], [200, 0])
 
     return (
         <div className="py-3">

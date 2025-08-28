@@ -13,8 +13,8 @@ type projectProp = {
 }
 
 export default function ProjectPoint({scrollYProgress, title, desc, stack, order, imgSetter, setImgTimeout, imgTimeout}:projectProp) {
-    const pointX = useTransform(scrollYProgress, [0.15+(order*0.05), 0.22+(order*0.05)], [60, 0])
-    const pointOpacity = useTransform(scrollYProgress, [0.15+(order*0.05), 0.2+(order*0.05)], [0, 1])
+    const pointX = useTransform(scrollYProgress, [0.32+(order*0.03), 0.36+(order*0.03)], [200, 0])
+    const pointOpacity = useTransform(scrollYProgress, [0.32+(order*0.03), 0.36+(order*0.03)], [0, 1])
 
     const enteringProjPoint = () => {
         clearTimeout(imgTimeout)

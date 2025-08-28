@@ -12,9 +12,13 @@ export default function HomePage() {
     const { scrollYProgress } = useScroll()
     const page2Slide = useTransform(scrollYProgress, [0, 0.6], [window.innerHeight, 0])
     
-
-    // Roadmap animations code
     const roadmapRef = useRef<HTMLElement | null>(null)
+    // Roadmap animations code
+    const { scrollYProgress: roadmapYProgress} = useScroll({
+        target: roadmapRef,
+        offset: ["start end", "end start"],
+
+    })
     const [roadmapSize, setRoadmapSize] = useState({width: 0, height: 0})
     useEffect(() => {
         if (!roadmapRef.current) return
@@ -28,14 +32,14 @@ export default function HomePage() {
     }, [])
 
     const rocketX = useTransform(
-        scrollYProgress,
-        [0.09, 0.12, 0.14, 0.18, 0.23, 0.28, 0.37, 0.4, 0.43],
-        [0, roadmapSize.width * 0.05, -(roadmapSize.width * 0.15), roadmapSize.width * 0.1, -(roadmapSize.width*0.7), -(roadmapSize.width*0.75), -(roadmapSize.width*0.67), -(roadmapSize.width*0.77), -(roadmapSize.width*0.35)]
+        roadmapYProgress, [0.25, 0.27, 0.3, 0.34, 0.4, 0.45, 0.5, 0.52, 0.6], [0, roadmapSize.width * 0.05, -(roadmapSize.width * 0.13), roadmapSize.width * 0.04, -(roadmapSize.width * 0.7), -(roadmapSize.width*0.67), -(roadmapSize.width*0.5), -(roadmapSize.width*0.33), -(roadmapSize.width*0.25)]
+        // [0.05, 0.12, 0.14, 0.18, 0.23, 0.28, 0.37, 0.4, 0.43],
+        // [0, roadmapSize.width * 0.05, -(roadmapSize.width * 0.15), roadmapSize.width * 0.1, -(roadmapSize.width*0.7), -(roadmapSize.width*0.75), -(roadmapSize.width*0.67), -(roadmapSize.width*0.77), -(roadmapSize.width*0.35)]
     ) 
     const rocketY = useTransform(
-        scrollYProgress,
-        [0.08, 0.21, 0.25, 0.4, 0.47, 0.52],
-        [0, roadmapSize.height * 0.12, roadmapSize.height * 0.11, roadmapSize.height * 0.47, roadmapSize.height * 0.45, roadmapSize.height * 0.5]
+        roadmapYProgress, 
+        [0.16, 0.38, 0.4, 0.5, 0.90, 0.95],
+        [0, roadmapSize.height * 0.12, roadmapSize.height * 0.11, roadmapSize.height * 0.44, roadmapSize.height * 0.45, roadmapSize.height * 0.5]
     ) 
     // const rocketRotate = useTransform(
     //     scrollYProgress,
@@ -44,16 +48,16 @@ export default function HomePage() {
     // )
 
     // Roadmap text animations
-    const textOpacityExp = useTransform(scrollYProgress, [0, 0.075], [0, 1])
-    const textXExp = useTransform(scrollYProgress, [0, 0.075], [300, 0])
+    const textOpacityExp = useTransform(roadmapYProgress, [0.26, 0.35], [0, 1])
+    const textXExp = useTransform(roadmapYProgress, [0.22, 0.35], [300, 0])
 
-    const projectOpacity = useTransform(scrollYProgress, [0.15, 0.2], [0, 1])
-    const projectX = useTransform(scrollYProgress, [0.15, 0.25], [300, 0])
+    const projectOpacity = useTransform(roadmapYProgress, [0.3, 0.4], [0, 1])
+    const projectX = useTransform(roadmapYProgress, [0.3, 0.38], [300, 0])
     const [hoverIndex, setHoverIndex] = useState<number>(0)
     const [projImgTimeout, setProjImgTimeout] = useState<number>(0)
 
-    const stackOpacity = useTransform(scrollYProgress, [0.35, 0.5], [0, 1])
-    const stackX = useTransform(scrollYProgress, [0.35, 0.45], [300, 0])
+    const stackOpacity = useTransform(roadmapYProgress, [0.45, 0.5], [0, 1])
+    const stackX = useTransform(roadmapYProgress, [0.45, 0.5], [300, 0])
 
     return (
         <div className='relative flex flex-col'>
@@ -88,7 +92,7 @@ export default function HomePage() {
                 <div className="text-white col-span-4 col-start-1 row-span-2 pt-[5px] px-[10%]">
                     <motion.h1 className="text-6xl" style={{opacity:textOpacityExp, x:textXExp}}>EXPERIENCE</motion.h1>
                     <ExperiencePoint 
-                        scrollYProgress={scrollYProgress}
+                        scrollYProgress={roadmapYProgress}
                         pointNum={1}
                         position="Full-stack Developer" 
                         company="TBSP Games"
@@ -116,7 +120,7 @@ export default function HomePage() {
                     </motion.h1>
                     <div className="grid grid-cols-8 grid-rows-3 2xl:h-[700px] h-[900px]">
                         <ProjectPoint
-                            scrollYProgress={scrollYProgress}
+                            scrollYProgress={roadmapYProgress}
                             title="Game Design Blog"
                             desc="Articles I write about game dessign choices I make, love, or both!"
                             stack={["Typescript","React", "Jest", "Tanstack Query", "Motion", "TailwindCSS"]}
@@ -126,7 +130,7 @@ export default function HomePage() {
                             imgTimeout={projImgTimeout}
                         />
                         <ProjectPoint
-                            scrollYProgress={scrollYProgress}
+                            scrollYProgress={roadmapYProgress}
                             title="What 2 Eat"
                             desc="Is choosing dinner too overwhelming? Try this."
                             stack={["Typescript","React", "Jest", "Tanstack Query", "Motion", "TailwindCSS"]}
@@ -136,8 +140,8 @@ export default function HomePage() {
                             imgTimeout={projImgTimeout}
                         />
                         <ProjectPoint
-                            scrollYProgress={scrollYProgress}
-                            title="Spotify Song Recommendations"
+                            scrollYProgress={roadmapYProgress}
+                            title="Spotify Song Recs"
                             desc="Recommendations based on your spotify songs, playlists, artists, or albums!"
                             stack={["Typescript","React", "Restful APIs", "Tanstack Query", "TailwindCSS"]}
                             order={3}
@@ -161,9 +165,11 @@ export default function HomePage() {
 
                 {/* stack + contact */}
                 <div className="2xl:mt-60 text-white flex flex-col 2xl:w-full w-[80%] 2xl:col-start-2 2xl:col-span-4 2xl:mt-0 mt-[10%] 2xl:row-start-7 2xl:row-span-7">
-                    <motion.h1 className="mb-8 text-7xl" style={{x: stackX, opacity:stackOpacity}}>My Stack</motion.h1>
+                    <motion.h1 className="lg:mb-8 text-6xl lg:text-7xl" style={{x: stackX, opacity:stackOpacity}}>My Stack</motion.h1>
                     {/* Frontend */}
                     <TechStackSection 
+                        scroll={roadmapYProgress}
+                        beginFade={0.4525}
                         title="Frontend"
                         frameworks={[
                             ["react","React"], 
@@ -181,6 +187,8 @@ export default function HomePage() {
                     />            
                     {/* Backend */}
                     <TechStackSection 
+                        scroll={roadmapYProgress}
+                        beginFade={0.5}
                         title="Backend"
                         frameworks={[
                             ["fiber", "Fiber"],
@@ -192,6 +200,8 @@ export default function HomePage() {
                     /> 
                     {/* Languages */}
                     <TechStackSection 
+                        scroll={roadmapYProgress}
+                        beginFade={0.53}
                         title="Languages"
                         frameworks={[
                             ["html","HTML"], 
@@ -203,6 +213,8 @@ export default function HomePage() {
                     />
                     {/* Tools */}
                     <TechStackSection 
+                        scroll={roadmapYProgress}
+                        beginFade={0.56}
                         title="Tools"
                         frameworks={[
                             ["docker", "Docker"],
@@ -216,12 +228,12 @@ export default function HomePage() {
                     />
 
                     {/* contact info */}
-                    <div className="h-50 flex flex-col items-center text-7xl 2xl:w-full w-[80%] mt-[10%]">
+                    <div className="h-50 flex flex-col items-center text-5xl xl:text-6xl 2xl:text-7xl 2xl:w-full mx-[10%] mt-[10%]">
                         Find me:
-                        <div className="mt-12 mb-2 text-5xl flex flex-row justify-between w-full italic">
-                            <a className='hover:underline' href='mailto:liamtamh@gmail.com'>liamtamh@gmail.com</a>
-                            <a className='hover:underline flex flex-row' href='https://www.linkedin.com/in/liam-huynh-91aa1a1a1/' target="_blank" rel='_noreferrer'><img className='w-12 mr-2' src='/images/linkedin_logo.png'/>LinkedIn</a>
-                            <a className='hover:underline flex flex-row' href='https://github.com/huynhli' target="_blank" rel='_noreferrer'><img className='w-12 mr-2' src='/images/tools/logo_github.png'/>Github</a>
+                        <div className="mt-3 xl:mt-12 mb-2 text-3xl xl:text-4xl 2xl:text-5xl flex flex-col justify-center items-center xl:flex-row xl:justify-between w-full italic">
+                            <a className='hover:underline mb-2' href='mailto:liamtamh@gmail.com'>liamtamh@gmail.com</a>
+                            <a className='hover:underline mb-2 flex flex-row' href='https://www.linkedin.com/in/liam-huynh-91aa1a1a1/' target="_blank" rel='_noreferrer'><img className='w-9 2xl:w-12 mr-2' src='/images/linkedin_logo.png'/>LinkedIn</a>
+                            <a className='hover:underline flex flex-row' href='https://github.com/huynhli' target="_blank" rel='_noreferrer'><img className='w-9 2xl:w-12 mr-2' src='/images/stack_logos/tools/logo_github.png'/>Github</a>
                             {/* TODO fill in txt fx liquid lef to right */}
                         </div>
                     </div>
