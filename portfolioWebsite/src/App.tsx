@@ -35,13 +35,13 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<HomePage />} />
-          <Route path="Projects" element={<ProjectsPage />} />
+          {/* <Route path="Projects" element={<ProjectsPage />} /> */}
           <Route path="Blog" element={<BlogPage />} />
-          <Route path="About" element={<AboutPage />} />
-          <Route path="ImageUpload" element={<ImageUpload />} />
-          <Route path="BlogArticle" element={<ArticleLayout />}>
-            <Route path="Article" element={<ArticleTemplatePage />} />
-          </Route>
+          {/* <Route path="About" element={<AboutPage />} /> */}
+          {/* <Route path="ImageUpload" element={<ImageUpload />} /> */}
+          {/* <Route path="BlogArticle" element={<ArticleLayout />}> */}
+            {/* <Route path="Article" element={<ArticleTemplatePage />} /> */}
+          {/* </Route> */}
         </Route>
       </Routes>
     </div>
