@@ -99,12 +99,12 @@ export default function ProjectsPage() {
                                         relative flex flex-col items-center justify-center
                                         bg-zinc-900 border-white border-1 p-4 min-h-20 mb-30 rounded-md
                                         font-bold shadow-md  
-                                        hover:cursor-pointer hover:bg-zinc-800 
-                                        hover:transition-transform hover:duration-300 hover:scale-104 hover:transition-colors     
+                                        hover:cursor-pointer
                                     "
                                     initial={{opacity: 0, y: 100}}
-                                    animate={{opacity: 1, y: 0}}
-                                    transition={{duration: 2+(i/20), ease: "easeIn"}}    
+                                    whileHover={{ scale: 1.04}}
+                                    animate={{ scale: 1, opacity: 1, y: 0 }}
+                                    transition={{ scale: { duration: 0.2 } }}
                                 >
                                     <div className="absolute inset-0 bg-white opacity-0 active:opacity-30 transition-opacity duration-200 z-20 rounded-md"></div>
                                     <div className='overflow-hidden w-full rounded-md mb-3'>

@@ -183,7 +183,7 @@ export default function HomePage() {
                                             border-l-2 rounded-l-[35%] border-white
                                             
                                             "
-                                        whileHover={{}}
+                                        whileHover={{}} // TODO implement this lol
                                         onMouseEnter={() => {
                                             if (projImgTimeoutRef.current) {
                                                 clearTimeout(projImgTimeoutRef.current) 
