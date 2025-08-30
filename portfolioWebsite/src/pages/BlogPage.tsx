@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion'
+import StarBg from '../components/StarBg'
 import '../main.css'
 import { useState, useEffect } from 'react'
 
@@ -61,13 +63,22 @@ export default function ProjectsPage() {
 
     return (
         <div className='text-white min-h-screen'>
+            <StarBg/>
+            {/* Nav Bar !!! */}
+            
+
             {/* description section */}
-            <div className="flex justify-center">
-                    <div className='flex flex-col items-center justify-center my-30 text-3xl h-40 w-160 mx-5 bg-zinc-900 border-white border-1 rounded-lg'>
-                        <h2 className="flex items-center justify-center text-3xl text-center mb-2 font-semibold">Welcome to my blog!</h2>
-                        <p className='flex items-center justify-center text-2xl mx-15 text-center font-medium'>Here you'll find articles on games and features that catch my interest.</p>
+            <motion.div 
+                className="flex justify-center"
+                style={{opacity: 0, y: -300}}
+                animate={{opacity: 1, y: 0}}
+                transition={{duration: 2, ease: "easeInOut"}}    
+            >
+                    <div className='flex flex-col items-center justify-center my-30 text-3xl h-auto mx-10 2xl:mx-[30%] bg-zinc-900 py-[2%] border-white border-1 rounded-lg'>
+                        <h2 className="flex items-center justify-center text-6xl text-center mb-2 font-semibold">BLOG</h2>
+                        <p className='flex items-center justify-center text-3xl mx-15 text-center font-medium'>Here you'll find articles I write on games, features, and implementations that pique my interest.</p>
                     </div>
-            </div>
+            </motion.div>
 
             {/* article section */}
             <div className="flex justify-center p-4">
