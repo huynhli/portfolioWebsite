@@ -104,7 +104,7 @@ export default function ProjectsPage() {
                                     initial={{opacity: 0, y: 100}}
                                     whileHover={{ scale: 1.04}}
                                     animate={{ scale: 1, opacity: 1, y: 0 }}
-                                    transition={{ scale: { duration: 0.2 } }}
+                                    transition={{ scale: { duration: 0.2 }, y: {duration: 3+(i/20)}, opacity: {duration: 3.5+(i/20), ease:"easeInOut"}}}
                                 >
                                     <div className="absolute inset-0 bg-white opacity-0 active:opacity-30 transition-opacity duration-200 z-20 rounded-md"></div>
                                     <div className='overflow-hidden w-full rounded-md mb-3'>
