@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import StarBg from '../components/StarBg'
 import '../main.css'
 import { useState, useEffect } from 'react'
+import Header from '../components/Header'
 
 export default function ProjectsPage() {
     // const goToArticle = (pageNum) => {
@@ -65,7 +66,7 @@ export default function ProjectsPage() {
         <div className='text-white min-h-screen'>
             <StarBg/>
             {/* Nav Bar !!! */}
-            
+            <Header/>
 
             {/* description section */}
             <motion.div 
