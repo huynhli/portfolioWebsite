@@ -14,7 +14,7 @@ export default function Landing() {
 
                     {/* main card */}
                     <motion.div
-                        style={{ opacity: 0 }}
+                        initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 3, delay: 0.2, ease: "easeInOut" }}
                         className="
