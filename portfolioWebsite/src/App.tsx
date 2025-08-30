@@ -2,12 +2,12 @@ import { Routes, Route, Outlet } from 'react-router-dom'
 // import Header from './components/Header.tsx'
 // import Footer from './components/Footer.tsx'
 import HomePage from './pages/HomePage.tsx'
-import ProjectsPage from './pages/ProjectsPage.tsx'
+// import ProjectsPage from './pages/ProjectsPage.tsx'
 import BlogPage from './pages/BlogPage.tsx'
-import AboutPage from './pages/AboutPage.tsx'
-import ImageUpload from './pages/ImageUpload.tsx'
-import ArticleFooter from './components/ArticleFooter.tsx'
-import ArticleTemplatePage from './pages/ArticleTemplatePage.tsx'
+// import AboutPage from './pages/AboutPage.tsx'
+// import ImageUpload from './pages/ImageUpload.tsx'
+// import ArticleFooter from './components/ArticleFooter.tsx'
+// import ArticleTemplatePage from './pages/ArticleTemplatePage.tsx'
 
 export default function App() {
   // defining default layout
@@ -21,14 +21,14 @@ export default function App() {
     )
   }
 
-  const ArticleLayout = () => {
-    return (
-      <div>
-        <Outlet/>
-        <ArticleFooter/>
-      </div>
-    )
-  }
+  // const ArticleLayout = () => {
+  //   return (
+  //     <div>
+  //       <Outlet/>
+  //       <ArticleFooter/>
+  //     </div>
+  //   )
+  // }
 
   return (
     <div>
