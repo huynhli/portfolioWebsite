@@ -63,7 +63,7 @@ export default function ProjectsPage() {
 
 
     return (
-        <div className='text-white min-h-screen'>
+        <div className='text-white min-h-[200vh]'>
             <StarBg/>
             {/* Nav Bar !!! */}
             <Header/>
@@ -71,7 +71,7 @@ export default function ProjectsPage() {
             {/* description section */}
             <motion.div 
                 className="flex justify-center"
-                style={{opacity: 0, y: -300}}
+                initial={{opacity: 0, y: -300}}
                 animate={{opacity: 1, y: 0}}
                 transition={{duration: 2, ease: "easeInOut"}}    
             >
@@ -87,19 +87,32 @@ export default function ProjectsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
                     {isLoading ? ( 
                         <div className="col-span-full text-center py-8 mb-5 text-3xl font-bold">
-                            <p>{loadingText} If nothing loads for a while, please load <a href='https://liamportfolioweb.onrender.com/' className='text-blue-400 hover:text-blue-500 underline'>this page</a> and come back.</p>
+                            <p>{loadingText} If nothing loads for a while, please load <a href='https://liamportfolioweb.onrender.com/' className='text-blue-400 hover:text-blue-500 underline'>this page</a> and come back! Also maybe shoot me an email because then something is wrong lol</p>
                         </div>
                         ) : allArticles.length > 0 ? (
                             // Map through all articles
                             allArticles.map((article, i) => (
-                                <div key={i} onClick={goToArticle(article.id)} className="relative hover:cursor-pointer transition-transform duration-300 hover:scale-104 flex flex-col bg-zinc-900 border-white border-1 p-4 min-h-20 mb-30 items-center justify-center font-bold rounded-md shadow-md hover:bg-zinc-800 transition-colors">
+                                <motion.div 
+                                    key={i} 
+                                    onClick={() => goToArticle(article.id)} 
+                                    className="
+                                        relative flex flex-col items-center justify-center
+                                        bg-zinc-900 border-white border-1 p-4 min-h-20 mb-30 rounded-md
+                                        font-bold shadow-md  
+                                        hover:cursor-pointer hover:bg-zinc-800 
+                                        hover:transition-transform hover:duration-300 hover:scale-104 hover:transition-colors     
+                                    "
+                                    initial={{opacity: 0, y: 100}}
+                                    animate={{opacity: 1, y: 0}}
+                                    transition={{duration: 2+(i/20), ease: "easeIn"}}    
+                                >
                                     <div className="absolute inset-0 bg-white opacity-0 active:opacity-30 transition-opacity duration-200 z-20 rounded-md"></div>
                                     <div className='overflow-hidden w-full rounded-md mb-3'>
                                         <img src={article.cover} className='w-full h-80 object-cover'/>
                                     </div>
                                     <p>{article.title}</p>
                                     <p>{article.date}</p>
-                                </div>
+                                </motion.div>
                             ))
                         ) : (
                         <div className="col-span-full text-center py-8 mb-5">No articles found</div>
