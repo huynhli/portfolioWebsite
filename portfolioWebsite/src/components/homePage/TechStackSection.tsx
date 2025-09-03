@@ -15,11 +15,11 @@ export default function TechStackSection({scroll, beginFade, title, frameworks} 
 
     return (
         // TODO this doesnt need custom optional type, it can just use string
-        <div className="flex flex-col sm:flex-row mt-10">
-            <motion.h2 className="text-4xl lg:text-6xl min-w-[30%]" style={{y:titleY, opacity:titleOpacity}}>
+        <div className="flex flex-col sm:flex-row mt-20">
+            <motion.h2 className="text-5xl min-w-[50%] md:min-w-[30%] mb-2 sm:mb-0" style={{y:titleY, opacity:titleOpacity}}>
                 {title}
             </motion.h2>
-            <ul className="text-3xl lg:text-5xl flex flex-row flex-wrap">
+            <ul className="text-3xl flex flex-row flex-wrap">
                 {frameworks.map((frameworkPair, key) => {
                     const listY = useTransform(
                         scroll,
@@ -40,7 +40,7 @@ export default function TechStackSection({scroll, beginFade, title, frameworks} 
                         >
                             <img
                             src={`/images/stack_logos/${title.toLowerCase()}/logo_${frameworkPair[0]}.png`}
-                            className="w-9 lg:w-12 mr-2 lazy"
+                            className="w-9 mr-2 lazy"
                             alt={`Logo for ${frameworkPair[0]}`}
                             />
                             {frameworkPair[1] ?? frameworkPair[0]}

@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import '../main.css'
 import './Header.css'
 
@@ -19,7 +20,12 @@ export default function Header() {
     }
 
     return (
-        <div className='flex justify-between h-20'>
+        <motion.div 
+            className='flex justify-between h-20'
+            initial={{opacity: 0, y: -100}}
+            animate={{opacity: 1, y: 0}}
+            transition={{duration: 2.5, ease: "easeInOut"}}    
+        >
             <div className='self-center px-8'>
                 <button className="underline-hover px-2 py-1 duration-400 rounded-t-lg hover:bg-purple-300 hover:cursor-pointer active:bg-purple-300" onClick={goToHome}>
                     Liam Huynh
@@ -47,7 +53,7 @@ export default function Header() {
                 </button>
                 </div>
             </div>
-        </div>
+        </motion.div>
 
     )
 }
