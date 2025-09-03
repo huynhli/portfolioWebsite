@@ -62,7 +62,7 @@ export default function Landing() {
                             cursor-pointer
                             group-hover/outer:opacity-100 
                             top-[30%] lg:top-0
-                            lg:group-hover/outer:-translate-y-[175%] lg:group-hover/outer:-translate-x-[9vw]
+                            lg:group-hover/outer:-translate-y-[195%] lg:group-hover/outer:-translate-x-[9vw]
                             group-hover/outer:-translate-y-[6vh] group-hover/outer:translate-x-[45vw]
                             transition duration-500 group-hover/outer:delay-[200ms]
                             "
@@ -89,7 +89,7 @@ export default function Landing() {
                             cursor-pointer
                             group-hover/outer:opacity-100 
                             top-[30%] lg:top-0
-                            lg:group-hover/outer:-translate-y-[175%] lg:group-hover/outer:translate-x-0
+                            lg:group-hover/outer:-translate-y-[195%] lg:group-hover/outer:translate-x-0
                             group-hover/outer:translate-x-[34vw]
                             transition duration-500 group-hover/outer:delay-[200ms]
                             bg-
@@ -117,7 +117,7 @@ export default function Landing() {
                             cursor-pointer
                             group-hover/outer:opacity-100 
                             top-[30%] lg:top-0
-                            lg:group-hover/outer:-translate-y-[175%] lg:group-hover/outer:translate-x-[9vw]
+                            lg:group-hover/outer:-translate-y-[195%] lg:group-hover/outer:translate-x-[9vw]
                             group-hover/outer:translate-y-[6vh] group-hover/outer:translate-x-[45vw]
                             transition duration-500 group-hover/outer:delay-[200ms]
                             hover:scale-115
