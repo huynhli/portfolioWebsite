@@ -1,6 +1,6 @@
 import { useScroll, useTransform } from "framer-motion"
-import Landing from "../components/Landing" 
-import Roadmap from "../components/Roadmap"
+import Landing from "../components/homePage/Landing" 
+import Roadmap from "../components/homePage/Roadmap"
 
 export default function HomePage() {
     
@@ -18,7 +18,7 @@ export default function HomePage() {
             <Roadmap slideTransform={page2Slide}/>
             
             {/* contact info */}
-            <div className="text-white h-100 z-100 flex flex-col justify-center items-center text-5xl xl:text-6xl 2xl:text-7xl 2xl:w-auto mx-[10%] pt-[6%] mb-[5%]">
+            <div className="text-white h-100 z-100 flex flex-col justify-center items-center text-5xl 2xl:w-auto mx-[10%] pt-[6%] mb-[7%]">
                 Find me:
                 <div className="mt-3 xl:mt-12 mb-2 text-3xl xl:text-4xl 2xl:text-5xl flex flex-col justify-center items-center xl:flex-row xl:justify-between w-full italic">
                     <a className='text-blue-400 hover:underline mb-2' href='mailto:liamtamh@gmail.com'>liamtamh@gmail.com</a>

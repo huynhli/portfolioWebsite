@@ -1,4 +1,4 @@
-import StarBg from "./StarBg"
+import StarBg from "../StarBg"
 import {motion, useTransform} from "framer-motion"
 import { useScroll } from "framer-motion"
 

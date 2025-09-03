@@ -1,20 +1,15 @@
 import { motion, MotionValue, useScroll, useTransform } from "framer-motion"
-import StarBg from "../components/StarBg"
+import StarBg from "../StarBg"
 import { useState, useEffect, useRef } from "react" 
-import ExperiencePoint from "../components/ExperiencePoint" 
-import ProjectPoint from "../components/ProjectPoint" 
-import TechStackSection from "../components/TechStackSection" 
-import { useNavigate } from "react-router-dom"
+import ExperiencePoint from "./ExperiencePoint" 
+import TechStackSection from "./TechStackSection" 
+import ProjectSection from "./ProjectSection"
 
 type roadmapProp = {
     slideTransform: MotionValue<number>
 }
 
 export default function Roadmap ({slideTransform} : roadmapProp) {
-    const navigate = useNavigate()
-    const goToProjects = () => {
-        navigate('/projects')
-    }
     const roadmapRef = useRef<HTMLElement | null>(null)
     // Roadmap animations code
     const { scrollYProgress: roadmapYProgress} = useScroll({
@@ -56,30 +51,6 @@ export default function Roadmap ({slideTransform} : roadmapProp) {
     const textOpacityExp = useTransform(roadmapYProgress, roadmapSize.width < 798 ? [0.05, 0.12] : [0.16, 0.33], [0, 1])
     const textXExp = useTransform(roadmapYProgress, roadmapSize.width < 798 ? [0.05, 0.12] : [0.16, 0.3], [300, 0])
 
-    const projectOpacity = useTransform(roadmapYProgress, roadmapSize.height < 400 ? [0.2, 0.3] : [0.3, 0.38], [0, 1])
-    const projectX = useTransform(roadmapYProgress, roadmapSize.height < 400 ? [0.2, 0.3] :[0.3, 0.38], [300, 0])
-
-    const [hoverIndex, setHoverIndex] = useState<number>(0)
-
-    const projImgTimeoutRef = useRef<number | null>(null) 
-
-    const enteringProjPoint = (index: number) => {
-        if (projImgTimeoutRef.current) {
-            clearTimeout(projImgTimeoutRef.current) 
-            projImgTimeoutRef.current = null 
-        }
-        setHoverIndex(index) 
-    }
-
-    const leavingProjPoint = () => {
-        if (projImgTimeoutRef.current) clearTimeout(projImgTimeoutRef.current) 
-        projImgTimeoutRef.current = window.setTimeout(() => {
-            setHoverIndex(0) 
-            projImgTimeoutRef.current = null 
-        }, 1000) 
-    }
-    const projectImages = ['/images/tempGameBlogImg.png', '/images/tempSpotifyRecsImg.png', '/images/tempSpotifyRecsImg.png']
-
     const stackOpacity = useTransform(roadmapYProgress, [0.45, 0.5], [0, 1])
     const stackX = useTransform(roadmapYProgress, [0.45, 0.5], [300, 0])
     return (
@@ -108,7 +79,7 @@ export default function Roadmap ({slideTransform} : roadmapProp) {
 
             {/* experience */}
             <div className="text-white col-span-4 col-start-1 row-span-2 pt-[5%] lg:pt-0 mt-[3px] px-[10%]">
-                <motion.h1 className="text-6xl" style={{opacity:textOpacityExp, x:textXExp}}>EXPERIENCE</motion.h1>
+                <motion.h1 className="text-6xl" style={{opacity:textOpacityExp, x:textXExp}}>Experience</motion.h1>
                 <ExperiencePoint 
                     scrollYProgress={roadmapYProgress}
                     pointNum={1}
@@ -126,79 +97,11 @@ export default function Roadmap ({slideTransform} : roadmapProp) {
             </div>
 
             {/* projects */}
-            <div className="
-                relative 2xl:col-start-3 2xl:col-span-4 2xl:row-span-2 2xl:row-start-4 text-white mt-[10%] 2xl:mt-0 mx-[5%]
-                2xl:mt-60
-                "
-            >
-                <motion.h1 
-                    className="text-6xl pb-[1%]"
-                    style={{opacity: projectOpacity, x: projectX}}
-                    onClick={goToProjects}
-                >
-                    PROJECTS
-                </motion.h1>
-                <div className="grid grid-cols-8 grid-rows-3 2xl:h-[700px] h-[900px]">
-                    <ProjectPoint
-                        scrollYProgress={roadmapYProgress}
-                        title="Game Design Blog"
-                        desc="Articles I write about game dessign choices I make, love, or both!"
-                        stack={["Typescript","React", "Jest", "Tanstack Query", "Motion", "TailwindCSS"]}
-                        order={1}
-                        enterProj={enteringProjPoint}
-                        leaveProj={leavingProjPoint}
-                    />
-                    <ProjectPoint
-                        scrollYProgress={roadmapYProgress}
-                        title="What 2 Eat"
-                        desc="Is choosing dinner too overwhelming? Try this."
-                        stack={["Typescript","React", "Jest", "Tanstack Query", "Motion", "TailwindCSS"]}
-                        order={2}
-                        enterProj={enteringProjPoint}
-                        leaveProj={leavingProjPoint}
-                    />
-                    <ProjectPoint
-                        scrollYProgress={roadmapYProgress}
-                        title="Spotify Song Recs"
-                        desc="Recommendations based on your spotify songs, playlists, artists, or albums!"
-                        stack={["Typescript","React", "Restful APIs", "Tanstack Query", "TailwindCSS"]}
-                        order={3}
-                        enterProj={enteringProjPoint}
-                        leaveProj={leavingProjPoint}
-                    />
-                    <div className="z-50 col-start-5 col-span-4 2xl:col-start-6 2xl:col-span-3 row-span-3 row-start-1 border-y-1 border-white">
-                        <div className="w-full h-full border-x-2 rounded-l-[35%] border-white flex justify-center center-items">
-                            {hoverIndex === 0 
-                            ? 
-                                <button onClick={goToProjects} className="text-3xl mx-10 2xl:text-6xl text-blue-500 underline cursor-pointer">View all my projects here!</button> 
-                            :   
-                                <motion.img
-                                    className="
-                                        h-full w-full object-contain
-                                        border-l-2 rounded-l-[35%] border-white
-                                        
-                                        "
-                                    whileHover={{}} // TODO implement this lol
-                                    onMouseEnter={() => {
-                                        if (projImgTimeoutRef.current) {
-                                            clearTimeout(projImgTimeoutRef.current) 
-                                            projImgTimeoutRef.current = null 
-                                        }
-                                    }}
-                                    onMouseLeave={leavingProjPoint}
-                                    src={projectImages[hoverIndex-1]}
-                                    alt={`An image of the project: ${hoverIndex === 1 ? 'Game Design Blog' : hoverIndex === 2 ? 'What 2 Eat' : 'Spotify Song Recs'}`}
-                                />
-                            }
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
+            <ProjectSection roadmapWidth={roadmapSize.width} roadmapYProgress={roadmapYProgress}/>
 
             {/* stack + contact */}
             <div className="2xl:mt-60 text-white flex flex-col 2xl:w-full w-[80%] 2xl:col-start-2 2xl:col-span-4 2xl:mt-0 mt-[10%] 2xl:row-start-7 2xl:row-span-7">
-                <motion.h1 className="lg:mb-8 text-6xl lg:text-7xl" style={{x: stackX, opacity:stackOpacity}}>My Stack</motion.h1>
+                <motion.h1 className="lg:mb-8 text-6xl lg:text-7xl" style={{x: stackX, opacity:stackOpacity}}>Stack</motion.h1>
                 {/* Frontend */}
                 <TechStackSection 
                     scroll={roadmapYProgress}

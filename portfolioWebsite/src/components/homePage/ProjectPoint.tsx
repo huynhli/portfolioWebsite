@@ -15,7 +15,6 @@ export default function ProjectPoint({scrollYProgress, title, desc, stack, order
     const pointOpacity = useTransform(scrollYProgress, [0.32+(order*0.03), 0.36+(order*0.03)], [0, 1])
 
     return (
-        
         <motion.div 
             className={`
                 h-full row-start-${order} 2xl:col-span-5 col-span-4 col-start-1 flex flex-col justify-center border-white border-t-1 border-s-1 ${order === 3 ? "border-b-1": ""} p-[2%] py-[5%]

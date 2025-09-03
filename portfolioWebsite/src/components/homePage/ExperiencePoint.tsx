@@ -14,7 +14,7 @@ type pointProps = {
 }
 
 export default function ExperiencePoint ({ scrollYProgress, pointNum, position, frameworks, company, companyLink, date, points, roadmapWidth } : pointProps) {
-    const offset = (pointNum-1) / 20
+    const offset = (pointNum-1) / (roadmapWidth < 798 ? 100 : 20)
     const posOpacity= useTransform(scrollYProgress, roadmapWidth < 798 ? [0.11+offset, 0.14+offset] : [0.25+offset, 0.33+offset], [0, 1])
     const posY= useTransform(scrollYProgress, roadmapWidth < 798 ? [0.11+offset, 0.16+offset] : [0.25+offset, 0.33+offset], [100, 0])
 
@@ -30,7 +30,7 @@ export default function ExperiencePoint ({ scrollYProgress, pointNum, position, 
                 className="flex flex-col lg:flex-row lg:my-2"
                 style={{y:posY, opacity:posOpacity}}
             >
-                <h2 className="text-2xl block lg:border-r-1 lg:border-b-0 border-b-1 lg:pr-2 lg:mr-1 mb-1 pb-2">{position}</h2>
+                <h2 className="text-2xl block lg:border-r-1 lg:border-b-0 border-b-1 lg:pr-2 lg:mr-1 mb-1 pb-2 lg:pb-0 2xl:">{position}</h2>
                 <ul className="text-2xl flex flex-row flex-wrap">
                     {frameworks.map((framework, key) => (
                         <li className="px-1" key={key}>{framework}{key < frameworks.length - 1 ? "," : ""}</li>
