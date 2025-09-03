@@ -13,6 +13,17 @@ export default function ProjectSection ({ roadmapWidth, roadmapYProgress } : pro
     const goToProjects = () => {
         navigate('/projects')
     }
+    const goToProject = (hoverIndex: number) => {
+        var link
+        if (hoverIndex == 1){
+            link = "/projects/gameDesignBlog"
+        } else if (hoverIndex === 2) {
+            link = "/projects/what2Eat"
+        } else {
+            link = "/projects/spotifySongRecs"
+        }
+        navigate(link)
+    }
     const projectOpacity = useTransform(roadmapYProgress, roadmapWidth < 798 ? [0.2, 0.3] : [0.3, 0.42], [0, 1])
     const projectX = useTransform(roadmapYProgress, roadmapWidth < 798 ? [0.2, 0.3] :[0.3, 0.42], [300, 0])
 
@@ -86,7 +97,7 @@ export default function ProjectSection ({ roadmapWidth, roadmapYProgress } : pro
                         projectLink="spotifySongRecs"
                     />
                     <div className="z-50 col-start-5 col-span-4 2xl:col-start-6 2xl:col-span-3 row-span-3 row-start-1 border-y-1 border-white">
-                        <div className="w-full h-full border-x-2 rounded-l-[35%] border-white flex justify-center center-items">
+                        <div className="w-full h-full border-x-2 rounded-l-[35%] border-white flex justify-center items-center">
                             {hoverIndex === 0 
                             ? 
                                 <button onClick={goToProjects} className="text-3xl mx-10 2xl:text-4xl text-blue-500 underline cursor-pointer">View all my projects here!</button> 
@@ -95,15 +106,15 @@ export default function ProjectSection ({ roadmapWidth, roadmapYProgress } : pro
                                     className="
                                         h-full w-full object-contain
                                         border-l-2 rounded-l-[35%] border-white
-                                        
+                                        hover:cursor-pointer
                                         "
-                                    whileHover={{}} // TODO implement this lol
                                     onMouseEnter={() => {
                                         if (projImgTimeoutRef.current) {
                                             clearTimeout(projImgTimeoutRef.current) 
                                             projImgTimeoutRef.current = null 
                                         }
                                     }}
+                                    onClick={() => (goToProject(hoverIndex))}
                                     onMouseLeave={leavingProjPoint}
                                     src={projectImages[hoverIndex-1]}
                                     alt={`An image of the project: ${hoverIndex === 1 ? 'Game Design Blog' : hoverIndex === 2 ? 'What 2 Eat' : 'Spotify Song Recs'}`}
