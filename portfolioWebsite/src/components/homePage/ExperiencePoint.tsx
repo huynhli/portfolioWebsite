@@ -16,14 +16,14 @@ type pointProps = {
 export default function ExperiencePoint ({ scrollYProgress, pointNum, position, frameworks, company, companyLink, date, points, roadmapWidth } : pointProps) {
     const offset = (pointNum-1) / (roadmapWidth < 798 ? 100 : 20)
     
-    const posOpacity= useTransform(scrollYProgress, roadmapWidth < 798 ? [0.11+offset, 0.14+offset] : [0.25+offset, 0.33+offset], [0, 1])
-    const posY= useTransform(scrollYProgress, roadmapWidth < 798 ? [0.11+offset, 0.16+offset] : [0.25+offset, 0.33+offset], [100, 0])
+    const posOpacity= useTransform(scrollYProgress, roadmapWidth < 798 ? [0.11+offset, 0.14+offset] : [0.25+offset, 0.36+offset], [0, 1])
+    const posY= useTransform(scrollYProgress, roadmapWidth < 798 ? [0.11+offset, 0.16+offset] : [0.25+offset, 0.36+offset], [100, 0])
 
-    const projTitleOpacity = useTransform(scrollYProgress, roadmapWidth < 798 ? [0.11+offset, 0.16+offset] : [0.25+offset, 0.32+offset], [0, 1])
-    const projTitleY = useTransform(scrollYProgress, roadmapWidth < 798 ? [0.11+offset, 0.175+offset] : [0.26+offset, 0.31+offset], [150, 0])
+    const projTitleOpacity = useTransform(scrollYProgress, roadmapWidth < 798 ? [0.11+offset, 0.16+offset] : [0.25+offset, 0.35+offset], [0, 1])
+    const projTitleY = useTransform(scrollYProgress, roadmapWidth < 798 ? [0.11+offset, 0.175+offset] : [0.26+offset, 0.35+offset], [150, 0])
 
-    const pointsOpacity = useTransform(scrollYProgress, roadmapWidth < 798 ? [0.11+offset, 0.18+offset] : [0.25+offset, 0.33+offset], [0, 1])
-    const pointsY = useTransform(scrollYProgress, roadmapWidth < 798 ? [0.11+offset, 0.195+offset] : [0.28+offset, 0.33+offset], [200, 0])
+    const pointsOpacity = useTransform(scrollYProgress, roadmapWidth < 798 ? [0.11+offset, 0.18+offset] : [0.25+offset, 0.36+offset], [0, 1])
+    const pointsY = useTransform(scrollYProgress, roadmapWidth < 798 ? [0.11+offset, 0.195+offset] : [0.28+offset, 0.36+offset], [200, 0])
 
     
     return (

@@ -48,11 +48,11 @@ export default function Roadmap ({slideTransform} : roadmapProp) {
     
 
     // Roadmap text animations
-    const textOpacityExp = useTransform(roadmapYProgress, roadmapSize.width < 798 ? [0.05, 0.12] : [0.16, 0.33], [0, 1])
-    const textXExp = useTransform(roadmapYProgress, roadmapSize.width < 798 ? [0.05, 0.12] : [0.16, 0.3], [300, 0])
+    const textOpacityExp = useTransform(roadmapYProgress, roadmapSize.width < 798 ? [0.05, 0.12] : [0.16, 0.34], [0, 1])
+    const textXExp = useTransform(roadmapYProgress, roadmapSize.width < 798 ? [0.05, 0.12] : [0.16, 0.34], [300, 0])
 
-    const stackOpacity = useTransform(roadmapYProgress, [0.35, 0.42], [0, 1])
-    const stackX = useTransform(roadmapYProgress, [0.35, 0.42], [300, 0])
+    const stackOpacity = useTransform(roadmapYProgress, [0.35, 0.58], [0, 1])
+    const stackX = useTransform(roadmapYProgress, [0.35, 0.58], [300, 0])
     return (
         <motion.section
             ref={roadmapRef}
