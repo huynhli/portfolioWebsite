@@ -24,6 +24,7 @@ export default function ExperiencePoint ({ scrollYProgress, pointNum, position, 
     const pointsOpacity = useTransform(scrollYProgress, roadmapWidth < 798 ? [0.11+offset, 0.18+offset] : [0.25+offset, 0.33+offset], [0, 1])
     const pointsY = useTransform(scrollYProgress, roadmapWidth < 798 ? [0.11+offset, 0.195+offset] : [0.28+offset, 0.33+offset], [200, 0])
 
+    
     return (
         <div className="py-3">
             <motion.div 
