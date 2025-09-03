@@ -15,6 +15,7 @@ type pointProps = {
 
 export default function ExperiencePoint ({ scrollYProgress, pointNum, position, frameworks, company, companyLink, date, points, roadmapWidth } : pointProps) {
     const offset = (pointNum-1) / (roadmapWidth < 798 ? 100 : 20)
+    
     const posOpacity= useTransform(scrollYProgress, roadmapWidth < 798 ? [0.11+offset, 0.14+offset] : [0.25+offset, 0.33+offset], [0, 1])
     const posY= useTransform(scrollYProgress, roadmapWidth < 798 ? [0.11+offset, 0.16+offset] : [0.25+offset, 0.33+offset], [100, 0])
 
@@ -42,7 +43,7 @@ export default function ExperiencePoint ({ scrollYProgress, pointNum, position, 
                 className="flex flex-col lg:flex-row lg:justify-between py-1 lg:mb-2"
                 style={{y:projTitleY, opacity:projTitleOpacity}}
             >
-                <a href={companyLink} target="_blank" rel="noreferrer" className="italic text-2xl underline text-blue-400 hover:text-blue-500 active:text-blue-600">{company}</a>
+                <a href={companyLink} target="_blank" rel="noreferrer" className="italic text-2xl underline text-blue-400 hover:text-blue-500 active:text-blue-600 mb-1">{company}</a>
                 <h2 className="italic text-2xl">{date}</h2>
             </motion.div>
             <motion.div 

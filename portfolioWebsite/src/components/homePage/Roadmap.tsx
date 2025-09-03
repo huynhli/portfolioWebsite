@@ -51,8 +51,8 @@ export default function Roadmap ({slideTransform} : roadmapProp) {
     const textOpacityExp = useTransform(roadmapYProgress, roadmapSize.width < 798 ? [0.05, 0.12] : [0.16, 0.33], [0, 1])
     const textXExp = useTransform(roadmapYProgress, roadmapSize.width < 798 ? [0.05, 0.12] : [0.16, 0.3], [300, 0])
 
-    const stackOpacity = useTransform(roadmapYProgress, [0.45, 0.5], [0, 1])
-    const stackX = useTransform(roadmapYProgress, [0.45, 0.5], [300, 0])
+    const stackOpacity = useTransform(roadmapYProgress, [0.35, 0.42], [0, 1])
+    const stackX = useTransform(roadmapYProgress, [0.35, 0.42], [300, 0])
     return (
         <motion.section
             ref={roadmapRef}
@@ -99,13 +99,13 @@ export default function Roadmap ({slideTransform} : roadmapProp) {
             {/* projects */}
             <ProjectSection roadmapWidth={roadmapSize.width} roadmapYProgress={roadmapYProgress}/>
 
-            {/* stack + contact */}
+            {/* stack */}
             <div className="2xl:mt-60 text-white flex flex-col 2xl:w-full w-[80%] 2xl:col-start-2 2xl:col-span-4 2xl:mt-0 mt-[10%] 2xl:row-start-7 2xl:row-span-7">
-                <motion.h1 className="lg:mb-8 text-6xl lg:text-7xl" style={{x: stackX, opacity:stackOpacity}}>Stack</motion.h1>
+                <motion.h1 className="text-6xl lg:text-7xl" style={{x: stackX, opacity:stackOpacity}}>Stack</motion.h1>
                 {/* Frontend */}
                 <TechStackSection 
                     scroll={roadmapYProgress}
-                    beginFade={0.4525}
+                    beginFade={roadmapSize.width < 798 ? 0.41 : 0.52}
                     title="Frontend"
                     frameworks={[
                         ["react","React"], 
@@ -124,7 +124,7 @@ export default function Roadmap ({slideTransform} : roadmapProp) {
                 {/* Backend */}
                 <TechStackSection 
                     scroll={roadmapYProgress}
-                    beginFade={0.5}
+                    beginFade={0.55}
                     title="Backend"
                     frameworks={[
                         ["fiber", "Fiber"],
@@ -137,7 +137,7 @@ export default function Roadmap ({slideTransform} : roadmapProp) {
                 {/* Languages */}
                 <TechStackSection 
                     scroll={roadmapYProgress}
-                    beginFade={0.53}
+                    beginFade={0.58}
                     title="Languages"
                     frameworks={[
                         ["html","HTML"], 
@@ -150,7 +150,7 @@ export default function Roadmap ({slideTransform} : roadmapProp) {
                 {/* Tools */}
                 <TechStackSection 
                     scroll={roadmapYProgress}
-                    beginFade={0.56}
+                    beginFade={0.61}
                     title="Tools"
                     frameworks={[
                         ["docker", "Docker"],
