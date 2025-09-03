@@ -17,7 +17,16 @@ export default function HomePage() {
             {/* Roadmap-y section */}
             <Roadmap slideTransform={page2Slide}/>
             
-            
+            {/* contact info */}
+            <div className="text-white h-100 z-100 flex flex-col justify-center items-center text-5xl xl:text-6xl 2xl:text-7xl 2xl:w-auto mx-[10%] pt-[6%] mb-[5%]">
+                Find me:
+                <div className="mt-3 xl:mt-12 mb-2 text-3xl xl:text-4xl 2xl:text-5xl flex flex-col justify-center items-center xl:flex-row xl:justify-between w-full italic">
+                    <a className='text-blue-400 hover:underline mb-2' href='mailto:liamtamh@gmail.com'>liamtamh@gmail.com</a>
+                    <a className='text-blue-400 hover:underline mb-2 flex flex-row' href='https://www.linkedin.com/in/liam-huynh-91aa1a1a1/' target="_blank" rel='_noreferrer'><img className='w-9 2xl:w-12 mr-2' src='/images/linkedin_logo.png'/>LinkedIn</a>
+                    <a className='text-blue-400 hover:underline flex flex-row' href='https://github.com/huynhli' target="_blank" rel='_noreferrer'><img className='w-9 2xl:w-12 mr-2' src='/images/stack_logos/tools/logo_github.png'/>Github</a>
+                    {/* TODO fill in txt fx liquid lef to right */}
+                </div>
+            </div>
         </div>
     )
 }

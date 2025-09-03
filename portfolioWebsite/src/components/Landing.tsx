@@ -1,9 +1,16 @@
 import StarBg from "./StarBg"
-import {motion} from "framer-motion"
+import {motion, useTransform} from "framer-motion"
+import { useScroll } from "framer-motion"
 
 export default function Landing() {
+    const { scrollYProgress } = useScroll()
+    const landingOpacity = useTransform(scrollYProgress, [0.5, 0.7], [1, 0])
+    
     return(
-        <section className="fixed flex flex-col h-screen w-screen justify-center items-center">
+        <motion.section 
+            className="fixed flex flex-col h-screen w-screen justify-center items-center"
+            style={{opacity: landingOpacity}}
+        >
                 <StarBg />
                 <div className="
                     h-[40%] w-full max-px-[10%] min-px-[5%]
@@ -14,6 +21,7 @@ export default function Landing() {
 
                     {/* main card */}
                     <motion.div
+
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 2, delay: 0.2, ease: "easeInOut" }}
@@ -39,7 +47,7 @@ export default function Landing() {
                             group-hover/outer:opacity-100 
                             lg:group-hover/outer:translate-x-[60%] lg:group-hover/outer:translate-y-[20%] lg:p-r-0
                             p-r-[20%]
-                            group-hover/outer:-translate-x-[20%] group-hover/outer:translate-y-[170%]
+                            group-hover/outer:-translate-x-[20%] group-hover/outer:translate-y-[140%]
                             transition-translate duration-500 ease-in-out
                             group/inner
                             flex justify-center items-center
@@ -55,7 +63,7 @@ export default function Landing() {
                             group-hover/outer:opacity-100 
                             top-[30%] lg:top-0
                             lg:group-hover/outer:-translate-y-[175%] lg:group-hover/outer:-translate-x-[9vw]
-                            group-hover/outer:-translate-y-[10vh] group-hover/outer:translate-x-[45vw]
+                            group-hover/outer:-translate-y-[6vh] group-hover/outer:translate-x-[45vw]
                             transition duration-500 group-hover/outer:delay-[200ms]
                             "
                             tabIndex={0}
@@ -110,7 +118,7 @@ export default function Landing() {
                             group-hover/outer:opacity-100 
                             top-[30%] lg:top-0
                             lg:group-hover/outer:-translate-y-[175%] lg:group-hover/outer:translate-x-[9vw]
-                            group-hover/outer:translate-y-[10vh] group-hover/outer:translate-x-[45vw]
+                            group-hover/outer:translate-y-[6vh] group-hover/outer:translate-x-[45vw]
                             transition duration-500 group-hover/outer:delay-[200ms]
                             hover:scale-115
                             "
@@ -144,6 +152,6 @@ export default function Landing() {
 
                 {/* TODO resume button */}
                 {/* TODO floating arrow animate pointing down + onclick scrolls down a bit */}
-            </section>
+            </motion.section>
     )
 }

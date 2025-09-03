@@ -50,12 +50,14 @@ export default function Roadmap ({slideTransform} : roadmapProp) {
     //     []
     // )
 
-    // Roadmap text animations
-    const textOpacityExp = useTransform(roadmapYProgress, [0.26, 0.35], [0, 1])
-    const textXExp = useTransform(roadmapYProgress, [0.22, 0.32], [300, 0])
+    
 
-    const projectOpacity = useTransform(roadmapYProgress, [0.3, 0.4], [0, 1])
-    const projectX = useTransform(roadmapYProgress, [0.3, 0.38], [300, 0])
+    // Roadmap text animations
+    const textOpacityExp = useTransform(roadmapYProgress, roadmapSize.width < 798 ? [0.05, 0.12] : [0.16, 0.33], [0, 1])
+    const textXExp = useTransform(roadmapYProgress, roadmapSize.width < 798 ? [0.05, 0.12] : [0.16, 0.3], [300, 0])
+
+    const projectOpacity = useTransform(roadmapYProgress, roadmapSize.height < 400 ? [0.2, 0.3] : [0.3, 0.38], [0, 1])
+    const projectX = useTransform(roadmapYProgress, roadmapSize.height < 400 ? [0.2, 0.3] :[0.3, 0.38], [300, 0])
 
     const [hoverIndex, setHoverIndex] = useState<number>(0)
 
@@ -85,8 +87,8 @@ export default function Roadmap ({slideTransform} : roadmapProp) {
             ref={roadmapRef}
             style={{ y: slideTransform }}
             className="
-                z-100 py-[2%]
-                border-t-5 rounded-t-4xl border-white bg-[#141414]
+                z-100 py-[2%] pb-[5%]
+                border-y-5 rounded-t-4xl rounded-b-4xl border-white bg-[#141414]
                 flex flex-col items-center
                 2xl:grid 2xl:grid-cols-6 grid-rows-[auto]
                 relative
@@ -99,13 +101,13 @@ export default function Roadmap ({slideTransform} : roadmapProp) {
                 className="absolute top-10 right-[10%] hidden 2xl:flex self-center h-[200px] w-[200px]"
                 style={{x:rocketX, y:rocketY}}
             >
-                <img src="/images/rocket.png"/>
+                {/* <img src="/images/rocket.png"/> */}
 
             </motion.div>
             
 
             {/* experience */}
-            <div className="text-white col-span-4 col-start-1 row-span-2 pt-[5px] px-[10%]">
+            <div className="text-white col-span-4 col-start-1 row-span-2 pt-[5%] lg:pt-0 mt-[3px] px-[10%]">
                 <motion.h1 className="text-6xl" style={{opacity:textOpacityExp, x:textXExp}}>EXPERIENCE</motion.h1>
                 <ExperiencePoint 
                     scrollYProgress={roadmapYProgress}
@@ -119,6 +121,7 @@ export default function Roadmap ({slideTransform} : roadmapProp) {
                         "Reduced client-side latency by over 600 ms by optimizing RESTful API data fetching workflows and server state management with Tanstack Query and Axios", 
                         "Doubled interactive visual effects and improved perceived app responsiveness by enhancing user engagement and loweringperceived latency with Framer Motion animation", 
                         "Improved DevOps efficiency and deployment reliability by containerizing frontend applications with Docker and orchestrating clusters via Kubernetes, streamlining CI/CD workflows and reducing environment-related errors by 40%"]} 
+                    roadmapWidth={roadmapSize.width}
                 />
             </div>
 
@@ -171,7 +174,7 @@ export default function Roadmap ({slideTransform} : roadmapProp) {
                             :   
                                 <motion.img
                                     className="
-                                        h-full w-full bg-blue-200 object-contain
+                                        h-full w-full object-contain
                                         border-l-2 rounded-l-[35%] border-white
                                         
                                         "
@@ -256,17 +259,6 @@ export default function Roadmap ({slideTransform} : roadmapProp) {
                         ["bash", "Bash"],
                     ]}
                 />
-
-                {/* contact info */}
-                <div className="h-50 flex flex-col items-center text-5xl xl:text-6xl 2xl:text-7xl 2xl:w-full 2xl:mx-0 mx-[10%] mt-[10%]">
-                    Find me:
-                    <div className="mt-3 xl:mt-12 mb-2 text-3xl xl:text-4xl 2xl:text-5xl flex flex-col justify-center items-center xl:flex-row xl:justify-between w-full italic">
-                        <a className='text-blue-400 hover:underline mb-2' href='mailto:liamtamh@gmail.com'>liamtamh@gmail.com</a>
-                        <a className='text-blue-400 hover:underline mb-2 flex flex-row' href='https://www.linkedin.com/in/liam-huynh-91aa1a1a1/' target="_blank" rel='_noreferrer'><img className='w-9 2xl:w-12 mr-2' src='/images/linkedin_logo.png'/>LinkedIn</a>
-                        <a className='text-blue-400 hover:underline flex flex-row' href='https://github.com/huynhli' target="_blank" rel='_noreferrer'><img className='w-9 2xl:w-12 mr-2' src='/images/stack_logos/tools/logo_github.png'/>Github</a>
-                        {/* TODO fill in txt fx liquid lef to right */}
-                    </div>
-                </div>
             </div>
             
         </motion.section>
