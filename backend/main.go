@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"os"
-	"portfolioWebsite/backend/config"
-	"portfolioWebsite/backend/database"
-	"portfolioWebsite/backend/routes"
+	"backend/config"
+	"backend/database"
+	"backend/routes"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"

@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	"portfolioWebsite/backend/config"
+	"backend/config"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
