@@ -2,47 +2,64 @@ import { motion } from 'framer-motion'
 import StarBg from '../components/StarBg'
 import '../main.css'
 import { useState, useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { getAllBlogPosts } from '../tanstackHelper'
+import { useNavigate } from 'react-router-dom'
+
+type article = {
+    id: string
+    title: string
+    date: string
+    cover: string
+}
 
 export default function ProjectsPage() {
-    // const goToArticle = (pageNum) => {
+    const navigate = useNavigate()
     const goToArticle = (article_id: String) => {
-        // string windowToGoTo = backendcall(pagenum)
-        window.location.href = `/projects/gameDesignBlog/Article?artid=${article_id}` 
+        navigate(`/projects/gameDesignBlog/Article?artid=${article_id}`)
     }
 
-    const [allArticles, setAllArticles] = useState<{
-        id: string
-        title: string
-        date: string
-        cover: string
-    }[]>([])
-    const [isLoading, setIsLoading] = useState(true)
+    // const [allArticles, setAllArticles] = useState<{
+    //     id: string
+    //     title: string
+    //     date: string
+    //     cover: string
+    // }[]>([])
+    // const [isLoading, setIsLoading] = useState(true)
     // const [error, setError] = useState<string | null>(null)
     
-    const getArticles = async () => {
-        try {
-            setIsLoading(true)
-            const responseObj = await fetch('https://liamportfolioweb.onrender.com/api/articleBanners')
-            const articleBanners = await responseObj.json()
-            setAllArticles(articleBanners)
-        } catch(error) {
-            console.error('Error fetching: ', error)
-            setAllArticles([
-            {
-                id: "error",
-                title: "Something went wrong",
-                date: new Date().toISOString().split('T')[0],
-                cover: ''
-            }
-            ])
-        } finally {
-            setIsLoading(false)
-        }
-    }
+    // const getArticles = async () => {
+    //     try {
+    //         setIsLoading(true)
+    //         const responseObj = await fetch('https://liamportfolioweb.onrender.com/api/v1/articles')
+    //         const articleBanners = await responseObj.json()
+    //         setAllArticles(articleBanners)
+    //     } catch(error) {
+    //         console.error('Error fetching: ', error)
+    //         setAllArticles([
+    //         {
+    //             id: "error",
+    //             title: "Something went wrong",
+    //             date: new Date().toISOString().split('T')[0],
+    //             cover: ''
+    //         }
+    //         ])
+    //     } finally {
+    //         setIsLoading(false)
+    //     }
+    // }
+    
 
-    useEffect(() => {
-        getArticles()
-    }, [])
+    // useEffect(() => {
+    //     getArticles()
+    // }, [])
+
+    // // useQuery for GET, useMutation + queryClient for others
+
+    const { data: allArticles = [], error, isLoading } = useQuery({
+        queryKey: ["allPosts"],
+        queryFn: () => getAllBlogPosts(),
+    })
 
     const [loadingText, setLoadingText] = useState<string>("Loading articles.")
     useEffect(() => {
@@ -67,7 +84,7 @@ export default function ProjectsPage() {
                 className="flex justify-center"
                 initial={{opacity: 0, y: -300}}
                 animate={{opacity: 1, y: 0}}
-                transition={{duration: 2, ease: "easeInOut"}}    
+                transition={{duration: 1, ease: "easeInOut"}}    
             >
                     <div className='flex flex-col items-center justify-center my-30 text-3xl h-auto mx-10 2xl:mx-[30%] bg-zinc-900 py-[2%] border-white border-1 rounded-lg'>
                         <h2 className="flex items-center justify-center text-6xl text-center mb-2 font-semibold">Blog</h2>
@@ -81,14 +98,24 @@ export default function ProjectsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
                     {isLoading ? ( 
                         <div className="col-span-full text-center py-8 mb-5 text-3xl font-bold">
-                            <p>{loadingText} If nothing loads for a while, please load <a href='https://liamportfolioweb.onrender.com/' className='text-blue-400 hover:text-blue-500 underline'>this page</a> and come back! Also maybe shoot me an email because then something is wrong lol</p>
+                            <p>{loadingText} <br/>If nothing loads for a while, please load <a href='https://liamportfolioweb.onrender.com/' className='text-blue-400 hover:text-blue-500 underline'>this page</a> and come back! Also maybe shoot me an email because then something is wrong lol</p>
+                        </div>
+                        ) : error ? (
+                        <div className="col-span-full text-center py-8 mb-5 text-3xl font-bold">
+                        <p>Error while fetching articles.</p>
                         </div>
                         ) : allArticles.length > 0 ? (
                             // Map through all articles
-                            allArticles.map((article, i) => (
+                            allArticles.map((article : article, i : number) => (
                                 <motion.div
                                     tabIndex={i}
-                                    // TODO: cant just press enter. make more accessibile
+                                    role="button"
+                                    onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        e.preventDefault(); // prevent scrolling for space
+                                        goToArticle(article.id);
+                                        }
+                                    }}
                                     key={i} 
                                     onClick={() => goToArticle(article.id)} 
                                     className="

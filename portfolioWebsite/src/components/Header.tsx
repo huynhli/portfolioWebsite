@@ -10,7 +10,7 @@ export default function Header() {
             className='flex justify-between h-20 text-white text-lg'
             initial={{opacity: 0, y: -100}}
             animate={{opacity: 1, y: 0}}
-            transition={{duration: 2.5, ease: "easeInOut"}}    
+            transition={{duration: 1.5, ease: "easeInOut"}}    
         >
             <div className='self-center px-8'>
                 <Link className="underline-hover px-2 py-1 duration-400 rounded-t-lg hover:bg-purple-800 active:bg-purple-400" to={``}>
