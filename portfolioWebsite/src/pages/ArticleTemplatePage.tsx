@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom'
 import '../main.css'
 import { useEffect, useState } from 'react'
-import Linkify from 'linkify-react'
+// import Linkify from 'linkify-react'
 
 export default function ArticleTemplatePage() {
     const [isLoading, setIsLoading] = useState(true)
@@ -36,6 +36,7 @@ export default function ArticleTemplatePage() {
 
     useEffect(() => {
         grabArticle()
+        console.log('grabbing article')
     }, [])
     
 
@@ -64,15 +65,15 @@ export default function ArticleTemplatePage() {
                             contentBlock.type === "Text" ? (
                                 <div key={i}>
                                     <p className='text-lg my-2'>
-                                        <Linkify
+                                        {/* <Linkify
                                         options={{
                                             target: '_blank',
                                             rel: 'noopener noreferrer',
                                             className: () => 'text-blue-500 underline hover:text-blue-600'
                                         }}
-                                        >
+                                        > */}
                                         {contentBlock.data}
-                                        </Linkify>
+                                        {/* </Linkify> */}
                                     </p>
                                 </div>
                             ) : contentBlock.type === "Image" ? (
@@ -84,6 +85,7 @@ export default function ArticleTemplatePage() {
                                     <p className='text-xl font-bold mt-4'>{contentBlock.data}</p>
                                 </div>
                             ) : (
+                                // heading
                                 <div>
                                     <p className='text-2xl font-bold mt-4'>{contentBlock.data}</p>
                                 </div>

@@ -4,6 +4,13 @@ import { Routes, Route, Outlet } from 'react-router-dom'
 import HomePage from './pages/HomePage.tsx'
 // import ProjectsPage from './pages/ProjectsPage.tsx'
 import BlogPage from './pages/BlogPage.tsx'
+import ProjectsPage from './pages/ProjectsPage.tsx'
+import Header from './components/Header.tsx'
+import AboutPage from './pages/AboutPage.tsx'
+import useScrollToTop from './hooks/useScrollToTop.tsx'
+import ArticleTemplatePage from './pages/ArticleTemplatePage.tsx'
+import ArticleFooter from './components/ArticleFooter.tsx'
+import ImageUpload from './pages/ImageUpload.tsx'
 // import AboutPage from './pages/AboutPage.tsx'
 // import ImageUpload from './pages/ImageUpload.tsx'
 // import ArticleFooter from './components/ArticleFooter.tsx'
@@ -14,34 +21,38 @@ export default function App() {
   const Layout = () => {
     return (
       <div>
-        {/* <Header/> */}
+        <Header/>
         <Outlet/>
         {/* <Footer/> */}
       </div>  
     )
   }
 
-  // const ArticleLayout = () => {
-  //   return (
-  //     <div>
-  //       <Outlet/>
-  //       <ArticleFooter/>
-  //     </div>
-  //   )
-  // }
+  useScrollToTop()
+
+  const ArticleLayout = () => {
+    return (
+      <div>
+        <Outlet/>
+        <ArticleFooter/>
+      </div>
+    )
+  }
 
   return (
     <div>
       <Routes>
+        <Route index element={<HomePage />} />
         <Route path="/" element={<Layout />}>
-          <Route path="/" element={<HomePage />} />
-          {/* <Route path="Projects" element={<ProjectsPage />} /> */}
-          <Route path="Blog" element={<BlogPage />} />
-          {/* <Route path="About" element={<AboutPage />} /> */}
-          {/* <Route path="ImageUpload" element={<ImageUpload />} /> */}
-          {/* <Route path="BlogArticle" element={<ArticleLayout />}> */}
-            {/* <Route path="Article" element={<ArticleTemplatePage />} /> */}
-          {/* </Route> */}
+          <Route path="projects" element={<div><Outlet /></div>}>
+            <Route index element={<ProjectsPage />} />
+            <Route path="gameDesignBlog" element={<BlogPage />} />
+            <Route path="gameDesignBlog/article" element={<ArticleLayout />}>
+              <Route index element={<ArticleTemplatePage />} />
+            </Route>
+          </Route>
+          <Route path="about" element={<AboutPage />} />
+          <Route path="imageUpload" element={<ImageUpload />} />
         </Route>
       </Routes>
     </div>

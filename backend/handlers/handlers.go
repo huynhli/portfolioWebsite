@@ -1,6 +1,9 @@
 package handlers
 
 import (
+	"backend/config"
+	"backend/database"
+	"backend/models"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -8,9 +11,6 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"backend/config"
-	"backend/database"
-	"backend/models"
 	"time"
 
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
@@ -38,8 +38,8 @@ func AddArticle(c *fiber.Ctx) error {
 }
 
 func GetArticleWithID(c *fiber.Ctx) error {
-	//save query param
-	id := c.Query("artid")
+	// Get ID from URL parameter instead of query parameter
+	id := c.Params("id")
 
 	objID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -61,18 +61,14 @@ func GetArticleWithID(c *fiber.Ctx) error {
 }
 
 func DeleteArticleById(c *fiber.Ctx) error {
-	type tempIdModel struct {
-		ID string `json:"article_id"`
-	}
-	var tempId tempIdModel
-	var articleID = c.BodyParser(&tempId)
-	if articleID != nil {
-		return fiber.NewError(fiber.StatusBadRequest, "Invalid request body")
-	}
-	objectID, err := primitive.ObjectIDFromHex(tempId.ID)
+	// Get ID from URL parameter instead of request body
+	id := c.Params("id")
+
+	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return fiber.NewError(fiber.StatusBadRequest, "Invalid article ID format")
 	}
+
 	result := database.Database.Collection("articles").FindOneAndDelete(context.TODO(), bson.D{{Key: "_id", Value: objectID}})
 	var articleModel models.Article
 	err = result.Decode(&articleModel)
@@ -82,7 +78,10 @@ func DeleteArticleById(c *fiber.Ctx) error {
 		}
 		return fiber.NewError(fiber.StatusInternalServerError, "Failed to delete article")
 	}
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Article deleted successfully", "article": articleModel})
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "Article deleted successfully",
+		"article": articleModel,
+	})
 }
 
 func GetAllArticleBanners(c *fiber.Ctx) error {
@@ -144,7 +143,7 @@ func UploadImage(c *fiber.Ctx) error {
 		return fiber.NewError(fiber.StatusInternalServerError, "Could not save image metadata")
 	}
 
-	return c.JSON(imageMetadata)
+	return c.Status(fiber.StatusCreated).JSON(imageMetadata)
 }
 
 func DeleteImage(c *fiber.Ctx) error {
@@ -200,14 +199,14 @@ func GetImageMetaDatasFromDBCloud(c *fiber.Ctx) error {
 	}
 	cursor, err := articleCollection.Find(context.TODO(), bson.D{}, options.Find().SetProjection(projection)) // cursor := iterable results of query
 	if err != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, "Failed to fetch articles")
+		return fiber.NewError(fiber.StatusInternalServerError, "Failed to fetch images")
 	}
 	defer cursor.Close(context.TODO())
 
 	// unloads cursor into []images
 	var images []models.Image
 	if err := cursor.All(context.TODO(), &images); err != nil {
-		return fiber.NewError(fiber.StatusInternalServerError, "Failed to decode articles")
+		return fiber.NewError(fiber.StatusInternalServerError, "Failed to decode images")
 	}
 
 	return c.JSON(images)

@@ -2,15 +2,12 @@ import { motion } from 'framer-motion'
 import StarBg from '../components/StarBg'
 import '../main.css'
 import { useState, useEffect } from 'react'
-import Header from '../components/Header'
 
 export default function ProjectsPage() {
     // const goToArticle = (pageNum) => {
     const goToArticle = (article_id: String) => {
         // string windowToGoTo = backendcall(pagenum)
-        return () => {
-            window.location.href = `/BlogArticle/Article?artid=${article_id}` 
-        }
+        window.location.href = `/projects/gameDesignBlog/Article?artid=${article_id}` 
     }
 
     const [allArticles, setAllArticles] = useState<{
@@ -61,12 +58,9 @@ export default function ProjectsPage() {
         return () => clearInterval(interval)
     }, [isLoading])
 
-
     return (
         <div className='text-white min-h-[200vh]'>
             <StarBg/>
-            {/* Nav Bar !!! */}
-            <Header/>
 
             {/* description section */}
             <motion.div 
@@ -76,7 +70,7 @@ export default function ProjectsPage() {
                 transition={{duration: 2, ease: "easeInOut"}}    
             >
                     <div className='flex flex-col items-center justify-center my-30 text-3xl h-auto mx-10 2xl:mx-[30%] bg-zinc-900 py-[2%] border-white border-1 rounded-lg'>
-                        <h2 className="flex items-center justify-center text-6xl text-center mb-2 font-semibold">BLOG</h2>
+                        <h2 className="flex items-center justify-center text-6xl text-center mb-2 font-semibold">Blog</h2>
                         <p className='flex items-center justify-center text-3xl mx-15 text-center font-medium'>Here you'll find articles I write on games, features, and implementations that pique my interest.</p>
                     </div>
             </motion.div>
@@ -92,7 +86,9 @@ export default function ProjectsPage() {
                         ) : allArticles.length > 0 ? (
                             // Map through all articles
                             allArticles.map((article, i) => (
-                                <motion.div 
+                                <motion.div
+                                    tabIndex={i}
+                                    // TODO: cant just press enter. make more accessibile
                                     key={i} 
                                     onClick={() => goToArticle(article.id)} 
                                     className="
