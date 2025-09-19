@@ -1,0 +1,11 @@
+# looks for dockerfile in build, maps port on machine to port in container
+services:
+  # name of container = backend
+  backend:
+    build: .
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./.env
+
+# docker-compose up --build

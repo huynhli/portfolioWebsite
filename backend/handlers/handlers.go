@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"portfolioWebsite/backend/config"
-	"portfolioWebsite/backend/database"
-	"portfolioWebsite/backend/models"
+	"backend/config"
+	"backend/database"
+	"backend/models"
 	"time"
 
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
