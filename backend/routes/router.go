@@ -2,7 +2,7 @@ package routes
 
 import (
 	"os"
-	"portfolioWebsite/backend/handlers"
+	"backend/handlers"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
