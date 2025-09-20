@@ -100,7 +100,7 @@ export default function ProjectsPage() {
                                     <p>{article.title}</p>
                                     <p>{article.stack}</p>
                                     <p>{article.desc}</p> */}
-                                    <p>Hello</p>
+                                    <p>Hello {article}</p>
                                 </motion.div>
                             ))
                         ) : (
