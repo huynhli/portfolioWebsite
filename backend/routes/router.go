@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"os"
 	"backend/handlers"
+	"os"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
@@ -12,23 +12,31 @@ import (
 func SetupRoutes(app *fiber.App) {
 	app.Get("/", homePage)
 
-	// article routes
-	app.Get("/api/articleBanners", handlers.GetAllArticleBanners)
-	app.Get("/api/getArticleWithID", handlers.GetArticleWithID)
-	app.Post("/api/addArticle", JWTMiddleware(), handlers.AddArticle)
-	app.Post("/api/deleteArticle", JWTMiddleware(), handlers.DeleteArticleById)
+	// API version prefix
+	api := app.Group("/api/v1")
 
-	// project routes
-	app.Get("/api/getProjects", handlers.GetProjects)
+	// Article routes - RESTful resource-based
+	articles := api.Group("/articles")
+	articles.Get("/", handlers.GetAllArticleBanners)                     // GET /api/v1/articles
+	articles.Get("/:id", handlers.GetArticleWithID)                      // GET /api/v1/articles/:id
+	articles.Post("/", JWTMiddleware(), handlers.AddArticle)             // POST /api/v1/articles
+	articles.Delete("/:id", JWTMiddleware(), handlers.DeleteArticleById) // DELETE /api/v1/articles/:id
 
-	// image routes
-	app.Post("/api/uploadImage", JWTMiddleware(), handlers.UploadImage)
-	app.Post("/api/deleteImage", JWTMiddleware(), handlers.DeleteImage)
-	app.Get("/api/getImageMetaDatas", handlers.GetImageMetaDatasFromDBCloud)
+	// Project routes
+	projects := api.Group("/projects")
+	projects.Get("/", handlers.GetProjects) // GET /api/v1/projects
 
-	// auth for upload routes
-	app.Get("/api/auth/github/login", handlers.GithubLogin)
-	app.Get("/api/auth/github/callback", handlers.GithubCallback)
+	// Image routes - RESTful resource-based
+	images := api.Group("/images")
+	images.Get("/", handlers.GetImageMetaDatasFromDBCloud)    // GET /api/v1/images
+	images.Post("/", JWTMiddleware(), handlers.UploadImage)   // POST /api/v1/images
+	images.Delete("/", JWTMiddleware(), handlers.DeleteImage) // DELETE /api/v1/images (with public_id in body)
+
+	// Authentication routes - nested resource
+	auth := api.Group("/auth")
+	github := auth.Group("/github")
+	github.Get("/login", handlers.GithubLogin)       // GET /api/v1/auth/github/login
+	github.Get("/callback", handlers.GithubCallback) // GET /api/v1/auth/github/callback
 }
 
 func homePage(c *fiber.Ctx) error {

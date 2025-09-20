@@ -46,7 +46,7 @@ export default function ProjectSection ({ roadmapWidth, roadmapYProgress } : pro
             projImgTimeoutRef.current = null 
         }, 1000)
     }
-    const projectImages = ['/images/tempGameBlogImg.png', '/images/tempSpotifyRecsImg.png', '/images/tempSpotifyRecsImg.png']
+    const projectImages = ['/images/tempGameBlogImg.png', '/images/tempAuralisImg.png', '/images/tempSpotifyRecsImg.png']
 
     return (
         <div className="
@@ -76,14 +76,14 @@ export default function ProjectSection ({ roadmapWidth, roadmapYProgress } : pro
                     />
                     <ProjectPoint
                         scrollYProgress={roadmapYProgress}
-                        title="What 2 Eat"
-                        desc="Is choosing dinner too overwhelming? Try this."
+                        title="Auralis"
+                        desc="Lofi music generated with ML"
                         stack={["Typescript","React", "Jest", "Tanstack Query", "Motion", "TailwindCSS"]}
                         order={2}
                         enterProj={enteringProjPoint}
                         leaveProj={leavingProjPoint}
                         roadmapWidth={roadmapWidth}
-                        projectLink="what2Eat"
+                        projectLink="Auralis"
                     />
                     <ProjectPoint
                         scrollYProgress={roadmapYProgress}
