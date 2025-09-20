@@ -1,4 +1,3 @@
-import { number } from "framer-motion"
 import axiosHelper from "./axiosHelper"
 
 // articles
