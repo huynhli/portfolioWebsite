@@ -1,5 +1,5 @@
 import { motion, MotionValue, useTransform } from "framer-motion"
-import { Link } from "react-router-dom"
+// import { Link } from "react-router-dom"
 
 type projectProp = {
     scrollYProgress: MotionValue<number>
@@ -13,7 +13,7 @@ type projectProp = {
     projectLink: string
 }
 
-const MotionLink = motion.create(Link)
+// const MotionLink = motion.create(Link)
 
 export default function ProjectPoint({scrollYProgress, title, desc, stack, order, enterProj, leaveProj, roadmapWidth, projectLink}:projectProp) {
     const pointX = useTransform(scrollYProgress, roadmapWidth < 798 ? [0,0] : [0.32+(order*0.04), 0.36+(order*0.04)], [200, 0])
@@ -24,8 +24,12 @@ export default function ProjectPoint({scrollYProgress, title, desc, stack, order
     // const goToProject = () => {
     //     navigate(`/projects/${projectLink}`)
     // }
+    const navHelper = () => {
+        window.open(projectLink)
+    }
     return (
-        <MotionLink
+        // TODO <MotionLink
+        <motion.div
             className={`
                 h-full row-start-${order} 2xl:col-span-5 col-span-4 col-start-1 flex flex-col justify-center border-white border-t-1 border-s-1 ${roadmapWidth < 798 ? "border-r-1 hover:-translate-x-[5%] hover:-mr-[5%] hover:pr-[5%]" : "hover:-translate-x-[5%] hover:-mr-[21%] hover:pr-[21%]" } ${order === 3 ? "border-b-1": ""} p-[2%] py-[5%]
                 2xl:hover:-translate-x-[15%] transition-all hover:border-l-1 hover:border-y-1
@@ -34,7 +38,8 @@ export default function ProjectPoint({scrollYProgress, title, desc, stack, order
             style={{x: pointX, opacity: pointOpacity}}
             onMouseEnter={() => enterProj(order)}
             onMouseLeave={() => leaveProj()}
-            to={`/projects/${projectLink}`}
+            // to={''}
+            onClick={navHelper}
         >
             <div className="flex flex-row">
                 <h1 className="text-4xl pr-2">{title}</h1>
@@ -44,6 +49,6 @@ export default function ProjectPoint({scrollYProgress, title, desc, stack, order
                 ))}</ul>
             </div>
             <p className="pt-2">{desc}</p>
-        </MotionLink>
+        </motion.div>
     )
 }

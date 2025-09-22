@@ -15,14 +15,20 @@ export default function ProjectSection ({ roadmapWidth, roadmapYProgress } : pro
     }
     const goToProject = (hoverIndex: number) => {
         var link
+        // TODO change
         if (hoverIndex == 1){
-            link = "/projects/gameDesignBlog"
+            // link = "/projects/gameDesignBlog"
+            link = "https://liamhuynh.pages.dev/projects/gameDesignBlog"
         } else if (hoverIndex === 2) {
-            link = "/projects/what2Eat"
+            // link = "/projects/Auralis"
+            link = "https://auralis-e5p.pages.dev"
         } else {
-            link = "/projects/spotifySongRecs"
+            // link = "/projects/similarSongs"
+            link = "https://similarSongs.pages.dev"
         }
-        navigate(link)
+        // navigate(link)
+        window.open(link)
+
     }
     const projectOpacity = useTransform(roadmapYProgress, roadmapWidth < 798 ? [0.2, 0.3] : [0.3, 0.42], [0, 1])
     const projectX = useTransform(roadmapYProgress, roadmapWidth < 798 ? [0.2, 0.3] :[0.3, 0.42], [300, 0])
@@ -72,7 +78,9 @@ export default function ProjectSection ({ roadmapWidth, roadmapYProgress } : pro
                         enterProj={enteringProjPoint}
                         leaveProj={leavingProjPoint}
                         roadmapWidth={roadmapWidth}
-                        projectLink="gameDesignBlog"
+                        // TODO
+                        // projectLink="gameDesignBlog"
+                        projectLink="https://liamhuynh.pages.dev/projects/gameDesignBlog"
                     />
                     <ProjectPoint
                         scrollYProgress={roadmapYProgress}
@@ -83,7 +91,9 @@ export default function ProjectSection ({ roadmapWidth, roadmapYProgress } : pro
                         enterProj={enteringProjPoint}
                         leaveProj={leavingProjPoint}
                         roadmapWidth={roadmapWidth}
-                        projectLink="Auralis"
+                        // TODO
+                        // projectLink="Auralis"
+                        projectLink="https://auralis-e5p.pages.dev"
                     />
                     <ProjectPoint
                         scrollYProgress={roadmapYProgress}
@@ -94,7 +104,9 @@ export default function ProjectSection ({ roadmapWidth, roadmapYProgress } : pro
                         enterProj={enteringProjPoint}
                         leaveProj={leavingProjPoint}
                         roadmapWidth={roadmapWidth}
-                        projectLink="spotifySongRecs"
+                        // TODO
+                        // projectLink="similarSongs"
+                        projectLink="https://similarSongs.pages.dev"
                     />
                     <div className="z-50 col-start-5 col-span-4 2xl:col-start-6 2xl:col-span-3 row-span-3 row-start-1 border-y-1 border-white">
                         <div className="w-full h-full border-x-2 rounded-l-[35%] border-white flex justify-center items-center">
