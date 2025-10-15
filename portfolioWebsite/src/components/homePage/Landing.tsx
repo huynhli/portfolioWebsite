@@ -34,7 +34,7 @@ export default function Landing() {
                             group-hover/outer:-translate-y-[20%]
                             "
                     >
-                        <h1 className="text-white text-[clamp(1.5rem,3.5vw,3rem)]">Hi! I'm <b className="font-extrabold">Liam</b>, <br/>a frontend developer</h1>
+                        <h1 className="text-white text-[clamp(1.5rem,3.5vw,3rem)]">Hi! I'm <b className="font-extrabold">Liam</b>, <br/>a software developer</h1>
                         <h2 className="text-white text-[clamp(1rem,2.5vw,1.75rem)]">dedicated to making scalable, high-performance, and user-centered web solutions.</h2>
                     </motion.div>
                     
