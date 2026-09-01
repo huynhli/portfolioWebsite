@@ -83,15 +83,38 @@ export default function Roadmap ({slideTransform} : roadmapProp) {
                 <ExperiencePoint 
                     scrollYProgress={roadmapYProgress}
                     pointNum={1}
+                    position="Software Developer Intern" 
+                    company="Geotab"
+                    companyLink = "https://www.geotab.com/"
+                    date="Jan 2026 - Aug 2026" 
+                    frameworks={["React (TypeScript)", "Angular", "Dotnet (C#)", "GCP", "PostgreSQL", "Docker"]} 
+                    points={[
+                        "Evaluated AI search options and developed a Semantic Kernel-based natural-language query-to-filter mapper with prompt engineering and confidence scoring, converting user queries into predetermined filters",
+                        "Implemented resiliency strategies using parallel action blocks, retry and circuit breaker policies, Hangfire jobs, and cross-worker cancellation tokens for registering >100,000 devices",
+                        "Used LINQ and CTEs to optimize PostgreSQL queries of more than 5 million rows and 20+ columns for administrative telematics device management workflows",
+                        "Authored implementation and maintenance documentation for the new Background Tasks page",
+                        "Used migration scripts and feature flags to ensure positive user experience across 20+ environments",
+                        "Improved DevOps efficiency and deployment reliability by containerizing frontend applications with Docker and orchestrating clusters via Kubernetes, streamlining CI/CD workflows and reducing environment-related errors by 40%",
+                        "Created a multi-agent orchestration workflow with skills to handle ticket creation, development and review orchestration in a loop, testing guidelines, and merge request creation.",
+                    ]} 
+                    roadmapWidth={roadmapSize.width}
+                />
+                <ExperiencePoint 
+                    scrollYProgress={roadmapYProgress}
+                    pointNum={2}
                     position="Full-stack Developer" 
                     company="TBSP Games"
                     companyLink = "https://tablespoongames.pages.dev/"
                     date="Jul 2025 - Aug 2025" 
-                    frameworks={["React", "Redux", "Tanstack Query", "Motion", "Jest", "Docker"]} 
+                    frameworks={["React (TypeScript)", "Golang", "React Query", "Motion", "Vitest", "Docker", "Github Actions"]} 
                     points={[
-                        "Reduced client-side latency by over 600 ms by optimizing RESTful API data fetching workflows and server state management with Tanstack Query and Axios", 
-                        "Doubled interactive visual effects and improved perceived app responsiveness by enhancing user engagement and loweringperceived latency with Framer Motion animation", 
-                        "Improved DevOps efficiency and deployment reliability by containerizing frontend applications with Docker and orchestrating clusters via Kubernetes, streamlining CI/CD workflows and reducing environment-related errors by 40%"]} 
+                        "Built and maintained 3 scalable web apps for a video game company using Golang, React components, Typescript, HTML, and CSS",
+                        "Added Docker containerization and Bash scripts for 3 projects, ensuring consistent and reliable dev, staging, and prod environments",
+                        "Collaborated across 3 software and hardware teams using Jira and Agile Scrums, shipping Epics 2 weeks ahead of deadlines",
+                        "Implemented 20+ tests using Vitest and parallel execution",
+                        "Prototyped an unannounced roguelike RPG using C\# and Unity, handling development, asset creation, and project management",
+                        "Created onboarding documentation to accelerate team onboarding and support independent work",
+                    ]} 
                     roadmapWidth={roadmapSize.width}
                 />
             </div>

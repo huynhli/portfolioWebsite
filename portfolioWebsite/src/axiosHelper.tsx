@@ -1,8 +1,8 @@
 import axios from "axios"
 
 const axiosHelper = axios.create({
-    baseURL: "https://liamportfolioweb.onrender.com/api/v1",     // backend url
-    // baseURL: "https://localhost:8080/api/v1",                       // dev bacakend
+    baseURL: "https://liamportfolioweb.onrender.com/api/v1",        // backend url
+    // baseURL: "https://localhost:8080/api/v1",                    // dev bacakend
     headers: {
         "Content-Type": "application/json"                          // headers for rest, asking for json
     },                                                          
