@@ -1,11 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"os"
 	"backend/config"
 	"backend/database"
 	"backend/routes"
+	"fmt"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -25,7 +25,7 @@ func main() {
 	// Set port from env var
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080" // Default to 8080 if PORT is not set
+		port = "8081" // Default to 8081 if PORT is not set
 	}
 
 	// create new Fiber app

@@ -32,8 +32,8 @@ WORKDIR /app
 COPY --from=builder /app/main .
 
 # Set port
-ENV PORT=8080
-EXPOSE 8080
+ENV PORT=8081
+EXPOSE 8081
 
 # when container starts, docker runs this
 CMD ["./main"] 
