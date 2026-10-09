@@ -11,6 +11,7 @@ import useScrollToTop from './hooks/useScrollToTop.tsx'
 import ArticleTemplatePage from './pages/ArticleTemplatePage.tsx'
 import ArticleFooter from './components/ArticleFooter.tsx'
 import ImageUpload from './pages/ImageUpload.tsx'
+import GamePage from './pages/GamePage.tsx'
 // import AboutPage from './pages/AboutPage.tsx'
 // import ImageUpload from './pages/ImageUpload.tsx'
 // import ArticleFooter from './components/ArticleFooter.tsx'
@@ -42,8 +43,9 @@ export default function App() {
   return (
     <div>
       <Routes>
-        <Route index element={<HomePage />} />
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<GamePage />} />
+        <Route path="/notGame" element={<Layout />}>
+          <Route index element={<HomePage />} />
           <Route path="projects" element={<div><Outlet /></div>}>
             <Route index element={<ProjectsPage />} />
             <Route path="gameDesignBlog" element={<BlogPage />} />
