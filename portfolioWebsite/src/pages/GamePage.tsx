@@ -90,6 +90,9 @@ class TopDownGame extends Phaser.Scene {
         this.load.image("stoneTiles", "/gameAssets/StoneTileset.png")
         this.load.image("resumePedestal", "/gameAssets/resume-pedestal.png")
         this.load.image("resumePaper", "/gameAssets/resume-paper.png")
+        this.load.image("linkedinIcon", "/images/linkedin_logo.png")
+        this.load.image("githubIcon", "/images/github_logo.png")
+        this.load.image("itchIcon", "/images/itch_logo.png")
         this.load.tilemapTiledJSON("tilemap", "/gameAssets/PortfolioMap.json")
     }
 
@@ -280,10 +283,51 @@ class TopDownGame extends Phaser.Scene {
                 this.game.events.emit(GAME_EVENTS.RESUME_OPEN)
             },
         })
+
+        this.addSocialPedestal(
+            "social-linkedin",
+            "LINKEDIN",
+            "linkedinIcon",
+            "https://www.linkedin.com/in/liam-huynh-91aa1a1a1/",
+            1000,
+            1080,
+        )
+        this.addSocialPedestal(
+            "social-github",
+            "GITHUB",
+            "githubIcon",
+            "https://github.com/huynhli",
+            1200,
+            1080,
+        )
+        this.addSocialPedestal(
+            "social-itch",
+            "ITCH.IO",
+            "itchIcon",
+            "https://trachscor.itch.io/",
+            1400,
+            1080,
+        )
     }
 
     private addInteractiveObject(config: InteractiveGameObjectConfig) {
         this.interactiveObjects.push(new InteractiveGameObject(this, config))
+    }
+
+    private addSocialPedestal(id: string, label: string, textureKey: string, url: string, x: number, y: number) {
+        this.addInteractiveObject({
+            id,
+            x,
+            y,
+            interactionRadius: 96,
+            pedestalTextureKey: "resumePedestal",
+            pedestalWidth: 64,
+            pedestalHeight: 64,
+            pedestalOffsetY: 16,
+            icons: [{ textureKey, width: 32, height: 32 }],
+            label,
+            action: () => window.open(url, "_blank", "noopener,noreferrer"),
+        })
     }
 
     private createInteractionPrompt() {
