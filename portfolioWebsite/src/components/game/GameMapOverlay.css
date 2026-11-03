@@ -1,0 +1,137 @@
+.game-map-button {
+    position: absolute;
+    z-index: 25;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    min-width: 128px;
+    min-height: 72px;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border: 2px solid rgb(206 201 179 / 75%);
+    background: rgb(20 22 18 / 94%);
+    color: #f5f1e5;
+    cursor: pointer;
+    font-family: monospace;
+    font-size: 23px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.game-map-button kbd {
+    color: #f5d88b;
+    font: inherit;
+    font-size: 16px;
+}
+
+.game-map-button:hover,
+.game-map-button:focus-visible {
+    outline: 4px solid #f5d88b;
+    outline-offset: 3px;
+    border-color: #f5d88b;
+    background: #34382b;
+}
+
+.game-map-overlay {
+    position: absolute;
+    z-index: 120;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 16px;
+    background: rgb(10 12 10 / 88%);
+    color: #f5f1e5;
+    font-family: monospace;
+}
+
+.game-map-panel {
+    width: min(760px, 100%);
+    padding: clamp(16px, 3vw, 28px);
+    border: 3px solid #cec9b3;
+    background: #171a16;
+    box-shadow: 10px 10px 0 rgb(0 0 0 / 35%);
+}
+
+.game-map-panel h2 {
+    margin: 0 0 14px;
+    color: #f5d88b;
+    font-size: clamp(22px, 4vw, 32px);
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.game-map-grid {
+    display: grid;
+    width: min(66vmin, 600px);
+    aspect-ratio: 1;
+    margin: 0 auto;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    border: 2px solid #cec9b3;
+}
+
+.game-map-room {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px;
+    border: 1px solid rgb(206 201 179 / 55%);
+    background: #252922;
+    color: #f5f1e5;
+    font-size: clamp(12px, 2.7vmin, 22px);
+    text-align: center;
+}
+
+.game-map-room.is-current {
+    border: 3px solid #f5d88b;
+    background: #414635;
+    color: #fff8df;
+    box-shadow: inset 0 0 0 2px #171a16;
+}
+
+.game-map-room small {
+    color: #f5d88b;
+    font-size: clamp(8px, 1.5vmin, 12px);
+    text-transform: uppercase;
+}
+
+.game-map-close-hint {
+    width: fit-content;
+    margin: 14px 0 0 auto;
+    padding: 10px 14px;
+    border: 2px solid #cec9b3;
+    background: #252922;
+    color: #f5d88b;
+    font-size: clamp(12px, 2vw, 16px);
+}
+
+@media (max-width: 560px) {
+    .game-map-button {
+        top: 8px;
+        right: 8px;
+        min-width: 106px;
+        min-height: 60px;
+        gap: 8px;
+        padding: 10px 12px;
+        font-size: 19px;
+    }
+
+    .game-map-button kbd {
+        font-size: 13px;
+    }
+
+    .game-map-grid {
+        width: min(74vmin, calc(100vw - 64px));
+    }
+
+    .game-map-room {
+        gap: 4px;
+        padding: 3px;
+        font-size: clamp(10px, 3.3vmin, 16px);
+    }
+}

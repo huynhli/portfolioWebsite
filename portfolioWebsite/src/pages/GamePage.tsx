@@ -3,15 +3,18 @@ import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { InteractiveGameObject, type InteractiveGameObjectConfig } from "../components/game/InteractiveGameObject"
 import { GameTutorialHud, type ControlDevice } from "../components/game/GameTutorialHud"
+import { GameMapButton, GameMapOverlay } from "../components/game/GameMapOverlay"
 import { GameStartMenu } from "../components/game/GameStartMenu"
 import { ResumePdfPanel } from "../components/game/ResumePdfPanel"
 import { GAME_EVENTS } from "../components/game/gameEvents"
+import { getGameRoomLabel, type GameRoomLocation } from "../components/game/gameRooms"
 
 type InputState = {
     move: Phaser.Math.Vector2
     backPressed: boolean
     interactPressed: boolean
     websitePressed: boolean
+    mapPressed: boolean
     panelNavigate: -1 | 0 | 1
 }
 
@@ -45,6 +48,12 @@ const OPPOSITE_DIRECTIONS: Record<DoorDirection, DoorDirection> = {
     left: "right",
     right: "left",
 }
+const DOOR_ARROWS: Record<DoorDirection, string> = {
+    up: "↑",
+    down: "↓",
+    left: "←",
+    right: "→",
+}
 
 class TopDownGame extends Phaser.Scene {
     private player!: Phaser.Physics.Arcade.Sprite
@@ -56,12 +65,14 @@ class TopDownGame extends Phaser.Scene {
         backPressed: false,
         interactPressed: false,
         websitePressed: false,
+        mapPressed: false,
         panelNavigate: 0,
     }
     private escKey!: Phaser.Input.Keyboard.Key
     private eKey!: Phaser.Input.Keyboard.Key
     private gKey!: Phaser.Input.Keyboard.Key
-    private previous = { back: false, interact: false, website: false, panelDirection: 0 }
+    private mKey!: Phaser.Input.Keyboard.Key
+    private previous = { back: false, interact: false, website: false, map: false, panelDirection: 0 }
     private lastInputDevice: ControlDevice = "keyboard"
     private notifiedInputDevice: ControlDevice = "keyboard"
     private interactiveObjects: InteractiveGameObject[] = []
@@ -76,6 +87,7 @@ class TopDownGame extends Phaser.Scene {
     private activeObject: InteractiveGameObject | null = null
     private interactionPrompt!: Phaser.GameObjects.Text
     private resumePanelOpen = false
+    private mapOpen = false
     private gameStarted = false
     private startMenuSelectDown = false
     private startMenuDirection = 0
@@ -106,9 +118,11 @@ class TopDownGame extends Phaser.Scene {
         this.roomColumns = Math.floor(map.widthInPixels / this.roomWidth)
         this.roomRows = Math.floor(map.heightInPixels / this.roomHeight)
         this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
+        this.createDoorIndicators()
 
         this.createPlayer(guideline)
         this.currentRoom = this.roomAt(this.player.x, this.player.y)
+        this.game.events.emit(GAME_EVENTS.MAP_ROOM_CHANGED, this.currentRoom)
         this.setCameraRoom(this.currentRoom.column, this.currentRoom.row)
         this.cameras.main.centerOn(this.player.x, this.player.y)
         this.createInput()
@@ -117,9 +131,11 @@ class TopDownGame extends Phaser.Scene {
 
         this.game.events.on(GAME_EVENTS.RESUME_CLOSE, this.closeResumePanel, this)
         this.game.events.on(GAME_EVENTS.START_GAME, this.startGame, this)
+        this.game.events.on(GAME_EVENTS.MAP_TOGGLE, this.toggleMap, this)
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
             this.game.events.off(GAME_EVENTS.RESUME_CLOSE, this.closeResumePanel, this)
             this.game.events.off(GAME_EVENTS.START_GAME, this.startGame, this)
+            this.game.events.off(GAME_EVENTS.MAP_TOGGLE, this.toggleMap, this)
             this.interactionPrompt?.destroy()
         })
 
@@ -139,6 +155,16 @@ class TopDownGame extends Phaser.Scene {
         if (this.resumePanelOpen) {
             this.player.setVelocity(0, 0)
             this.handleResumePanelInput()
+            return
+        }
+
+        if (this.inputState.mapPressed) {
+            this.toggleMap()
+            this.player.setVelocity(0, 0)
+            return
+        }
+        if (this.mapOpen) {
+            this.player.setVelocity(0, 0)
             return
         }
 
@@ -242,6 +268,62 @@ class TopDownGame extends Phaser.Scene {
         })
     }
 
+    private createDoorIndicators() {
+        for (const doorway of this.doorways) {
+            const direction = DIRECTION_VECTORS[doorway.direction]
+            const destinationColumn = doorway.roomColumn + direction.x
+            const destinationRow = doorway.roomRow + direction.y
+            const hasDestinationDoor = this.doorways.some((candidate) =>
+                candidate.roomColumn === destinationColumn
+                && candidate.roomRow === destinationRow
+                && candidate.direction === OPPOSITE_DIRECTIONS[doorway.direction],
+            )
+            if (!hasDestinationDoor) continue
+
+            const roomLabel = getGameRoomLabel(destinationColumn, destinationRow)
+            const labelText = this.add.text(0, 0, `TO: ${roomLabel}`, {
+                fontFamily: "monospace",
+                fontSize: "11px",
+                color: "#f5f1e5",
+            }).setOrigin(0.5)
+            const labelBox = this.add.rectangle(0, 0, labelText.width + 14, labelText.height + 8, 0x181a16, 0.94)
+                .setStrokeStyle(1, 0xc6c0a9, 0.95)
+            const inwardX = -direction.x * this.tileWidth * 1.5
+            const inwardY = -direction.y * this.tileHeight * 1.5
+            const signX = doorway.centerX + inwardX
+            const signY = doorway.centerY + inwardY
+            const signRotation = doorway.direction === "left" || doorway.direction === "right"
+                ? Math.PI / 2
+                : 0
+            this.add.container(signX, signY, [labelBox, labelText])
+                .setRotation(signRotation)
+                .setDepth(signY + 1000)
+
+            const arrow = this.add.text(
+                doorway.centerX - direction.x * this.tileWidth * 0.75,
+                doorway.centerY - direction.y * this.tileHeight * 0.75,
+                DOOR_ARROWS[doorway.direction],
+                {
+                    fontFamily: "monospace",
+                    fontSize: "24px",
+                    color: "#f5d88b",
+                    stroke: "#181a16",
+                    strokeThickness: 4,
+                },
+            ).setOrigin(0.5).setDepth(9000)
+
+            this.tweens.add({
+                targets: arrow,
+                x: arrow.x + direction.x * 7,
+                y: arrow.y + direction.y * 7,
+                duration: 720,
+                ease: "Sine.InOut",
+                yoyo: true,
+                repeat: -1,
+            })
+        }
+    }
+
     private createPlayer(guideline: Phaser.Tilemaps.TilemapLayer | Phaser.Tilemaps.TilemapGPULayer): void {
         this.player = this.physics.add.sprite(1200, 900, "player")
         this.player.setScale(2)
@@ -256,6 +338,7 @@ class TopDownGame extends Phaser.Scene {
         this.escKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ESC)
         this.eKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.E)
         this.gKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.G)
+        this.mKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.M)
     }
 
     private createInteractiveObjects() {
@@ -376,22 +459,27 @@ class TopDownGame extends Phaser.Scene {
         const keyboardBack = this.escKey.isDown
         const keyboardInteract = this.eKey.isDown
         const keyboardWebsite = this.gKey.isDown
+        const keyboardMap = this.mKey.isDown
         const gamepadBack = !!pad?.buttons[9]?.pressed
         const gamepadInteract = !!pad?.buttons[0]?.pressed
         const gamepadWebsite = !!pad?.buttons[3]?.pressed
+        const gamepadMap = !!pad?.buttons[8]?.pressed
         const backDown = keyboardBack || gamepadBack
         const interactDown = keyboardInteract || gamepadInteract
         const websiteDown = keyboardWebsite || gamepadWebsite
+        const mapDown = keyboardMap || gamepadMap
 
         this.inputState.backPressed = backDown && !this.previous.back
         this.inputState.interactPressed = interactDown && !this.previous.interact
         this.inputState.websitePressed = websiteDown && !this.previous.website
+        this.inputState.mapPressed = mapDown && !this.previous.map
         this.previous.back = backDown
         this.previous.interact = interactDown
         this.previous.website = websiteDown
+        this.previous.map = mapDown
 
-        const keyboardUsed = keyboardLeft || keyboardRight || keyboardUp || keyboardDown || keyboardBack || keyboardInteract || keyboardWebsite
-        const gamepadUsed = dpadActive || stickActive || gamepadBack || gamepadInteract || gamepadWebsite
+        const keyboardUsed = keyboardLeft || keyboardRight || keyboardUp || keyboardDown || keyboardBack || keyboardInteract || keyboardWebsite || keyboardMap
+        const gamepadUsed = dpadActive || stickActive || gamepadBack || gamepadInteract || gamepadWebsite || gamepadMap
         if (gamepadUsed) this.lastInputDevice = "gamepad"
         else if (keyboardUsed) this.lastInputDevice = "keyboard"
         if (this.lastInputDevice !== this.notifiedInputDevice) {
@@ -454,6 +542,14 @@ class TopDownGame extends Phaser.Scene {
         this.gameStarted = true
         // Don't let the menu's confirm button activate a nearby game object.
         this.previous.interact = true
+    }
+
+    private toggleMap = () => {
+        if (this.resumePanelOpen) return
+
+        this.mapOpen = !this.mapOpen
+        this.player.setVelocity(0, 0)
+        this.game.events.emit(this.mapOpen ? GAME_EVENTS.MAP_OPEN : GAME_EVENTS.MAP_CLOSE)
     }
 
     private updateActiveObject() {
@@ -531,6 +627,7 @@ class TopDownGame extends Phaser.Scene {
         this.player.setVelocity(0, 0)
         this.player.setDepth(this.player.y)
         this.currentRoom = { column: destinationColumn, row: destinationRow }
+        this.game.events.emit(GAME_EVENTS.MAP_ROOM_CHANGED, this.currentRoom)
         this.setCameraRoom(destinationColumn, destinationRow)
         this.cameras.main.centerOn(this.player.x, this.player.y)
         return true
@@ -570,6 +667,8 @@ export default function GamePage() {
     const [gameReady, setGameReady] = useState(false)
     const [startMenuOpen, setStartMenuOpen] = useState(true)
     const [homeIntroVisible, setHomeIntroVisible] = useState(false)
+    const [mapOpen, setMapOpen] = useState(false)
+    const [currentRoom, setCurrentRoom] = useState<GameRoomLocation>({ column: 1, row: 1 })
 
     const beginPlayTransition = () => {
         setStartMenuOpen(false)
@@ -600,6 +699,9 @@ export default function GamePage() {
         const openResumePanel = () => setResumePanelOpen(true)
         const changeInputDevice = (device: ControlDevice) => setInputDevice(device)
         const navigateToWebsite = () => navigate("/notGame")
+        const showMap = () => setMapOpen(true)
+        const hideMap = () => setMapOpen(false)
+        const changeRoom = (room: GameRoomLocation) => setCurrentRoom(room)
         const markGameReady = () => {
             setGameReady(true)
             if (pendingStartRef.current) {
@@ -611,6 +713,9 @@ export default function GamePage() {
         game.events.on(GAME_EVENTS.INPUT_DEVICE_CHANGED, changeInputDevice)
         game.events.on(GAME_EVENTS.NAVIGATE_WEBSITE, navigateToWebsite)
         game.events.on(GAME_EVENTS.GAME_READY, markGameReady)
+        game.events.on(GAME_EVENTS.MAP_OPEN, showMap)
+        game.events.on(GAME_EVENTS.MAP_CLOSE, hideMap)
+        game.events.on(GAME_EVENTS.MAP_ROOM_CHANGED, changeRoom)
         gameRef.current = game
         setGameInstance(game)
 
@@ -619,6 +724,9 @@ export default function GamePage() {
             game.events.off(GAME_EVENTS.INPUT_DEVICE_CHANGED, changeInputDevice)
             game.events.off(GAME_EVENTS.NAVIGATE_WEBSITE, navigateToWebsite)
             game.events.off(GAME_EVENTS.GAME_READY, markGameReady)
+            game.events.off(GAME_EVENTS.MAP_OPEN, showMap)
+            game.events.off(GAME_EVENTS.MAP_CLOSE, hideMap)
+            game.events.off(GAME_EVENTS.MAP_ROOM_CHANGED, changeRoom)
             game.destroy(true)
             gameRef.current = null
         }
@@ -643,6 +751,13 @@ export default function GamePage() {
             {!startMenuOpen && (
                 <GameTutorialHud device={inputDevice} onGoToWebsite={() => navigate("/notGame")} />
             )}
+            {!startMenuOpen && !homeIntroVisible && !mapOpen && gameInstance && (
+                <GameMapButton
+                    device={inputDevice}
+                    onClick={() => gameInstance.events.emit(GAME_EVENTS.MAP_TOGGLE)}
+                />
+            )}
+            {mapOpen && <GameMapOverlay currentRoom={currentRoom} />}
             {startMenuOpen && gameInstance && (
                 <GameStartMenu
                     game={gameInstance}

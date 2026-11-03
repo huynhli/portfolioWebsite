@@ -10,4 +10,8 @@ export const GAME_EVENTS = {
     GAME_READY: "game:ready",
     START_MENU_NAVIGATE: "start-menu:navigate",
     START_MENU_SELECT: "start-menu:select",
+    MAP_TOGGLE: "map:toggle",
+    MAP_OPEN: "map:open",
+    MAP_CLOSE: "map:close",
+    MAP_ROOM_CHANGED: "map:room-changed",
 } as const
