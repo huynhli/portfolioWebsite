@@ -6,4 +6,8 @@ export const GAME_EVENTS = {
     RESUME_BACK: "resume:back",
     INPUT_DEVICE_CHANGED: "input:device-changed",
     NAVIGATE_WEBSITE: "navigation:website",
+    START_GAME: "start:game",
+    GAME_READY: "game:ready",
+    START_MENU_NAVIGATE: "start-menu:navigate",
+    START_MENU_SELECT: "start-menu:select",
 } as const

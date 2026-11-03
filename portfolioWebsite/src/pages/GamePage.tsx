@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { InteractiveGameObject, type InteractiveGameObjectConfig } from "../components/game/InteractiveGameObject"
 import { GameTutorialHud, type ControlDevice } from "../components/game/GameTutorialHud"
+import { GameStartMenu } from "../components/game/GameStartMenu"
 import { ResumePdfPanel } from "../components/game/ResumePdfPanel"
 import { GAME_EVENTS } from "../components/game/gameEvents"
 
@@ -75,6 +76,9 @@ class TopDownGame extends Phaser.Scene {
     private activeObject: InteractiveGameObject | null = null
     private interactionPrompt!: Phaser.GameObjects.Text
     private resumePanelOpen = false
+    private gameStarted = false
+    private startMenuSelectDown = false
+    private startMenuDirection = 0
 
     constructor() {
         super("TopDownGame")
@@ -109,15 +113,24 @@ class TopDownGame extends Phaser.Scene {
         this.createInteractionPrompt()
 
         this.game.events.on(GAME_EVENTS.RESUME_CLOSE, this.closeResumePanel, this)
+        this.game.events.on(GAME_EVENTS.START_GAME, this.startGame, this)
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
             this.game.events.off(GAME_EVENTS.RESUME_CLOSE, this.closeResumePanel, this)
+            this.game.events.off(GAME_EVENTS.START_GAME, this.startGame, this)
             this.interactionPrompt?.destroy()
         })
 
         this.cameras.main.startFollow(this.player, true, 0.1, 0.1)
+        this.game.events.emit(GAME_EVENTS.GAME_READY)
     }
 
     update() {
+        if (!this.gameStarted) {
+            this.readStartMenuInput()
+            this.player.setVelocity(0, 0)
+            return
+        }
+
         this.readInput()
 
         if (this.resumePanelOpen) {
@@ -359,6 +372,46 @@ class TopDownGame extends Phaser.Scene {
         this.previous.panelDirection = menuDirection
     }
 
+    private readStartMenuInput() {
+        const pad = this.input.gamepad?.pad1
+        const dpadLeft = !!pad?.buttons[14]?.pressed
+        const dpadRight = !!pad?.buttons[15]?.pressed
+        const dpadUp = !!pad?.buttons[12]?.pressed
+        const dpadDown = !!pad?.buttons[13]?.pressed
+        const stickX = pad?.leftStick.x ?? 0
+        const stickY = pad?.leftStick.y ?? 0
+        const direction = dpadLeft || dpadUp
+            ? -1
+            : dpadRight || dpadDown
+                ? 1
+                : Math.max(Math.abs(stickX), Math.abs(stickY)) > 0.45
+                    ? Math.abs(stickX) > Math.abs(stickY) ? Math.sign(stickX) : Math.sign(stickY)
+                    : 0
+
+        if (direction !== 0 && direction !== this.startMenuDirection) {
+            this.game.events.emit(GAME_EVENTS.START_MENU_NAVIGATE, direction)
+            this.game.events.emit(GAME_EVENTS.INPUT_DEVICE_CHANGED, "gamepad")
+            this.notifiedInputDevice = "gamepad"
+            this.lastInputDevice = "gamepad"
+        }
+        this.startMenuDirection = direction
+
+        const selectDown = !!pad?.buttons[0]?.pressed
+        if (selectDown && !this.startMenuSelectDown) {
+            this.game.events.emit(GAME_EVENTS.START_MENU_SELECT)
+            this.game.events.emit(GAME_EVENTS.INPUT_DEVICE_CHANGED, "gamepad")
+            this.notifiedInputDevice = "gamepad"
+            this.lastInputDevice = "gamepad"
+        }
+        this.startMenuSelectDown = selectDown
+    }
+
+    private startGame = () => {
+        this.gameStarted = true
+        // Don't let the menu's confirm button activate a nearby game object.
+        this.previous.interact = true
+    }
+
     private updateActiveObject() {
         let closestObject: InteractiveGameObject | null = null
         let closestDistance = Number.POSITIVE_INFINITY
@@ -465,10 +518,19 @@ class TopDownGame extends Phaser.Scene {
 export default function GamePage() {
     const gameContainerRef = useRef<HTMLDivElement>(null)
     const gameRef = useRef<Phaser.Game | null>(null)
+    const pendingStartRef = useRef(false)
     const navigate = useNavigate()
     const [gameInstance, setGameInstance] = useState<Phaser.Game | null>(null)
     const [resumePanelOpen, setResumePanelOpen] = useState(false)
     const [inputDevice, setInputDevice] = useState<ControlDevice>("keyboard")
+    const [gameReady, setGameReady] = useState(false)
+    const [startMenuOpen, setStartMenuOpen] = useState(true)
+    const [homeIntroVisible, setHomeIntroVisible] = useState(false)
+
+    const beginPlayTransition = () => {
+        setStartMenuOpen(false)
+        setHomeIntroVisible(true)
+    }
 
     useEffect(() => {
         const game = new Phaser.Game({
@@ -494,9 +556,17 @@ export default function GamePage() {
         const openResumePanel = () => setResumePanelOpen(true)
         const changeInputDevice = (device: ControlDevice) => setInputDevice(device)
         const navigateToWebsite = () => navigate("/notGame")
+        const markGameReady = () => {
+            setGameReady(true)
+            if (pendingStartRef.current) {
+                pendingStartRef.current = false
+                beginPlayTransition()
+            }
+        }
         game.events.on(GAME_EVENTS.RESUME_OPEN, openResumePanel)
         game.events.on(GAME_EVENTS.INPUT_DEVICE_CHANGED, changeInputDevice)
         game.events.on(GAME_EVENTS.NAVIGATE_WEBSITE, navigateToWebsite)
+        game.events.on(GAME_EVENTS.GAME_READY, markGameReady)
         gameRef.current = game
         setGameInstance(game)
 
@@ -504,6 +574,7 @@ export default function GamePage() {
             game.events.off(GAME_EVENTS.RESUME_OPEN, openResumePanel)
             game.events.off(GAME_EVENTS.INPUT_DEVICE_CHANGED, changeInputDevice)
             game.events.off(GAME_EVENTS.NAVIGATE_WEBSITE, navigateToWebsite)
+            game.events.off(GAME_EVENTS.GAME_READY, markGameReady)
             game.destroy(true)
             gameRef.current = null
         }
@@ -514,10 +585,39 @@ export default function GamePage() {
         setResumePanelOpen(false)
     }
 
+    const startGame = () => {
+        if (!gameReady) {
+            pendingStartRef.current = true
+            return
+        }
+        beginPlayTransition()
+    }
+
     return (
         <div className="relative flex h-screen w-full flex-col">
             <div className="min-h-0 w-full flex-1" ref={gameContainerRef} />
-            <GameTutorialHud device={inputDevice} onGoToWebsite={() => navigate("/notGame")} />
+            {!startMenuOpen && (
+                <GameTutorialHud device={inputDevice} onGoToWebsite={() => navigate("/notGame")} />
+            )}
+            {startMenuOpen && gameInstance && (
+                <GameStartMenu
+                    game={gameInstance}
+                    onPlay={startGame}
+                    onWebsite={() => navigate("/notGame")}
+                />
+            )}
+            {homeIntroVisible && (
+                <div
+                    className="game-home-intro"
+                    role="status"
+                    onAnimationEnd={() => {
+                        gameRef.current?.events.emit(GAME_EVENTS.START_GAME)
+                        setHomeIntroVisible(false)
+                    }}
+                >
+                    <span>Home</span>
+                </div>
+            )}
             {resumePanelOpen && gameInstance && (
                 <ResumePdfPanel game={gameInstance} onClose={closeResumePanel} />
             )}

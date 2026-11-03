@@ -1,0 +1,123 @@
+.game-start-menu {
+    position: absolute;
+    z-index: 100;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: rgb(10 12 10 / 82%);
+    color: #f5f1e5;
+    font-family: monospace;
+}
+
+.game-start-menu__panel {
+    width: min(760px, 100%);
+    padding: clamp(28px, 6vw, 56px);
+    border: 3px solid #cec9b3;
+    background: #171a16;
+    box-shadow: 10px 10px 0 rgb(0 0 0 / 35%);
+    text-align: center;
+}
+
+.game-start-menu__title {
+    margin: 0 0 44px;
+    color: #f5d88b;
+    font-size: clamp(30px, 6vw, 54px);
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.game-start-menu__options {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 24px;
+}
+
+.game-start-menu__option-wrap {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.game-start-menu__prompt {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    width: max-content;
+    max-width: min(420px, calc(100vw - 48px));
+    margin: 0;
+    padding: 10px 14px;
+    transform: translateX(-50%);
+    border: 2px solid #f5d88b;
+    background: #34382b;
+    color: #fff8df;
+    font-size: clamp(12px, 2vw, 16px);
+    line-height: 1.35;
+}
+
+.game-start-menu__button {
+    width: 100%;
+    min-height: 82px;
+    padding: 18px 20px;
+    border: 2px solid #cec9b3;
+    background: #252922;
+    color: #f5f1e5;
+    cursor: pointer;
+    font: inherit;
+    font-size: clamp(16px, 2.4vw, 23px);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.game-start-menu__button:hover,
+.game-start-menu__button:focus-visible,
+.game-start-menu__button.is-selected {
+    outline: 3px solid #f5d88b;
+    outline-offset: 4px;
+    border-color: #f5d88b;
+    background: #414635;
+}
+
+.game-home-intro {
+    position: absolute;
+    z-index: 110;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: rgb(10 12 10 / 82%);
+    color: #f5d88b;
+    font-family: monospace;
+    font-size: clamp(48px, 10vw, 88px);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-shadow: 5px 5px 0 #171a16;
+    animation: game-home-intro-fade 1800ms ease-in-out forwards;
+    pointer-events: none;
+}
+
+@keyframes game-home-intro-fade {
+    0% { opacity: 0; }
+    15% { opacity: 1; }
+    78% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@media (max-width: 560px) {
+    .game-start-menu__panel {
+        padding: 42px 24px 28px;
+    }
+
+    .game-start-menu__title {
+        margin-bottom: 50px;
+    }
+
+    .game-start-menu__options {
+        flex-direction: column;
+        gap: 34px;
+    }
+
+    .game-start-menu__button {
+        min-height: 68px;
+    }
+}
