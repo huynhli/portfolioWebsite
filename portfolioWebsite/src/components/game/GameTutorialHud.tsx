@@ -4,27 +4,37 @@ export type ControlDevice = "keyboard" | "gamepad"
 
 type GameTutorialHudProps = {
     device: ControlDevice
+    onGoToWebsite: () => void
 }
 
-export function GameTutorialHud({ device }: GameTutorialHudProps) {
+export function GameTutorialHud({ device, onGoToWebsite }: GameTutorialHudProps) {
     const controls = device === "gamepad"
         ? [
-            { key: "A", action: "Use" },
-            { key: "LEFT STICK / D-PAD", action: "Move" },
-            { key: "START", action: "Pause" },
-            { key: "Y", action: "Go to website" },
+            { id: "use", key: "A", action: "Use" },
+            { id: "move", key: "LEFT STICK / D-PAD", action: "Move" },
+            { id: "website", key: "Y", action: "Go to website" },
         ]
         : [
-            { key: "E", action: "Use" },
-            { key: "WASD", action: "Move" },
-            { key: "ESC", action: "Pause" },
-            { key: "G", action: "Go to website" },
+            { id: "use", key: "E", action: "Use" },
+            { id: "move", key: "WASD", action: "Move" },
+            { id: "website", key: "G", action: "Go to website" },
         ]
 
     return (
         <aside className="game-tutorial-hud" aria-label="Game controls">
-            {controls.map(({ key, action }) => (
-                <div className="game-tutorial-card" key={action}>
+            {controls.map(({ id, key, action }) => id === "website" ? (
+                <button
+                    className="game-tutorial-card game-tutorial-card--website"
+                    key={id}
+                    type="button"
+                    aria-label="Go to website"
+                    onClick={onGoToWebsite}
+                >
+                    <kbd className="game-tutorial-key">{key}</kbd>
+                    <span className="game-tutorial-action">{action}</span>
+                </button>
+            ) : (
+                <div className="game-tutorial-card" key={id}>
                     <kbd className="game-tutorial-key">{key}</kbd>
                     <span className="game-tutorial-action">{action}</span>
                 </div>

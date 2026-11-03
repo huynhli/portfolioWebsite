@@ -1,33 +1,38 @@
 .game-tutorial-hud {
     position: absolute;
     z-index: 20;
-    right: 16px;
-    bottom: 14px;
+    bottom: 16px;
     left: 16px;
     display: flex;
-    justify-content: center;
-    gap: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
     pointer-events: none;
 }
 
 .game-tutorial-card {
     display: flex;
-    min-width: 118px;
+    box-sizing: border-box;
+    width: min(354px, calc(100vw - 32px));
+    min-width: 0;
+    flex-wrap: wrap;
+    min-height: 84px;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 7px 10px;
-    border: 1px solid rgb(206 201 179 / 46%);
-    background: rgb(20 22 18 / 88%);
+    justify-content: flex-start;
+    gap: 24px;
+    padding: 21px 30px;
+    border: 2px solid rgb(206 201 179 / 62%);
+    background: rgb(20 22 18 / 94%);
     color: #f5f1e5;
     font-family: monospace;
-    font-size: 11px;
+    font-size: 33px;
     line-height: 1.2;
-    white-space: nowrap;
+    text-align: left;
 }
 
 .game-tutorial-key {
     color: #f5d88b;
+    font: inherit;
     font-weight: 700;
 }
 
@@ -35,26 +40,32 @@
     color: #dedbcc;
 }
 
+.game-tutorial-card--website {
+    pointer-events: auto;
+    cursor: pointer;
+    appearance: none;
+}
+
+.game-tutorial-card--website:hover,
+.game-tutorial-card--website:focus-visible {
+    outline: 4px solid #f5d88b;
+    outline-offset: 3px;
+    border-color: #f5d88b;
+    background: #34382b;
+}
+
 @media (max-width: 640px) {
     .game-tutorial-hud {
-        right: 8px;
         bottom: 8px;
         left: 8px;
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 5px;
+        gap: 15px;
     }
 
     .game-tutorial-card {
-        min-width: 0;
-        flex-direction: column;
-        gap: 3px;
-        padding: 6px 5px;
-        font-size: 10px;
-    }
-
-    .game-tutorial-key {
-        white-space: normal;
-        text-align: center;
+        min-height: 84px;
+        flex-wrap: wrap;
+        gap: 15px 18px;
+        padding: 18px 15px;
+        font-size: 30px;
     }
 }

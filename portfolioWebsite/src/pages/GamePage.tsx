@@ -8,7 +8,7 @@ import { GAME_EVENTS } from "../components/game/gameEvents"
 
 type InputState = {
     move: Phaser.Math.Vector2
-    pausePressed: boolean
+    backPressed: boolean
     interactPressed: boolean
     websitePressed: boolean
     panelNavigate: -1 | 0 | 1
@@ -52,7 +52,7 @@ class TopDownGame extends Phaser.Scene {
     private speed = 400
     private inputState: InputState = {
         move: new Phaser.Math.Vector2(),
-        pausePressed: false,
+        backPressed: false,
         interactPressed: false,
         websitePressed: false,
         panelNavigate: 0,
@@ -60,7 +60,7 @@ class TopDownGame extends Phaser.Scene {
     private escKey!: Phaser.Input.Keyboard.Key
     private eKey!: Phaser.Input.Keyboard.Key
     private gKey!: Phaser.Input.Keyboard.Key
-    private previous = { pause: false, interact: false, website: false, panelDirection: 0 }
+    private previous = { back: false, interact: false, website: false, panelDirection: 0 }
     private lastInputDevice: ControlDevice = "keyboard"
     private notifiedInputDevice: ControlDevice = "keyboard"
     private interactiveObjects: InteractiveGameObject[] = []
@@ -316,25 +316,25 @@ class TopDownGame extends Phaser.Scene {
         this.inputState.move.set(dx, dy)
         if (this.inputState.move.length() > 1) this.inputState.move.normalize()
 
-        const keyboardPause = this.escKey.isDown
+        const keyboardBack = this.escKey.isDown
         const keyboardInteract = this.eKey.isDown
         const keyboardWebsite = this.gKey.isDown
-        const gamepadPause = !!pad?.buttons[9]?.pressed
+        const gamepadBack = !!pad?.buttons[9]?.pressed
         const gamepadInteract = !!pad?.buttons[0]?.pressed
         const gamepadWebsite = !!pad?.buttons[3]?.pressed
-        const pauseDown = keyboardPause || gamepadPause
+        const backDown = keyboardBack || gamepadBack
         const interactDown = keyboardInteract || gamepadInteract
         const websiteDown = keyboardWebsite || gamepadWebsite
 
-        this.inputState.pausePressed = pauseDown && !this.previous.pause
+        this.inputState.backPressed = backDown && !this.previous.back
         this.inputState.interactPressed = interactDown && !this.previous.interact
         this.inputState.websitePressed = websiteDown && !this.previous.website
-        this.previous.pause = pauseDown
+        this.previous.back = backDown
         this.previous.interact = interactDown
         this.previous.website = websiteDown
 
-        const keyboardUsed = keyboardLeft || keyboardRight || keyboardUp || keyboardDown || keyboardPause || keyboardInteract || keyboardWebsite
-        const gamepadUsed = dpadActive || stickActive || gamepadPause || gamepadInteract || gamepadWebsite
+        const keyboardUsed = keyboardLeft || keyboardRight || keyboardUp || keyboardDown || keyboardBack || keyboardInteract || keyboardWebsite
+        const gamepadUsed = dpadActive || stickActive || gamepadBack || gamepadInteract || gamepadWebsite
         if (gamepadUsed) this.lastInputDevice = "gamepad"
         else if (keyboardUsed) this.lastInputDevice = "keyboard"
         if (this.lastInputDevice !== this.notifiedInputDevice) {
@@ -385,11 +385,6 @@ class TopDownGame extends Phaser.Scene {
     }
 
     private handleActions(): boolean {
-        if (this.inputState.pausePressed) {
-            this.togglePause()
-            return true
-        }
-
         if (this.inputState.websitePressed) {
             this.game.events.emit(GAME_EVENTS.NAVIGATE_WEBSITE)
             return true
@@ -406,7 +401,7 @@ class TopDownGame extends Phaser.Scene {
 
         if (this.inputState.websitePressed) {
             this.game.events.emit(GAME_EVENTS.NAVIGATE_WEBSITE)
-        } else if (this.inputState.pausePressed) {
+        } else if (this.inputState.backPressed) {
             this.game.events.emit(GAME_EVENTS.RESUME_BACK)
         } else if (this.inputState.interactPressed) {
             this.game.events.emit(GAME_EVENTS.RESUME_SELECT)
@@ -455,11 +450,6 @@ class TopDownGame extends Phaser.Scene {
         this.cameras.main.setBounds(column * this.roomWidth, row * this.roomHeight, this.roomWidth, this.roomHeight)
     }
 
-    private togglePause() {
-        this.scene.launch("PauseMenu")
-        this.scene.pause()
-    }
-
     private move() {
         const { move } = this.inputState
         this.player.setVelocity(move.x * this.speed, move.y * this.speed)
@@ -469,43 +459,6 @@ class TopDownGame extends Phaser.Scene {
     private closeResumePanel = () => {
         this.resumePanelOpen = false
         this.previous.panelDirection = 0
-    }
-}
-
-class PauseMenu extends Phaser.Scene {
-    constructor() {
-        super("PauseMenu")
-    }
-
-    create() {
-        this.add.rectangle(0, 0, this.scale.width, this.scale.height, 0x000000, 0.6).setOrigin(0)
-        this.add.text(this.scale.width / 2, this.scale.height / 2, "Paused", {
-            fontSize: "48px",
-            color: "#ffffff",
-        }).setOrigin(0.5)
-
-        this.input.keyboard!.once("keydown-ESC", this.resumeGame, this)
-        this.input.keyboard!.once("keydown-G", this.navigateToWebsite, this)
-        this.input.gamepad?.on("down", this.onPadDown, this)
-        this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
-            this.input.keyboard?.off("keydown-ESC", this.resumeGame, this)
-            this.input.keyboard?.off("keydown-G", this.navigateToWebsite, this)
-            this.input.gamepad?.off("down", this.onPadDown, this)
-        })
-    }
-
-    private onPadDown(_: Phaser.Input.Gamepad.Gamepad, button: Phaser.Input.Gamepad.Button) {
-        if (button.index === 9) this.resumeGame()
-        else if (button.index === 3) this.navigateToWebsite()
-    }
-
-    private navigateToWebsite() {
-        this.game.events.emit(GAME_EVENTS.NAVIGATE_WEBSITE)
-    }
-
-    private resumeGame() {
-        this.scene.stop()
-        this.scene.resume("TopDownGame")
     }
 }
 
@@ -527,7 +480,7 @@ export default function GamePage() {
                 autoCenter: Phaser.Scale.CENTER_BOTH,
             },
             parent: gameContainerRef.current!,
-            scene: [TopDownGame, PauseMenu],
+            scene: [TopDownGame],
             physics: {
                 default: "arcade",
                 arcade: {
@@ -564,7 +517,7 @@ export default function GamePage() {
     return (
         <div className="relative flex h-screen w-full flex-col">
             <div className="min-h-0 w-full flex-1" ref={gameContainerRef} />
-            <GameTutorialHud device={inputDevice} />
+            <GameTutorialHud device={inputDevice} onGoToWebsite={() => navigate("/notGame")} />
             {resumePanelOpen && gameInstance && (
                 <ResumePdfPanel game={gameInstance} onClose={closeResumePanel} />
             )}
