@@ -1,16 +1,48 @@
 import Phaser from "phaser"
 import { useEffect, useRef, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { InteractiveGameObject, type InteractiveGameObjectConfig } from "../components/game/InteractiveGameObject"
+import { GameTutorialHud, type ControlDevice } from "../components/game/GameTutorialHud"
 import { ResumePdfPanel } from "../components/game/ResumePdfPanel"
 import { GAME_EVENTS } from "../components/game/gameEvents"
-
-type ControlDevice = "keyboard" | "gamepad"
 
 type InputState = {
     move: Phaser.Math.Vector2
     pausePressed: boolean
     interactPressed: boolean
+    websitePressed: boolean
     panelNavigate: -1 | 0 | 1
+}
+
+type DoorDirection = "up" | "down" | "left" | "right"
+
+type RoomDoorway = {
+    roomColumn: number
+    roomRow: number
+    direction: DoorDirection
+    bounds: Phaser.Geom.Rectangle
+    centerX: number
+    centerY: number
+}
+
+type DoorwayGroup = Omit<RoomDoorway, "bounds" | "centerX" | "centerY"> & {
+    tiles: Array<{ x: number; y: number }>
+}
+
+const ROOM_WIDTH_TILES = 25
+const ROOM_HEIGHT_TILES = 20
+const HORIZONTAL_DOOR_HEIGHT_TILES = 4
+const DIRECTION_VECTORS: Record<DoorDirection, Phaser.Math.Vector2> = {
+    up: new Phaser.Math.Vector2(0, -1),
+    down: new Phaser.Math.Vector2(0, 1),
+    left: new Phaser.Math.Vector2(-1, 0),
+    right: new Phaser.Math.Vector2(1, 0),
+}
+const OPPOSITE_DIRECTIONS: Record<DoorDirection, DoorDirection> = {
+    up: "down",
+    down: "up",
+    left: "right",
+    right: "left",
 }
 
 class TopDownGame extends Phaser.Scene {
@@ -22,13 +54,24 @@ class TopDownGame extends Phaser.Scene {
         move: new Phaser.Math.Vector2(),
         pausePressed: false,
         interactPressed: false,
+        websitePressed: false,
         panelNavigate: 0,
     }
     private escKey!: Phaser.Input.Keyboard.Key
     private eKey!: Phaser.Input.Keyboard.Key
-    private previous = { pause: false, interact: false, panelDirection: 0 }
+    private gKey!: Phaser.Input.Keyboard.Key
+    private previous = { pause: false, interact: false, website: false, panelDirection: 0 }
     private lastInputDevice: ControlDevice = "keyboard"
+    private notifiedInputDevice: ControlDevice = "keyboard"
     private interactiveObjects: InteractiveGameObject[] = []
+    private doorways: RoomDoorway[] = []
+    private currentRoom = { column: 0, row: 0 }
+    private roomWidth = ROOM_WIDTH_TILES * 32
+    private roomHeight = ROOM_HEIGHT_TILES * 32
+    private tileWidth = 32
+    private tileHeight = 32
+    private roomColumns = 3
+    private roomRows = 3
     private activeObject: InteractiveGameObject | null = null
     private interactionPrompt!: Phaser.GameObjects.Text
     private resumePanelOpen = false
@@ -47,11 +90,20 @@ class TopDownGame extends Phaser.Scene {
     }
 
     create() {
-        const { map, guideline } = this.createMap()
+        const { map, guideline, doorways } = this.createMap()
+        this.doorways = doorways
+        this.tileWidth = map.tileWidth
+        this.tileHeight = map.tileHeight
+        this.roomWidth = ROOM_WIDTH_TILES * this.tileWidth
+        this.roomHeight = ROOM_HEIGHT_TILES * this.tileHeight
+        this.roomColumns = Math.floor(map.widthInPixels / this.roomWidth)
+        this.roomRows = Math.floor(map.heightInPixels / this.roomHeight)
         this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
-        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels)
 
         this.createPlayer(guideline)
+        this.currentRoom = this.roomAt(this.player.x, this.player.y)
+        this.setCameraRoom(this.currentRoom.column, this.currentRoom.row)
+        this.cameras.main.centerOn(this.player.x, this.player.y)
         this.createInput()
         this.createInteractiveObjects()
         this.createInteractionPrompt()
@@ -79,6 +131,7 @@ class TopDownGame extends Phaser.Scene {
             this.player.setVelocity(0, 0)
             return
         }
+        if (this.updateDoorTransitions()) return
         this.move()
     }
 
@@ -90,9 +143,87 @@ class TopDownGame extends Phaser.Scene {
 
         map.createLayer("Ground", tilesets)
         const guideline = map.createLayer("guideline", tilesets)!
+        const doorLayer = map.createLayer("doors", tilesets)!
+        const doorways = this.createRoomDoorways(map, guideline, doorLayer)
         guideline.setCollisionByProperty({ collides: true })
 
-        return { map, guideline }
+        return { map, guideline, doorways }
+    }
+
+    private createRoomDoorways(
+        map: Phaser.Tilemaps.Tilemap,
+        guideline: Phaser.Tilemaps.TilemapLayer,
+        doorLayer: Phaser.Tilemaps.TilemapLayer,
+    ): RoomDoorway[] {
+        const roomColumns = Math.floor(map.width / ROOM_WIDTH_TILES)
+        const roomRows = Math.floor(map.height / ROOM_HEIGHT_TILES)
+        const groups = new Map<string, DoorwayGroup>()
+
+        for (let tileY = 0; tileY < map.height; tileY++) {
+            for (let tileX = 0; tileX < map.width; tileX++) {
+                const tile = doorLayer.getTileAt(tileX, tileY)
+                if (!tile || tile.index < 0) continue
+
+                const roomColumn = Math.floor(tileX / ROOM_WIDTH_TILES)
+                const roomRow = Math.floor(tileY / ROOM_HEIGHT_TILES)
+                const localX = tileX % ROOM_WIDTH_TILES
+                const localY = tileY % ROOM_HEIGHT_TILES
+                let direction: DoorDirection | null = null
+
+                if (localX === ROOM_WIDTH_TILES - 1) direction = "right"
+                else if (localX === 0) direction = "left"
+                else if (localY === ROOM_HEIGHT_TILES - 1) direction = "down"
+                else if (localY === 0) direction = "up"
+                if (!direction) continue
+
+                const directionVector = DIRECTION_VECTORS[direction]
+                const neighborColumn = roomColumn + directionVector.x
+                const neighborRow = roomRow + directionVector.y
+                if (neighborColumn < 0 || neighborColumn >= roomColumns || neighborRow < 0 || neighborRow >= roomRows) {
+                    doorLayer.removeTileAt(tileX, tileY, false, true)
+                    continue
+                }
+
+                guideline.removeTileAt(tileX, tileY, false, true)
+                const key = `${roomColumn},${roomRow},${direction}`
+                const group = groups.get(key) ?? { roomColumn, roomRow, direction, tiles: [] }
+                group.tiles.push({ x: tileX, y: tileY })
+                groups.set(key, group)
+            }
+        }
+
+        return [...groups.values()].map(({ tiles, ...group }) => {
+            const minTileX = Math.min(...tiles.map(({ x }) => x))
+            const maxTileX = Math.max(...tiles.map(({ x }) => x))
+            let minTileY = Math.min(...tiles.map(({ y }) => y))
+            let maxTileY = Math.max(...tiles.map(({ y }) => y))
+
+            if (group.direction === "left" || group.direction === "right") {
+                const markerHeight = maxTileY - minTileY + 1
+                const extraRows = Math.max(0, HORIZONTAL_DOOR_HEIGHT_TILES - markerHeight)
+                minTileY -= Math.floor(extraRows / 2)
+                maxTileY += Math.ceil(extraRows / 2)
+
+                for (let tileY = minTileY; tileY <= maxTileY; tileY++) {
+                    for (let tileX = minTileX; tileX <= maxTileX; tileX++) {
+                        if (tileY >= 0 && tileY < map.height) {
+                            guideline.removeTileAt(tileX, tileY, false, true)
+                        }
+                    }
+                }
+            }
+
+            const minX = minTileX * map.tileWidth
+            const minY = minTileY * map.tileHeight
+            const maxX = (maxTileX + 1) * map.tileWidth
+            const maxY = (maxTileY + 1) * map.tileHeight
+            return {
+                ...group,
+                bounds: new Phaser.Geom.Rectangle(minX, minY, maxX - minX, maxY - minY),
+                centerX: (minX + maxX) / 2,
+                centerY: (minY + maxY) / 2,
+            }
+        })
     }
 
     private createPlayer(guideline: Phaser.Tilemaps.TilemapLayer | Phaser.Tilemaps.TilemapGPULayer): void {
@@ -108,6 +239,7 @@ class TopDownGame extends Phaser.Scene {
         this.wasd = this.input.keyboard!.addKeys("W,A,S,D") as typeof this.wasd
         this.escKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ESC)
         this.eKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.E)
+        this.gKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.G)
     }
 
     private createInteractiveObjects() {
@@ -186,20 +318,29 @@ class TopDownGame extends Phaser.Scene {
 
         const keyboardPause = this.escKey.isDown
         const keyboardInteract = this.eKey.isDown
+        const keyboardWebsite = this.gKey.isDown
         const gamepadPause = !!pad?.buttons[9]?.pressed
         const gamepadInteract = !!pad?.buttons[0]?.pressed
+        const gamepadWebsite = !!pad?.buttons[3]?.pressed
         const pauseDown = keyboardPause || gamepadPause
         const interactDown = keyboardInteract || gamepadInteract
+        const websiteDown = keyboardWebsite || gamepadWebsite
 
         this.inputState.pausePressed = pauseDown && !this.previous.pause
         this.inputState.interactPressed = interactDown && !this.previous.interact
+        this.inputState.websitePressed = websiteDown && !this.previous.website
         this.previous.pause = pauseDown
         this.previous.interact = interactDown
+        this.previous.website = websiteDown
 
-        const keyboardUsed = keyboardLeft || keyboardRight || keyboardUp || keyboardDown || keyboardPause || keyboardInteract
-        const gamepadUsed = dpadActive || stickActive || gamepadPause || gamepadInteract
+        const keyboardUsed = keyboardLeft || keyboardRight || keyboardUp || keyboardDown || keyboardPause || keyboardInteract || keyboardWebsite
+        const gamepadUsed = dpadActive || stickActive || gamepadPause || gamepadInteract || gamepadWebsite
         if (gamepadUsed) this.lastInputDevice = "gamepad"
         else if (keyboardUsed) this.lastInputDevice = "keyboard"
+        if (this.lastInputDevice !== this.notifiedInputDevice) {
+            this.notifiedInputDevice = this.lastInputDevice
+            this.game.events.emit(GAME_EVENTS.INPUT_DEVICE_CHANGED, this.lastInputDevice)
+        }
 
         const keyboardMenuDirection = Number(this.wasd.D.isDown || this.cursors.right.isDown)
             - Number(this.wasd.A.isDown || this.cursors.left.isDown)
@@ -249,6 +390,11 @@ class TopDownGame extends Phaser.Scene {
             return true
         }
 
+        if (this.inputState.websitePressed) {
+            this.game.events.emit(GAME_EVENTS.NAVIGATE_WEBSITE)
+            return true
+        }
+
         if (this.inputState.interactPressed) this.activeObject?.activate()
         return this.resumePanelOpen
     }
@@ -258,11 +404,55 @@ class TopDownGame extends Phaser.Scene {
             this.game.events.emit(GAME_EVENTS.RESUME_NAVIGATE, this.inputState.panelNavigate)
         }
 
-        if (this.inputState.pausePressed) {
+        if (this.inputState.websitePressed) {
+            this.game.events.emit(GAME_EVENTS.NAVIGATE_WEBSITE)
+        } else if (this.inputState.pausePressed) {
             this.game.events.emit(GAME_EVENTS.RESUME_BACK)
         } else if (this.inputState.interactPressed) {
             this.game.events.emit(GAME_EVENTS.RESUME_SELECT)
         }
+    }
+
+    private updateDoorTransitions(): boolean {
+        const doorway = this.doorways.find((candidate) =>
+            candidate.roomColumn === this.currentRoom.column
+            && candidate.roomRow === this.currentRoom.row
+            && candidate.bounds.contains(this.player.x, this.player.y),
+        )
+        if (!doorway) return false
+
+        const direction = DIRECTION_VECTORS[doorway.direction]
+        const destinationColumn = doorway.roomColumn + direction.x
+        const destinationRow = doorway.roomRow + direction.y
+        const destinationDoor = this.doorways.find((candidate) =>
+            candidate.roomColumn === destinationColumn
+            && candidate.roomRow === destinationRow
+            && candidate.direction === OPPOSITE_DIRECTIONS[doorway.direction],
+        )
+        if (!destinationDoor) return false
+
+        const destinationFacing = DIRECTION_VECTORS[destinationDoor.direction]
+        this.player.setPosition(
+            destinationDoor.centerX - destinationFacing.x * this.tileWidth,
+            destinationDoor.centerY - destinationFacing.y * this.tileHeight,
+        )
+        this.player.setVelocity(0, 0)
+        this.player.setDepth(this.player.y)
+        this.currentRoom = { column: destinationColumn, row: destinationRow }
+        this.setCameraRoom(destinationColumn, destinationRow)
+        this.cameras.main.centerOn(this.player.x, this.player.y)
+        return true
+    }
+
+    private roomAt(x: number, y: number) {
+        return {
+            column: Phaser.Math.Clamp(Math.floor(x / this.roomWidth), 0, this.roomColumns - 1),
+            row: Phaser.Math.Clamp(Math.floor(y / this.roomHeight), 0, this.roomRows - 1),
+        }
+    }
+
+    private setCameraRoom(column: number, row: number) {
+        this.cameras.main.setBounds(column * this.roomWidth, row * this.roomHeight, this.roomWidth, this.roomHeight)
     }
 
     private togglePause() {
@@ -295,15 +485,22 @@ class PauseMenu extends Phaser.Scene {
         }).setOrigin(0.5)
 
         this.input.keyboard!.once("keydown-ESC", this.resumeGame, this)
+        this.input.keyboard!.once("keydown-G", this.navigateToWebsite, this)
         this.input.gamepad?.on("down", this.onPadDown, this)
         this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
             this.input.keyboard?.off("keydown-ESC", this.resumeGame, this)
+            this.input.keyboard?.off("keydown-G", this.navigateToWebsite, this)
             this.input.gamepad?.off("down", this.onPadDown, this)
         })
     }
 
     private onPadDown(_: Phaser.Input.Gamepad.Gamepad, button: Phaser.Input.Gamepad.Button) {
         if (button.index === 9) this.resumeGame()
+        else if (button.index === 3) this.navigateToWebsite()
+    }
+
+    private navigateToWebsite() {
+        this.game.events.emit(GAME_EVENTS.NAVIGATE_WEBSITE)
     }
 
     private resumeGame() {
@@ -315,8 +512,10 @@ class PauseMenu extends Phaser.Scene {
 export default function GamePage() {
     const gameContainerRef = useRef<HTMLDivElement>(null)
     const gameRef = useRef<Phaser.Game | null>(null)
+    const navigate = useNavigate()
     const [gameInstance, setGameInstance] = useState<Phaser.Game | null>(null)
     const [resumePanelOpen, setResumePanelOpen] = useState(false)
+    const [inputDevice, setInputDevice] = useState<ControlDevice>("keyboard")
 
     useEffect(() => {
         const game = new Phaser.Game({
@@ -340,16 +539,22 @@ export default function GamePage() {
         })
 
         const openResumePanel = () => setResumePanelOpen(true)
+        const changeInputDevice = (device: ControlDevice) => setInputDevice(device)
+        const navigateToWebsite = () => navigate("/notGame")
         game.events.on(GAME_EVENTS.RESUME_OPEN, openResumePanel)
+        game.events.on(GAME_EVENTS.INPUT_DEVICE_CHANGED, changeInputDevice)
+        game.events.on(GAME_EVENTS.NAVIGATE_WEBSITE, navigateToWebsite)
         gameRef.current = game
         setGameInstance(game)
 
         return () => {
             game.events.off(GAME_EVENTS.RESUME_OPEN, openResumePanel)
+            game.events.off(GAME_EVENTS.INPUT_DEVICE_CHANGED, changeInputDevice)
+            game.events.off(GAME_EVENTS.NAVIGATE_WEBSITE, navigateToWebsite)
             game.destroy(true)
             gameRef.current = null
         }
-    }, [])
+    }, [navigate])
 
     const closeResumePanel = () => {
         gameRef.current?.events.emit(GAME_EVENTS.RESUME_CLOSE)
@@ -359,6 +564,7 @@ export default function GamePage() {
     return (
         <div className="relative flex h-screen w-full flex-col">
             <div className="min-h-0 w-full flex-1" ref={gameContainerRef} />
+            <GameTutorialHud device={inputDevice} />
             {resumePanelOpen && gameInstance && (
                 <ResumePdfPanel game={gameInstance} onClose={closeResumePanel} />
             )}

@@ -1,0 +1,60 @@
+.game-tutorial-hud {
+    position: absolute;
+    z-index: 20;
+    right: 16px;
+    bottom: 14px;
+    left: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    pointer-events: none;
+}
+
+.game-tutorial-card {
+    display: flex;
+    min-width: 118px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border: 1px solid rgb(206 201 179 / 46%);
+    background: rgb(20 22 18 / 88%);
+    color: #f5f1e5;
+    font-family: monospace;
+    font-size: 11px;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.game-tutorial-key {
+    color: #f5d88b;
+    font-weight: 700;
+}
+
+.game-tutorial-action {
+    color: #dedbcc;
+}
+
+@media (max-width: 640px) {
+    .game-tutorial-hud {
+        right: 8px;
+        bottom: 8px;
+        left: 8px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 5px;
+    }
+
+    .game-tutorial-card {
+        min-width: 0;
+        flex-direction: column;
+        gap: 3px;
+        padding: 6px 5px;
+        font-size: 10px;
+    }
+
+    .game-tutorial-key {
+        white-space: normal;
+        text-align: center;
+    }
+}
