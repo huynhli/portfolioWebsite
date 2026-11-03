@@ -6,6 +6,7 @@ export type InteractiveGameIconConfig = {
     y?: number
     width?: number
     height?: number
+    fit?: "contain"
 }
 
 export type InteractiveGameObjectConfig = {
@@ -50,7 +51,13 @@ export class InteractiveGameObject extends Phaser.GameObjects.Container {
 
         for (const iconConfig of config.icons) {
             const icon = scene.add.image(iconConfig.x ?? 0, iconConfig.y ?? 0, iconConfig.textureKey)
-                .setDisplaySize(iconConfig.width ?? 28, iconConfig.height ?? 28)
+            const width = iconConfig.width ?? 28
+            const height = iconConfig.height ?? 28
+            if (iconConfig.fit === "contain") {
+                icon.setScale(Math.min(width / icon.width, height / icon.height))
+            } else {
+                icon.setDisplaySize(width, height)
+            }
             floatingGroup.add(icon)
         }
 

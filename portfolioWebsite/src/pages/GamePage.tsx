@@ -101,10 +101,13 @@ class TopDownGame extends Phaser.Scene {
         this.load.image("grassAndStoneTiles", "/gameAssets/GrassAndStoneTileset.png")
         this.load.image("stoneTiles", "/gameAssets/StoneTileset.png")
         this.load.image("resumePedestal", "/gameAssets/resume-pedestal.png")
-        this.load.image("resumePaper", "/gameAssets/resume-paper.png")
-        this.load.image("linkedinIcon", "/images/linkedin_logo.png")
-        this.load.image("githubIcon", "/images/github_logo.png")
-        this.load.image("itchIcon", "/images/itch_logo.png")
+        this.load.image("resumePaper", "/gameAssets/gameIcons/resume-paper-white.png")
+        this.load.image("linkedinIcon", "/gameAssets/gameIcons/linkedin-logo-white.png")
+        this.load.image("githubIcon", "/gameAssets/gameIcons/github-logo-white.png")
+        this.load.image("itchIcon", "/gameAssets/gameIcons/itch-logo-white.png")
+        this.load.image("tbspGamesProfile", "/gameAssets/gameIcons/tbsp-games-profile-white.png")
+        this.load.image("geotabProfile", "/gameAssets/gameIcons/geotab-profile-white.png")
+        this.load.image("barelProfile", "/gameAssets/gameIcons/barel-profile-white.png")
         this.load.tilemapTiledJSON("tilemap", "/gameAssets/PortfolioMap.json")
     }
 
@@ -344,8 +347,8 @@ class TopDownGame extends Phaser.Scene {
     private createInteractiveObjects() {
         this.addInteractiveObject({
             id: "resume-swe",
-            x: 1328,
-            y: 900,
+            x: 1140,
+            y: 800,
             interactionRadius: 96,
             pedestalTextureKey: "resumePedestal",
             pedestalWidth: 64,
@@ -359,6 +362,30 @@ class TopDownGame extends Phaser.Scene {
                 },
             ],
             label: "RESUME - SWE",
+            action: () => {
+                this.resumePanelOpen = true
+                this.previous.panelDirection = Math.sign(this.inputState.move.x)
+                this.player.setVelocity(0, 0)
+                this.game.events.emit(GAME_EVENTS.RESUME_OPEN)
+            },
+        })
+        this.addInteractiveObject({
+            id: "resume-devops",
+            x: 1260,
+            y: 800,
+            interactionRadius: 96,
+            pedestalTextureKey: "resumePedestal",
+            pedestalWidth: 64,
+            pedestalHeight: 64,
+            pedestalOffsetY: 16,
+            icons: [
+                {
+                    textureKey: "resumePaper",
+                    width: 32,
+                    height: 32,
+                },
+            ],
+            label: "RESUME - DEVOPS",
             action: () => {
                 this.resumePanelOpen = true
                 this.previous.panelDirection = Math.sign(this.inputState.move.x)
@@ -391,6 +418,41 @@ class TopDownGame extends Phaser.Scene {
             1400,
             1080,
         )
+
+        // The room map contains two TBSP rooms, so both point to the same company site.
+        this.addCompanyPedestal(
+            "company-tbsp-west",
+            "TBSP GAMES",
+            "tbspGamesProfile",
+            "https://tablespoongames.pages.dev/",
+            400,
+            960,
+        )
+        this.addCompanyPedestal(
+            "company-tbsp-east",
+            "TBSP GAMES",
+            "tbspGamesProfile",
+            "https://tablespoongames.pages.dev/",
+            2000,
+            960,
+        )
+        this.addCompanyPedestal(
+            "company-geotab",
+            "GEOTAB",
+            "geotabProfile",
+            "https://www.geotab.com/",
+            2000,
+            1600,
+            80,
+        )
+        this.addCompanyPedestal(
+            "company-barel",
+            "BAREL",
+            "barelProfile",
+            "https://bareltec.com/",
+            1200,
+            1600,
+        )
     }
 
     private addInteractiveObject(config: InteractiveGameObjectConfig) {
@@ -407,7 +469,32 @@ class TopDownGame extends Phaser.Scene {
             pedestalWidth: 64,
             pedestalHeight: 64,
             pedestalOffsetY: 16,
-            icons: [{ textureKey, width: 32, height: 32 }],
+            icons: [{ textureKey, width: 32, height: 32, fit: "contain" }],
+            label,
+            action: () => window.open(url, "_blank", "noopener,noreferrer"),
+        })
+    }
+
+    private addCompanyPedestal(
+        id: string,
+        label: string,
+        textureKey: string,
+        url: string,
+        x: number,
+        y: number,
+        iconWidth = 48,
+        iconHeight = 48,
+    ) {
+        this.addInteractiveObject({
+            id,
+            x,
+            y,
+            interactionRadius: 112,
+            pedestalTextureKey: "resumePedestal",
+            pedestalWidth: 88,
+            pedestalHeight: 88,
+            pedestalOffsetY: 18,
+            icons: [{ textureKey, width: iconWidth, height: iconHeight, fit: "contain" }],
             label,
             action: () => window.open(url, "_blank", "noopener,noreferrer"),
         })
