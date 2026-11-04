@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import type Phaser from "phaser"
+import type { PDFDocumentProxy, RenderTask } from "pdfjs-dist"
+import pdfWorkerUrl from "pdfjs-dist/build/pdf.worker.min.mjs?url"
 import { GAME_EVENTS } from "./gameEvents"
 import type { ResumeDocument } from "../../config/resumeDocuments"
 import "./ResumePdfPanel.css"
@@ -13,9 +15,14 @@ type ResumePdfPanelProps = {
 export function ResumePdfPanel({ game, onClose, resume }: ResumePdfPanelProps) {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [popupBlocked, setPopupBlocked] = useState(false)
+    const [pdf, setPdf] = useState<PDFDocumentProxy | null>(null)
+    const [pdfError, setPdfError] = useState(false)
+    const [viewerWidth, setViewerWidth] = useState(0)
     const selectedIndexRef = useRef(selectedIndex)
     const popupBlockedRef = useRef(popupBlocked)
     const buttonRefs = useRef<Array<HTMLButtonElement | null>>([])
+    const pageContainerRef = useRef<HTMLDivElement | null>(null)
+    const canvasRefs = useRef<Array<HTMLCanvasElement | null>>([])
     const actionsRef = useRef({ onClose, openInNewTab: () => {}, openHereInstead: () => {} })
 
     selectedIndexRef.current = selectedIndex
@@ -36,6 +43,104 @@ export function ResumePdfPanel({ game, onClose, resume }: ResumePdfPanelProps) {
     const openHereInstead = () => window.location.assign(resume.url)
 
     actionsRef.current = { onClose, openInNewTab, openHereInstead }
+
+    useEffect(() => {
+        let cancelled = false
+        let destroyLoadingTask: (() => void) | undefined
+
+        setPdf(null)
+        setPdfError(false)
+
+        void import("pdfjs-dist").then(({ getDocument, GlobalWorkerOptions }) => {
+            if (cancelled) return
+
+            GlobalWorkerOptions.workerSrc = pdfWorkerUrl
+            const loadingTask = getDocument({ url: resume.url })
+            destroyLoadingTask = () => { void loadingTask.destroy() }
+
+            return loadingTask.promise.then((document) => {
+                if (!cancelled) setPdf(document)
+            })
+        }).catch(() => {
+            if (!cancelled) setPdfError(true)
+        })
+
+        return () => {
+            cancelled = true
+            destroyLoadingTask?.()
+        }
+    }, [resume.url])
+
+    useEffect(() => {
+        const container = pageContainerRef.current
+        if (!container) return
+
+        const updateWidth = () => setViewerWidth(container.clientWidth)
+        updateWidth()
+
+        if (typeof ResizeObserver === "undefined") {
+            window.addEventListener("resize", updateWidth)
+            return () => window.removeEventListener("resize", updateWidth)
+        }
+
+        const observer = new ResizeObserver(updateWidth)
+        observer.observe(container)
+        return () => observer.disconnect()
+    }, [])
+
+    useEffect(() => {
+        if (!pdf || viewerWidth <= 0) return
+
+        let cancelled = false
+        const renderTasks: RenderTask[] = []
+        const outputScale = Math.min(window.devicePixelRatio || 1, 2)
+
+        const renderPages = async () => {
+            for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+                const canvas = canvasRefs.current[pageNumber - 1]
+                if (!canvas) continue
+
+                const page = await pdf.getPage(pageNumber)
+                if (cancelled) return
+
+                const baseViewport = page.getViewport({ scale: 1 })
+                const scale = Math.min(Math.max(viewerWidth - 32, 1) / baseViewport.width, 1.6)
+                const viewport = page.getViewport({ scale })
+                const context = canvas.getContext("2d")
+                if (!context) continue
+
+                canvas.width = Math.floor(viewport.width * outputScale)
+                canvas.height = Math.floor(viewport.height * outputScale)
+                canvas.style.width = `${Math.floor(viewport.width)}px`
+                canvas.style.height = `${Math.floor(viewport.height)}px`
+
+                const task = page.render({
+                    canvasContext: context,
+                    canvas,
+                    viewport,
+                    transform: outputScale === 1 ? undefined : [outputScale, 0, 0, outputScale, 0, 0],
+                })
+                renderTasks.push(task)
+                try {
+                    await task.promise
+                } catch (error) {
+                    if (!cancelled && !(error instanceof Error && error.name === "RenderingCancelledException")) {
+                        setPdfError(true)
+                    }
+                    return
+                }
+                if (cancelled) return
+            }
+        }
+
+        void renderPages().catch(() => {
+            if (!cancelled) setPdfError(true)
+        })
+        return () => {
+            cancelled = true
+            renderTasks.forEach((task) => task.cancel())
+        }
+    }, [pdf, viewerWidth])
 
     useEffect(() => {
         const navigate = (direction: number) => {
@@ -72,11 +177,26 @@ export function ResumePdfPanel({ game, onClose, resume }: ResumePdfPanelProps) {
                     <p>Choose with A / D, arrows, left stick, or D-pad; select with E / controller A</p>
                 </header>
 
-                <div className="resume-panel__document">
-                    <iframe
-                        title={`${resume.title} resume`}
-                        src={resume.url}
-                    />
+                <div className="resume-panel__document" ref={pageContainerRef}>
+                    {pdfError ? (
+                        <div className="resume-panel__message" role="status">
+                            <p>The resume preview could not be loaded.</p>
+                            <a href={resume.url} target="_blank" rel="noreferrer">Open the PDF in a new tab</a>
+                        </div>
+                    ) : !pdf ? (
+                        <div className="resume-panel__message" role="status">Loading resume...</div>
+                    ) : (
+                        <div className="resume-panel__pages">
+                            {Array.from({ length: pdf.numPages }, (_, index) => (
+                                <canvas
+                                    key={`${resume.url}-${index + 1}`}
+                                    ref={(element) => { canvasRefs.current[index] = element }}
+                                    className="resume-panel__page"
+                                    aria-label={`${resume.title} resume, page ${index + 1}`}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 <nav className="resume-panel__actions" aria-label="Resume actions">
