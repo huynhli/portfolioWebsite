@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import '../main.css'
 import './Header.css'
 import { Link } from 'react-router-dom'
+import { RESUME_DOCUMENTS } from '../config/resumeDocuments'
 
 export default function Header() {
 
@@ -24,8 +25,8 @@ export default function Header() {
                     </Link>
                 </div>
                 <div className='px-2'>
-                    <a className="underline-hover px-2 py-1 duration-400 rounded-t-lg hover:bg-purple-800 active:bg-purple-400" href={`/LiamHuynh_Resume_SWE-portfolio.pdf`} target='_blank'>
-                    Resume
+                    <a className="underline-hover px-2 py-1 duration-400 rounded-t-lg hover:bg-purple-800 active:bg-purple-400" href={RESUME_DOCUMENTS.fullStack.url} target='_blank' rel='noreferrer'>
+                    Full Stack Resume
                     </a>
                 </div>
                 <div className='px-2'>

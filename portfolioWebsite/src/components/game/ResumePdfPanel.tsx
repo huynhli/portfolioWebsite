@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState } from "react"
 import type Phaser from "phaser"
 import { GAME_EVENTS } from "./gameEvents"
+import type { ResumeDocument } from "../../config/resumeDocuments"
 import "./ResumePdfPanel.css"
-
-const RESUME_PDF_URL = "/LiamHuynh_Resume_SWE-portfolio.pdf"
 
 type ResumePdfPanelProps = {
     game: Phaser.Game
     onClose: () => void
+    resume: ResumeDocument
 }
 
-export function ResumePdfPanel({ game, onClose }: ResumePdfPanelProps) {
+export function ResumePdfPanel({ game, onClose, resume }: ResumePdfPanelProps) {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [popupBlocked, setPopupBlocked] = useState(false)
     const selectedIndexRef = useRef(selectedIndex)
@@ -22,7 +22,7 @@ export function ResumePdfPanel({ game, onClose }: ResumePdfPanelProps) {
     popupBlockedRef.current = popupBlocked
 
     const openInNewTab = () => {
-        const openedWindow = window.open(RESUME_PDF_URL, "_blank")
+        const openedWindow = window.open(resume.url, "_blank")
         if (openedWindow) {
             openedWindow.opener = null
             setPopupBlocked(false)
@@ -33,7 +33,7 @@ export function ResumePdfPanel({ game, onClose }: ResumePdfPanelProps) {
         setSelectedIndex(2)
     }
 
-    const openHereInstead = () => window.location.assign(RESUME_PDF_URL)
+    const openHereInstead = () => window.location.assign(resume.url)
 
     actionsRef.current = { onClose, openInNewTab, openHereInstead }
 
@@ -68,14 +68,14 @@ export function ResumePdfPanel({ game, onClose }: ResumePdfPanelProps) {
         <div className="resume-panel" role="dialog" aria-modal="true" aria-labelledby="resume-panel-title">
             <section className="resume-panel__window">
                 <header className="resume-panel__header">
-                    <h1 id="resume-panel-title">Resume</h1>
+                    <h1 id="resume-panel-title">{resume.title} Resume</h1>
                     <p>Choose with A / D, arrows, left stick, or D-pad; select with E / controller A</p>
                 </header>
 
                 <div className="resume-panel__document">
                     <iframe
-                        title="Software engineering resume"
-                        src={RESUME_PDF_URL}
+                        title={`${resume.title} resume`}
+                        src={resume.url}
                     />
                 </div>
 

@@ -6,6 +6,7 @@ import { GameTutorialHud, type ControlDevice } from "../components/game/GameTuto
 import { GameMapButton, GameMapOverlay } from "../components/game/GameMapOverlay"
 import { GameStartMenu } from "../components/game/GameStartMenu"
 import { ResumePdfPanel } from "../components/game/ResumePdfPanel"
+import { RESUME_DOCUMENTS, type ResumeDocument } from "../config/resumeDocuments"
 import { GAME_EVENTS } from "../components/game/gameEvents"
 import { getGameRoomLabel, type GameRoomLocation } from "../components/game/gameRooms"
 
@@ -348,7 +349,7 @@ class TopDownGame extends Phaser.Scene {
 
     private createInteractiveObjects() {
         this.addInteractiveObject({
-            id: "resume-swe",
+            id: "resume-full-stack",
             x: 1140,
             y: 800,
             interactionRadius: 96,
@@ -363,12 +364,12 @@ class TopDownGame extends Phaser.Scene {
                     height: 32,
                 },
             ],
-            label: "RESUME - SWE",
+            label: "RESUME - FULL STACK",
             action: () => {
                 this.resumePanelOpen = true
                 this.previous.panelDirection = Math.sign(this.inputState.move.x)
                 this.player.setVelocity(0, 0)
-                this.game.events.emit(GAME_EVENTS.RESUME_OPEN)
+                this.game.events.emit(GAME_EVENTS.RESUME_OPEN, RESUME_DOCUMENTS.fullStack)
             },
         })
         this.addInteractiveObject({
@@ -392,7 +393,7 @@ class TopDownGame extends Phaser.Scene {
                 this.resumePanelOpen = true
                 this.previous.panelDirection = Math.sign(this.inputState.move.x)
                 this.player.setVelocity(0, 0)
-                this.game.events.emit(GAME_EVENTS.RESUME_OPEN)
+                this.game.events.emit(GAME_EVENTS.RESUME_OPEN, RESUME_DOCUMENTS.devOps)
             },
         })
 
@@ -752,6 +753,7 @@ export default function GamePage() {
     const navigate = useNavigate()
     const [gameInstance, setGameInstance] = useState<Phaser.Game | null>(null)
     const [resumePanelOpen, setResumePanelOpen] = useState(false)
+    const [resumeDocument, setResumeDocument] = useState<ResumeDocument>(RESUME_DOCUMENTS.fullStack)
     const [inputDevice, setInputDevice] = useState<ControlDevice>("keyboard")
     const [gameReady, setGameReady] = useState(false)
     const [startMenuOpen, setStartMenuOpen] = useState(true)
@@ -785,7 +787,10 @@ export default function GamePage() {
             input: { gamepad: true },
         })
 
-        const openResumePanel = () => setResumePanelOpen(true)
+        const openResumePanel = (resume: ResumeDocument) => {
+            setResumeDocument(resume)
+            setResumePanelOpen(true)
+        }
         const changeInputDevice = (device: ControlDevice) => setInputDevice(device)
         const navigateToWebsite = () => navigate("/notGame")
         const showMap = () => setMapOpen(true)
@@ -867,7 +872,7 @@ export default function GamePage() {
                 </div>
             )}
             {resumePanelOpen && gameInstance && (
-                <ResumePdfPanel game={gameInstance} onClose={closeResumePanel} />
+                <ResumePdfPanel game={gameInstance} onClose={closeResumePanel} resume={resumeDocument} />
             )}
         </div>
     )

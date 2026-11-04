@@ -1,4 +1,5 @@
 import '../main.css'
+import { RESUME_DOCUMENTS } from '../config/resumeDocuments'
 export default function AboutPage() {
 
     return (
@@ -69,8 +70,8 @@ export default function AboutPage() {
             {/* Download Resume */}
             <div className='flex justify-center'>
                     <div className='flex items-center justify-center m-3 text-2xl mx-5 '>
-                        <button onClick={() => window.open('/ResumeFeb2025.pdf', '_blank')} className='cursor-pointer bg-purple-300 hover:bg-purple-300 rounded-lg py-6 px-14  transition-transform duration-300 hover:scale-110'>
-                            Download my resume here!
+                        <button onClick={() => window.open(RESUME_DOCUMENTS.fullStack.url, '_blank', 'noopener,noreferrer')} className='cursor-pointer bg-purple-300 hover:bg-purple-300 rounded-lg py-6 px-14  transition-transform duration-300 hover:scale-110'>
+                            Download my full stack resume here!
                         </button>
                     </div>
             </div>
