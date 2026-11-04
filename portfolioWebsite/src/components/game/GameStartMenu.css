@@ -29,31 +29,105 @@
 
 .game-start-menu__options {
     display: flex;
-    align-items: stretch;
+    align-items: flex-start;
     justify-content: center;
     gap: 24px;
 }
 
 .game-start-menu__option-wrap {
-    position: relative;
+    display: flex;
+    flex-direction: column;
     flex: 1 1 0;
     min-width: 0;
 }
 
 .game-start-menu__prompt {
-    position: absolute;
-    bottom: calc(100% + 12px);
-    left: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    gap: 14px;
     width: max-content;
-    max-width: min(420px, calc(100vw - 48px));
-    margin: 0;
-    padding: 10px 14px;
-    transform: translateX(-50%);
+    max-width: calc(100vw - 48px);
+    margin: 14px 0 0;
+    padding: 8px 12px;
     border: 2px solid #f5d88b;
     background: #34382b;
     color: #fff8df;
-    font-size: clamp(12px, 2vw, 16px);
-    line-height: 1.35;
+    box-shadow: 4px 4px 0 rgb(0 0 0 / 35%);
+}
+
+.game-start-menu__sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    clip-path: inset(50%);
+}
+
+.game-start-menu__mouse {
+    width: 24px;
+    height: 30px;
+    overflow: visible;
+}
+
+.game-start-menu__mouse-left {
+    fill: #f5d88b;
+    opacity: 0.8;
+}
+
+.game-start-menu__mouse-outline,
+.game-start-menu__mouse-divider {
+    fill: none;
+    stroke: #fff8df;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.game-start-menu__mouse-click {
+    fill: none;
+    stroke: #f5d88b;
+    stroke-width: 2;
+    stroke-linecap: round;
+    animation: game-start-menu-click 1.2s steps(2, end) infinite;
+}
+
+.game-start-menu__controller-button {
+    display: inline-grid;
+    width: 30px;
+    height: 30px;
+    place-items: center;
+    border: 2px solid #c4f3ad;
+    border-radius: 50%;
+    background: #36a83f;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 1;
+    text-shadow: 1px 1px 0 #17551e;
+    box-shadow: inset 0 -3px 0 rgb(0 0 0 / 20%), 0 2px 0 #1a4d20;
+}
+
+.game-start-menu__keycap {
+    display: inline-grid;
+    width: 30px;
+    height: 30px;
+    place-items: center;
+    border: 2px solid #fff8df;
+    border-radius: 4px;
+    background: #eee9d9;
+    color: #252922;
+    font: 700 17px/1 monospace;
+    box-shadow: inset 0 -3px 0 #c7c0ad, 0 2px 0 #8e8878;
+}
+
+@keyframes game-start-menu-click {
+    0%, 45%, 100% { opacity: 1; }
+    20%, 32% { opacity: 0.25; }
 }
 
 .game-start-menu__button {
