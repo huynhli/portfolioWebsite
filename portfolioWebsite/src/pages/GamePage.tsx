@@ -187,8 +187,10 @@ class TopDownGame extends Phaser.Scene {
         const tilesets = [grassAndStone!, stone!]
 
         map.createLayer("Ground", tilesets)
-        const guideline = map.createLayer("guideline", tilesets)!
-        const doorLayer = map.createLayer("doors", tilesets)!
+        // Keep these as regular, mutable TilemapLayers for collision and door edits.
+        // Phaser's createLayer type is a union even when the GPU option is explicitly false.
+        const guideline = map.createLayer("guideline", tilesets, undefined, undefined, false)! as Phaser.Tilemaps.TilemapLayer
+        const doorLayer = map.createLayer("doors", tilesets, undefined, undefined, false)! as Phaser.Tilemaps.TilemapLayer
         const doorways = this.createRoomDoorways(map, guideline, doorLayer)
         guideline.setCollisionByProperty({ collides: true })
 
@@ -327,7 +329,7 @@ class TopDownGame extends Phaser.Scene {
         }
     }
 
-    private createPlayer(guideline: Phaser.Tilemaps.TilemapLayer | Phaser.Tilemaps.TilemapGPULayer): void {
+    private createPlayer(guideline: Phaser.Tilemaps.TilemapLayer): void {
         this.player = this.physics.add.sprite(1200, 900, "player")
         this.player.setScale(2)
         this.player.setCollideWorldBounds(true)
